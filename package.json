@@ -1,11 +1,11 @@
 {
-  "name": "sml-immersive-foundation",
+  "name": "sml-immersive-site",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "build": "vite build && cd current-site/sml-v31/sml-v31-academy && npm install && npx vite build --base=/legacy/ && node scripts/check-mi-sml-css-size.mjs && mkdir -p ../../../dist/legacy && cp -R dist/. ../../../dist/legacy/",
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {

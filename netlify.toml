@@ -1,10 +1,10 @@
 [build]
-  base = "current-site/sml-v31/sml-v31-academy"
+  base = "."
   command = "npm run build"
   publish = "dist"
 
 [functions]
-  directory = "netlify/functions"
+  directory = "current-site/sml-v31/sml-v31-academy/netlify/functions"
 
 [build.environment]
   NODE_VERSION = "20"
@@ -30,6 +30,41 @@
   status = 200
 
 [[redirects]]
+  from = "/mi-sml"
+  to = "/legacy/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/mi-sml/*"
+  to = "/legacy/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/academia"
+  to = "/legacy/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/academia/*"
+  to = "/legacy/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/privacidad"
+  to = "/legacy/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/aviso-legal"
+  to = "/legacy/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/legacy/*"
+  to = "/legacy/index.html"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
@@ -40,13 +75,12 @@
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
-  for = "/mi-sml"
+  for = "/legacy/assets/*"
   [headers.values]
-    X-Robots-Tag = "noindex, nofollow"
-    Cache-Control = "no-store"
+    Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
-  for = "/mi-sml/*"
+  for = "/mi-sml*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
     Cache-Control = "no-store"
@@ -55,10 +89,4 @@
   for = "/api/mi-sml/*"
   [headers.values]
     Cache-Control = "no-store"
-    X-Robots-Tag = "noindex, nofollow"
-
-[[headers]]
-  for = "/api/academy/*"
-  [headers.values]
-    Cache-Control = "no-store, private"
     X-Robots-Tag = "noindex, nofollow"
