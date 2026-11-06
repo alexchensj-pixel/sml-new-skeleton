@@ -11,42 +11,60 @@ const copy = (from, to) => {
   fs.cpSync(from, to, { recursive: true, force: true });
 };
 
-// The new skeleton remains the host project; the pinned original app supplies the complete product modules.
-copy(path.join(legacy, 'src'), path.join(root, 'src'));
+// Keep the immersive skeleton as the actual home application. The original product
+// modules live in an isolated namespace and are mounted only on their own routes.
+copy(path.join(legacy, 'src'), path.join(root, 'src/legacy'));
 copy(path.join(legacy, 'server'), path.join(root, 'server'));
 copy(path.join(legacy, 'netlify/functions'), path.join(root, 'netlify/functions'));
 copy(path.join(legacy, 'vite.config.js'), path.join(root, 'vite.config.js'));
 
-// Bring the course academy into the same Vite application instead of building a second site under /academia.
-copy(path.join(academy, 'src/Academy'), path.join(root, 'src/Academy'));
-copy(path.join(academy, 'src/Assets/Images/academy'), path.join(root, 'src/Assets/Images/academy'));
-copy(path.join(academy, 'src/Assets/Video/academy'), path.join(root, 'src/Assets/Video/academy'));
+// Keep the original academy's relative imports and media paths intact.
+copy(path.join(academy, 'src/Academy'), path.join(root, 'src/legacy/Academy'));
+copy(path.join(academy, 'src/Assets/Images/academy'), path.join(root, 'src/legacy/Assets/Images/academy'));
+copy(path.join(academy, 'src/Assets/Video/academy'), path.join(root, 'src/legacy/Assets/Video/academy'));
 copy(path.join(academy, 'server/academyContent.mjs'), path.join(root, 'server/academyContent.mjs'));
 copy(path.join(academy, 'netlify/functions/academy-content.mjs'), path.join(root, 'netlify/functions/academy-content.mjs'));
 
-// Route all public, client and legal experiences through one application entry point.
-fs.writeFileSync(path.join(root, 'src/main.jsx'), `import React, { Suspense, lazy } from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App/App.jsx';
+// The legacy Vite plugins remain available for local API parity and structured data,
+// but the original app's source now lives under src/legacy.
+const vitePath = path.join(root, 'vite.config.js');
+let vite = fs.readFileSync(vitePath, 'utf8');
+vite = vite.replace("./src/Data/Content.js", "./src/legacy/Data/Content.js");
+fs.writeFileSync(vitePath, vite);
+
+fs.writeFileSync(path.join(root, 'src/legacy/LegacyRouter.jsx'), `import React from 'react';
+import AppOriginal from './App/App.jsx';
+import MiSML from './Client/MiSML.jsx';
+import Academia from './Academy/Academia.jsx';
 import LegalPage from './UI/Legal/LegalPage.jsx';
 import { RUTAS } from './Data/Legal.js';
 import './styles/global.css';
-const MiSML = lazy(() => import('./Client/MiSML.jsx'));
-const Academia = lazy(() => import('./Academy/Academia.jsx'));
-const ruta = window.location.pathname.replace(/\\/+$/, '') || '/';
-const legalTipo = ruta === RUTAS.privacidad ? 'privacidad' : ruta === RUTAS.aviso ? 'aviso' : null;
-const esMiSML = ruta === '/mi-sml' || ruta.startsWith('/mi-sml/');
-const esAcademia = ruta === '/academia' || ruta.startsWith('/academia/');
-if (!legalTipo && !esMiSML && !esAcademia) {
-  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  window.scrollTo(0, 0);
+
+export default function LegacyRouter() {
+  const path = window.location.pathname.replace(/\\/+$/, '') || '/';
+  if (path === '/mi-sml' || path.startsWith('/mi-sml/')) return <MiSML />;
+  if (path === '/academia' || path.startsWith('/academia/')) return <Academia />;
+  if (path === RUTAS.privacidad) return <LegalPage tipo="privacidad" />;
+  if (path === RUTAS.aviso) return <LegalPage tipo="aviso" />;
+  return <AppOriginal />;
 }
+`);
+
+fs.writeFileSync(path.join(root, 'src/main.jsx'), `import React, { Suspense, lazy } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.jsx';
+import './styles.css';
+
+const LegacyRouter = lazy(() => import('./legacy/LegacyRouter.jsx'));
+const path = window.location.pathname.replace(/\\/+$/, '') || '/';
+const isLegacyRoute = path !== '/';
+
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {esMiSML ? <Suspense fallback={null}><MiSML /></Suspense>
-      : esAcademia ? <Suspense fallback={null}><Academia /></Suspense>
-      : legalTipo ? <LegalPage tipo={legalTipo} /> : <App />}
+    {isLegacyRoute
+      ? <Suspense fallback={<div className="route-loading" aria-label="Cargando" />}><LegacyRouter /></Suspense>
+      : <App />}
   </React.StrictMode>
 );
 `);
-console.log('SML legacy modules synchronised into the new skeleton project.');
+console.log('Hybrid routing ready: immersive skeleton at /; original Mi SML, Academy and legal modules on their own routes.');
