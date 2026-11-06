@@ -1,10 +1,9 @@
 [build]
-  base = "."
   command = "npm run build"
   publish = "dist"
 
 [functions]
-  directory = "current-site/sml-v31/sml-v31-academy/netlify/functions"
+  directory = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "20"
@@ -31,37 +30,32 @@
 
 [[redirects]]
   from = "/mi-sml"
-  to = "/academia/index.html"
+  to = "/index.html"
   status = 200
 
 [[redirects]]
   from = "/mi-sml/*"
-  to = "/academia/index.html"
+  to = "/index.html"
   status = 200
 
 [[redirects]]
   from = "/academia"
-  to = "/academia/index.html"
+  to = "/index.html"
   status = 200
 
 [[redirects]]
   from = "/academia/*"
-  to = "/academia/index.html"
+  to = "/index.html"
   status = 200
 
 [[redirects]]
   from = "/privacidad"
-  to = "/academia/index.html"
+  to = "/index.html"
   status = 200
 
 [[redirects]]
   from = "/aviso-legal"
-  to = "/academia/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/legacy/*"
-  to = "/academia/index.html"
+  to = "/index.html"
   status = 200
 
 [[redirects]]
@@ -71,11 +65,6 @@
 
 [[headers]]
   for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/academia/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
