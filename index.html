@@ -1,103 +1,17 @@
 <!doctype html>
 <html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#111215">
-  <meta name="description" content="Striking Motion Lab — una nueva forma de explorar el entrenamiento de combate.">
-  <title>Striking Motion Lab — Enter the Lab</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
-  <script src="/app.js" defer></script>
-</head>
-<body>
-  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
-  <header class="site-header">
-    <a class="brand" href="#inicio" aria-label="Striking Motion Lab, inicio">
-      <span class="brand-mark">S<span>/</span>ML</span>
-      <span class="brand-caption">STRIKING MOTION LAB</span>
-    </a>
-    <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
-      <span></span><span></span><span class="sr-only">Abrir navegación</span>
-    </button>
-    <nav class="primary-nav" id="primary-nav" aria-label="Navegación principal">
-      <a href="#entrenamiento">Entrenamiento</a>
-      <a href="#metodo">Método</a>
-      <a href="#lab">El Lab</a>
-      <a class="nav-cta" href="#contacto">Entrar en contacto <span>↗</span></a>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero" id="inicio" aria-labelledby="hero-title">
-      <div class="hero-grid" aria-hidden="true"></div>
-      <div class="hero-orbit orbit-one" aria-hidden="true"></div>
-      <div class="hero-orbit orbit-two" aria-hidden="true"></div>
-      <div class="hero-core" aria-hidden="true"><span>SML</span><i></i></div>
-      <div class="hero-content">
-        <p class="eyebrow"><span class="eyebrow-line"></span> MADRID · COMBAT SPORTS LAB</p>
-        <h1 id="hero-title">MOVE WITH<br><em>INTENT.</em></h1>
-        <p class="hero-copy">El movimiento como lenguaje.<br>El entrenamiento como exploración.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#entrenamiento">Explorar el entrenamiento <span>↘</span></a>
-          <a class="text-link" href="#metodo">Descubrir el enfoque <span>↗</span></a>
-        </div>
-      </div>
-      <div class="hero-meta"><span>01 / EXPERIENCE</span><span>SCROLL TO EXPLORE <b>↓</b></span></div>
-      <div class="hero-side-label" aria-hidden="true">STRIKING MOTION / EST. MADRID</div>
-    </section>
-
-    <section class="intro section-pad" id="entrenamiento">
-      <div class="section-index" data-reveal>01 — TRAINING</div>
-      <div class="intro-layout">
-        <div data-reveal>
-          <p class="eyebrow">FIND YOUR MOVEMENT</p>
-          <h2>ENTRENA.<br><em>EVOLUCIONA.</em></h2>
-        </div>
-        <div class="intro-detail" data-reveal>
-          <p class="large-copy">Una experiencia de entrenamiento construida alrededor de tu movimiento, tu punto de partida y tu objetivo.</p>
-          <p class="muted-copy">Esta sección está preparada para presentar las modalidades y formatos de entrenamiento en la siguiente fase.</p>
-          <a class="line-link" href="#contacto">Explorar posibilidades <span>↗</span></a>
-        </div>
-      </div>
-      <div class="discipline-strip" data-reveal><span>BOXING</span><i>✳</i><span>KICKBOXING</span><i>✳</i><span>MUAY THAI</span><i>✳</i><span>K1</span></div>
-    </section>
-
-    <section class="method section-pad" id="metodo">
-      <div class="method-visual" aria-hidden="true">
-        <div class="method-ring ring-a"></div><div class="method-ring ring-b"></div>
-        <div class="method-cross"></div><div class="method-coordinate">40°25' N<br>03°42' W</div>
-        <div class="method-center">M<span>.</span></div>
-      </div>
-      <div class="method-copy" data-reveal>
-        <div class="section-index">02 — METHOD</div>
-        <p class="eyebrow">MORE THAN REPETITION</p>
-        <h2>PRECISION<br>IN <em>MOTION.</em></h2>
-        <p class="large-copy">Observar. Comprender. Entrenar. Ajustar.</p>
-        <p class="muted-copy">Un espacio reservado para explicar el enfoque técnico y la experiencia de entrenamiento SML.</p>
-        <a class="line-link" href="#lab">Conocer el enfoque <span>↗</span></a>
-      </div>
-    </section>
-
-    <section class="lab section-pad" id="lab">
-      <div class="section-index" data-reveal>03 — THE LAB</div>
-      <div class="lab-heading" data-reveal><p class="eyebrow">A DIFFERENT PERSPECTIVE</p><h2>BUILT AROUND<br><em>YOU.</em></h2></div>
-      <div class="lab-bottom" data-reveal>
-        <p class="large-copy">No hay dos movimientos iguales.<br>El siguiente paso empieza aquí.</p>
-        <span class="lab-stamp">1%<br><small>BETTER<br>EVERYDAY</small></span>
-      </div>
-    </section>
-
-    <section class="contact section-pad" id="contacto">
-      <div class="section-index" data-reveal>04 — YOUR MOVE</div>
-      <div class="contact-layout" data-reveal>
-        <div><p class="eyebrow">START A CONVERSATION</p><h2>READY<br>TO <em>MOVE?</em></h2></div>
-        <div class="contact-action"><p>Tu punto de partida.<br>Tu siguiente movimiento.</p><a class="button button-primary" href="mailto:hola@strikingmotionlab.com?subject=Entrenamiento%20SML">Contactar con SML <span>↗</span></a></div>
-      </div>
-      <div class="contact-footer"><span>MADRID · SPAIN</span><span>STRIKING MOTION LAB © <span id="year"></span></span><a href="#inicio">BACK TO TOP ↑</a></div>
-    </section>
-  </main>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101114" />
+    <meta name="description" content="Striking Motion Lab — entrenamiento personalizado de boxeo, kickboxing y Muay Thai en Madrid." />
+    <title>Striking Motion Lab — Move with intent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

@@ -1,27 +1,36 @@
-# Striking Motion Lab — New Skeleton
+# SML — Immersive Spatial Foundation
 
-Independent experimental website shell for SML.
+A new, isolated foundation for Striking Motion Lab. This branch explores a short, continuous 3D corridor experience rather than a conventional stacked landing page.
 
-## Current scope
+## Stack
+- React 18 + Vite
+- Three.js + React Three Fiber
+- Scroll-driven camera movement
+- HTML content and controls layered over the 3D environment
+- Responsive layout and reduced-motion support
 
-- Immersive, cinematic visual direction in graphite, titanium and SML orange.
-- Short, direct one-page navigation.
-- Responsive mobile menu.
-- Scroll progress indicator and restrained reveal transitions.
-- Reduced-motion support and semantic navigation.
-- Static deployment on Netlify; no framework or build step required.
+## Local development
+```bash
+npm install
+npm run dev
+```
 
-## Structure
+Production build:
+```bash
+npm run build
+```
 
-- `index.html` — page architecture and semantic content placeholders.
-- `styles.css` — visual system, responsive layouts and motion.
-- `app.js` — navigation and lightweight interactions.
-- `netlify.toml` — static publish configuration.
+## Experience structure
+1. Entry / SML identity
+2. Training floor
+3. Method
+4. Contact / Instagram
 
-## Deliberately not included yet
+The scene is original geometry and lighting. No images, textures, or personal assets from the reference repository are copied.
 
-No production copy, pricing, booking integration, CRM, analytics, student portal, or migrated content. Validate the skeleton and navigation first; add real content and integrations only in a later phase.
+## Deployment
+Netlify build command: `npm run build`
+Publish directory: `dist`
+Node: 20
 
-## Local preview
-
-Open `index.html` in a browser or serve this directory with any static file server.
+This is a visual foundation only. It deliberately does not migrate existing pricing, CRM, student portal, or legacy website content.
