@@ -107,4 +107,8 @@ main{position:relative;z-index:2}
 .choice-card.selected,.discipline-card.selected{border-color:var(--orange);background:rgba(224,90,43,.1)}
 .discipline-intro{margin:28px 0 8px}.discipline-intro h3{font:700 2rem/1 'Barlow Condensed',sans-serif;text-transform:uppercase}
 .service-copy,.material-note,.pricing-line{font-size:11px;line-height:1.8;letter-spacing:.08em;color:var(--muted)}
-.pricing-line{display:flex;flex-wrap:wrap;
+.pricing-line{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+@media(max-width:760px){
+  .choice-grid,.discipline-grid,.method-grid,.training-grid,.booking-grid{grid-template-columns:1fr}
+}
