@@ -26,17 +26,22 @@ function App() {
   const [discipline, setDiscipline] = useState(null);
   const [showMore, setShowMore] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [methodProgress, setMethodProgress] = useState(0);
 
   useEffect(() => {
     const updateProgress = () => {
       const range = document.documentElement.scrollHeight - window.innerHeight;
       setScrollProgress(range > 0 ? window.scrollY / range : 0);
+      const section = document.getElementById('metodo');
+      if (section) { const rect = section.getBoundingClientRect(); setMethodProgress(Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)))); }
     };
     updateProgress();
     window.addEventListener('scroll', updateProgress, { passive: true });
     window.addEventListener('resize', updateProgress);
     return () => { window.removeEventListener('scroll', updateProgress); window.removeEventListener('resize', updateProgress); };
   }, []);
+
+  const activeMethodIndex = Math.min(4, Math.floor(Math.max(0, Math.min(.999, methodProgress)) * 5));
 
   const progress = useMemo(() => {
     const ids = navItems.map(([id]) => id);
@@ -51,7 +56,7 @@ function App() {
   };
 
   return <>
-    <SpatialBoundary><SpatialWorld progress={{ current: scrollProgress }} /></SpatialBoundary>
+    <SpatialBoundary><SpatialWorld progress={{ current: scrollProgress }} methodProgress={{ current: methodProgress }} /></SpatialBoundary>
     <div className="grain" aria-hidden="true" />
     <header className="topbar">
       <a className="brand" href="#inicio" onClick={e => { e.preventDefault(); go('inicio'); }}>
@@ -103,7 +108,7 @@ function App() {
       <section id="metodo" className="journey-section content-section">
         <div className="section-meta"><span>03 / 06</span><span>MÉTODO</span></div>
         <p className="eyebrow">UN PROCESO PERSONAL</p><h2>{advisorySubstages[0].titular.join(' ')}</h2>
-        <div className="method-grid">{advisorySubstages.slice(1).map(step => <article className="method-card" key={step.id}><small>{step.num}</small><h3>{step.n}</h3><p>{step.texto}</p>{step.elementos && <p className="method-tags">{step.elementos.join(' · ')}</p>}{step.destacada && <strong>{step.destacada}</strong>}</article>)}</div>
+        <div className="method-grid">{advisorySubstages.slice(1).map((step, i) => <article className={activeMethodIndex === i ? 'method-card method-card-active' : 'method-card'} key={step.id} aria-current={activeMethodIndex === i ? 'step' : undefined}><small>{step.num}</small><h3>{step.n}</h3>{activeMethodIndex === i && <><p>{step.texto}</p>{step.elementos && <p className="method-tags">{step.elementos.join(' · ')}</p>}{step.destacada && <strong>{step.destacada}</strong>}{step.etiqueta && <span className="method-eval-tag">{step.etiqueta}</span>}</>}</article>)}</div>
         <div className="evaluation"><span>{evaluacionInicial.kicker}</span><h3>{evaluacionInicial.titulo} · {evaluacionInicial.precio}</h3><p>{evaluacionInicial.texto}</p><p>{evaluacionInicial.nota}</p><button className="primary-cta" onClick={() => go('reserva')}>{evaluacionInicial.cta} ↗</button><button className="text-link" onClick={() => setShowMore(!showMore)}>{evaluacionInicial.ctaMas}</button>{showMore && <ul>{evaluacionInicial.mas.map(([a,b]) => <li key={a}><b>{a}:</b> {b}</li>)}</ul>}</div>
       </section>
 
