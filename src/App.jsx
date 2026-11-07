@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import SpatialWorld from './scene/SpatialWorld.jsx';
 import {
   site, hero, chapters, seleccion, advisorySubstages, evaluacionInicial,
@@ -25,6 +25,18 @@ function App() {
   const [mode, setMode] = useState(null);
   const [discipline, setDiscipline] = useState(null);
   const [showMore, setShowMore] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const updateProgress = () => {
+      const range = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(range > 0 ? window.scrollY / range : 0);
+    };
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress);
+    return () => { window.removeEventListener('scroll', updateProgress); window.removeEventListener('resize', updateProgress); };
+  }, []);
 
   const progress = useMemo(() => {
     const ids = navItems.map(([id]) => id);
@@ -39,7 +51,7 @@ function App() {
   };
 
   return <>
-    <SpatialBoundary><SpatialWorld progress={{ current: progress }} /></SpatialBoundary>
+    <SpatialBoundary><SpatialWorld progress={{ current: scrollProgress }} /></SpatialBoundary>
     <div className="grain" aria-hidden="true" />
     <header className="topbar">
       <a className="brand" href="#inicio" onClick={e => { e.preventDefault(); go('inicio'); }}>
