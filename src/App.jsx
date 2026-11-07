@@ -1,29 +1,135 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import SpatialWorld from './scene/SpatialWorld.jsx';
+import {
+  site, hero, chapters, seleccion, advisorySubstages, evaluacionInicial,
+  dossierItems, reserva, faq, empresas, cierre, waLink
+} from './legacy/Data/Content.js';
 
 class SpatialBoundary extends React.Component {
   constructor(props) { super(props); this.state = { failed: false }; }
   static getDerivedStateFromError() { return { failed: true }; }
-  componentDidCatch(error) { console.error('SML spatial background unavailable:', error); }
+  componentDidCatch(error) { console.error('SML spatial scene unavailable:', error); }
   render() { return this.state.failed ? <div className="world-fallback" aria-hidden="true" /> : this.props.children; }
 }
 
-const sections = [
- {id:'training',number:'01',eyebrow:'THE TRAINING FLOOR',title:<>TRAIN<br/><em>WITH INTENT.</em></>,copy:'Boxeo · Kickboxing K1 · Muay Thai. Entrenamiento técnico y personalizado para adultos, desde iniciación hasta objetivos de rendimiento.',body:<><div className="sml-detail-grid">{[['01 / PRIVATE','Entrenamiento 1:1','Sesión individual adaptada a tu nivel y objetivo.'],['02 / DUO','Entrena en pareja','Comparte sesión y progreso con otra persona.'],['03 / SMALL GROUP','Grupos reducidos','Máximo 4 personas, con correcciones técnicas.'],['04 / B2B','Experiencias y eventos','Activaciones para hoteles, empresas y marcas.']].map(x=><article className="sml-detail" key={x[0]}><small>{x[0]}</small><h3>{x[1]}</h3><p>{x[2]}</p></article>)}</div><div className="discipline-list"><span>BOXING</span><span>KICKBOXING / K1</span><span>MUAY THAI</span></div><a className="text-cta" href="/academia">Explorar academia <b>↗</b></a></>},
- {id:'method',number:'02',eyebrow:'THE METHOD',title:<>BUILT<br/><em>AROUND YOU.</em></>,copy:'No seguimos una plantilla genérica. Cada proceso parte de tu punto de partida y evoluciona contigo.',body:<><div className="method-steps"><span>01 / TE CONOZCO</span><span>02 / TE OBSERVO</span><span>03 / ENTRENAMOS</span><span>04 / SEGUIMOS</span></div><p className="section-copy">Evaluación inicial, objetivos claros, observación técnica y seguimiento. Trabajamos guardia, biomecánica, desplazamientos, defensa, combinaciones, estrategia y preparación para sparring cuando corresponde.</p></>},
- {id:'about',number:'03',eyebrow:'COACH / FOUNDER',title:<>COACHING<br/><em>WITH PURPOSE.</em></>,copy:'Soy Alex Chen. Competidor y entrenador de deportes de contacto. Mi recorrido combina formación técnica, competición y trabajo individual con alumnos de distintos niveles.',body:<><div className="discipline-list"><span>FEKM / WAKO</span><span>COMPETITION EXPERIENCE</span><span>MADRID</span></div><p className="section-copy">SML nace para acercar el entrenamiento de combate a personas que quieren aprender bien, ganar confianza y moverse mejor, sin necesitar entrar en un gimnasio de competición.</p><a className="text-cta" href="https://www.instagram.com/strikingmotionlab/" target="_blank" rel="noreferrer">Conocer SML <b>↗</b></a></>},
- {id:'groups',number:'04',eyebrow:'SMALL GROUPS',title:<>YOUR TEAM.<br/><em>YOUR PACE.</em></>,copy:'Grupos de máximo 4 personas. No necesitas experiencia previa: las sesiones se adaptan al nivel del grupo y cada alumno recibe correcciones técnicas.',body:<><div className="sml-detail-grid"><article className="sml-detail"><small>SÁBADOS Y DOMINGOS / 10:00–11:00</small><h3>Estadio Metropolitano</h3><p>Metro Estadio Metropolitano.</p></article><article className="sml-detail"><small>SÁBADOS Y DOMINGOS / 11:00–12:00</small><h3>Parque de Roma</h3><p>Metro Sainz de Baranda.</p></article></div><div className="discipline-list"><span>DROP-IN €15</span><span>4 CLASES €55</span><span>8 CLASES €95</span></div><p className="section-copy">Material incluido. Consulta disponibilidad por zona y plazas antes de venir.</p><a className="text-cta" href="https://www.instagram.com/strikingmotionlab/" target="_blank" rel="noreferrer">Consultar disponibilidad <b>↗</b></a></>},
- {id:'analysis',number:'05',eyebrow:'MOVEMENT ANALYSIS',title:<>SEE IT.<br/><em>REFINE IT.</em></>,copy:'Movement Analysis convierte el vídeo de tus sesiones y ejercicios en observaciones concretas sobre técnica, equilibrio, guardia, desplazamientos, defensa y combinaciones.',body:<><div className="method-steps"><span>UPLOAD</span><span>ANALYSE</span><span>COACH REVIEW</span><span>IMPROVE</span></div><p className="section-copy">El análisis se prepara para revisión del entrenador antes de publicarse en tu espacio personal.</p><a className="text-cta" href="/mi-sml">Entrar en Mi SML <b>↗</b></a></>},
- {id:'partners',number:'06',eyebrow:'EVENTS / PARTNERSHIPS',title:<>BRING THE LAB<br/><em>TO YOUR SPACE.</em></>,copy:'Experiencias de boxeo, kickboxing y Muay Thai para hoteles, empresas, marcas, espacios deportivos y eventos privados.',body:<><div className="discipline-list"><span>HOTELS</span><span>COMPANIES</span><span>BRANDS</span><span>EVENTS</span></div><p className="section-copy">SML aporta entrenador, material, diseño de actividad y gestión. El partner aporta espacio y audiencia. Formatos individuales, parejas, grupos y activaciones participativas.</p><a className="text-cta" href="https://www.instagram.com/strikingmotionlab/" target="_blank" rel="noreferrer">Hablar de una colaboración <b>↗</b></a></>},
- {id:'contact',number:'07',eyebrow:'ENTER THE LAB',title:<>YOUR MOVE<br/><em>STARTS HERE.</em></>,copy:'Sesiones 1:1, parejas y grupos reducidos en Madrid. Entrenamos en distintas zonas, en casa, al aire libre o en espacios colaboradores. Material incluido.',body:<><div className="sml-detail-grid"><article className="sml-detail"><small>1:1 / 60 MIN</small><h3>Desde €30</h3><p>Bonos de 4, 8 y 12 sesiones disponibles.</p></article><article className="sml-detail"><small>COUPLES</small><h3>€20 / persona</h3><p>Entrenamiento compartido.</p></article><article className="sml-detail"><small>SMALL GROUP</small><h3>Desde €15</h3><p>Clase suelta o bonos de 4 y 8 clases.</p></article></div><div className="method-steps"><span>ESPAÑOL</span><span>ENGLISH</span><span>中文</span></div><a className="text-cta" href="https://www.instagram.com/strikingmotionlab/" target="_blank" rel="noreferrer">Contactar / reservar <b>↗</b></a><a className="text-cta" href="/academia">Ver academia <b>↗</b></a><a className="text-cta" href="/mi-sml">Acceder a Mi SML <b>↗</b></a></>}
+const navItems = [
+  ['inicio', 'Inicio'], ['descubrir', 'Descubrir'], ['metodo', 'Método'],
+  ['entrenamiento', 'Entrenamiento'], ['alex', 'Sobre Alex'], ['reserva', 'Reserva'],
+  ['empresas', 'Empresas']
 ];
 
-export default function App(){
- const progress=useRef(0); const [active,setActive]=useState(0); const [menuOpen,setMenuOpen]=useState(false);
- useEffect(()=>{const update=()=>{const max=document.documentElement.scrollHeight-window.innerHeight;progress.current=max>0?window.scrollY/max:0;const marker=window.scrollY+window.innerHeight*.55;let current=0;sections.forEach((s,i)=>{const node=document.getElementById(s.id);if(node&&marker>=node.offsetTop)current=i;});setActive(current);};update();window.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update);return()=>{window.removeEventListener('scroll',update);window.removeEventListener('resize',update);};},[]);
- const go=id=>{setMenuOpen(false);document.getElementById(id)?.scrollIntoView({behavior:'smooth'});};
- return <><SpatialBoundary><SpatialWorld progress={progress}/></SpatialBoundary><div className="grain" aria-hidden="true"/><header className="topbar"><a className="brand" href="#top" onClick={e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});}}><span className="brand-mark">S<span>/</span>ML</span><span className="brand-caption">STRIKING MOTION LAB<br/>MADRID · EST. 2025</span></a><button className="menu-toggle" onClick={()=>setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Abrir navegación"><span/><span/></button><nav className={menuOpen?'nav nav-open':'nav'}>{sections.map(s=><button key={s.id} onClick={()=>go(s.id)}>{s.eyebrow}</button>)}<a href="/academia">ACADEMIA ↗</a><a href="/mi-sml">MI SML ↗</a></nav><span className="top-index">SPATIAL EXPERIENCE / 001</span></header>
- <main id="top"><section className="hero" aria-label="Striking Motion Lab"><div className="hero-kicker"><span className="live-dot"/> PERSONAL COMBAT SPORTS LAB <span>·</span> MADRID</div><div className="hero-title-wrap"><p className="hero-overline">MOVE WITH INTENT</p><h1>STRIKING<br/><span>MOTION</span><b>LAB.</b></h1></div><div className="hero-bottom"><p>TRAINING IS NOT<br/>ABOUT FIGHTING.<br/><strong>IT'S ABOUT HOW YOU MOVE.</strong></p><button className="round-cta" onClick={()=>go('training')} aria-label="Entrar en el laboratorio"><span>ENTER<br/>THE LAB</span><b>↘</b></button></div><div className="hero-coordinate">40°25' N&nbsp; 3°42' W<br/>MADRID / SPAIN</div><div className="scroll-cue"><span/> SCROLL TO EXPLORE</div></section>
- {sections.map((s,i)=><section className={`journey-section section-${(i%3)+1}`} id={s.id} key={s.id}><div className="section-meta"><span>{s.number} / 07</span><span>{s.eyebrow}</span></div><div className="section-content"><p className="section-kicker"><i/> {s.eyebrow}</p><h2>{s.title}</h2><p className="section-copy">{s.copy}</p>{s.body}</div><div className="section-side-note">STRIKING MOTION LAB <span>—</span> MADRID</div></section>)}</main>
- <div className="progress-rail"><span style={{transform:`scaleY(${progress.current||0})`}}/></div><div className="chapter-indicator"><span>0{active+1}</span><i/>07</div><footer className="footer"><span>© {new Date().getFullYear()} STRIKING MOTION LAB</span><span>MOVE WITH INTENT / 1% BETTER EVERYDAY</span><span><a href="/academia">ACADEMIA</a> · <a href="/mi-sml">MI SML</a> · <a href="https://www.instagram.com/strikingmotionlab/" target="_blank" rel="noreferrer">INSTAGRAM ↗</a></span></footer></>;
+function App() {
+  const [active, setActive] = useState('inicio');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [faqOpen, setFaqOpen] = useState(-1);
+  const [mode, setMode] = useState(null);
+  const [discipline, setDiscipline] = useState(null);
+  const [showMore, setShowMore] = useState(false);
+
+  const progress = useMemo(() => {
+    const ids = navItems.map(([id]) => id);
+    const index = Math.max(0, ids.indexOf(active));
+    return index / (ids.length - 1);
+  }, [active]);
+
+  const go = (id) => {
+    setActive(id);
+    setMenuOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  return <>
+    <SpatialBoundary><SpatialWorld progress={{ current: progress }} /></SpatialBoundary>
+    <div className="grain" aria-hidden="true" />
+    <header className="topbar">
+      <a className="brand" href="#inicio" onClick={e => { e.preventDefault(); go('inicio'); }}>
+        <span className="brand-mark">S<span>/</span>ML</span>
+        <span className="brand-caption">STRIKING MOTION LAB<br/>MADRID</span>
+      </a>
+      <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Abrir navegación"><span/><span/></button>
+      <nav className={menuOpen ? 'nav nav-open' : 'nav'}>
+        {navItems.map(([id, label]) => <button key={id} onClick={() => go(id)}>{label}</button>)}
+        <a href="/academia">ACADEMIA ↗</a><a href="/mi-sml">MI SML ↗</a>
+      </nav>
+      <span className="top-index">SPATIAL EXPERIENCE / 001</span>
+    </header>
+
+    <main id="inicio">
+      <section className="hero journey-section">
+        <div className="hero-kicker">PERSONAL COMBAT SPORTS LAB · {site.ciudad.toUpperCase()}</div>
+        <p className="hero-overline">{hero.kicker}</p>
+        <h1>{hero.titulo.map((line, i) => <React.Fragment key={line}>{line}{i < hero.titulo.length - 1 && <br/>}</React.Fragment>)}</h1>
+        <p className="hero-disciplines">{hero.disciplinasLinea}</p>
+        <p className="hero-context">{hero.contexto}</p>
+        <div className="hero-actions">
+          <a className="primary-cta" href={site.calendly}> {hero.ctaReservar} ↗</a>
+          <button className="secondary-cta" onClick={() => go('descubrir')}>{hero.ctaExplorar}</button>
+        </div>
+        <div className="hero-proof">{hero.confianza}</div>
+        <div className="scroll-cue">SCROLL TO EXPLORE ↓</div>
+      </section>
+
+      <section id="descubrir" className="journey-section content-section">
+        <div className="section-meta"><span>{chapters[1]?.n} / 06</span><span>DESCUBRIR</span></div>
+        <p className="eyebrow">ANTES DE ELEGIR</p><h2>{seleccion.pregunta}</h2><p className="lead">{seleccion.lead}</p>
+        <p className="section-note">{seleccion.formasNota}</p>
+        <div className="choice-grid">
+          {seleccion.formas.map((item, i) => <button className={mode === item.id ? 'choice-card selected' : 'choice-card'} key={item.id} onClick={() => setMode(mode === item.id ? null : item.id)}>
+            <small>0{i + 1}</small><h3>{item.titulo}</h3><strong>{item.concepto}</strong>
+            {mode === item.id && <><p>{item.texto}</p><ul>{item.etiquetas?.map(tag => <li key={tag}>{tag}</li>)}</ul>{item.cierre && <p className="choice-close">{item.cierre}</p>}</>}
+            <span>{mode === item.id ? 'CERRAR −' : 'EXPLORAR +'}</span>
+          </button>)}
+        </div>
+        <div className="discipline-intro"><h3>{seleccion.puente.titulo}</h3><p>{seleccion.puente.forma.texto} · {seleccion.puente.disciplina.texto}</p></div>
+        <p className="eyebrow">{seleccion.disciplinasIntro[0]}</p><p className="lead">{seleccion.disciplinasIntro[1]}</p>
+        <div className="discipline-grid">
+          {['Boxeo', 'K1 / Kickboxing', 'Muay Thai'].map(name => <button key={name} className={discipline === name ? 'discipline-card selected' : 'discipline-card'} onClick={() => setDiscipline(discipline === name ? null : name)}><span>DISCIPLINA</span><h3>{name}</h3><b>{discipline === name ? 'SELECCIONADO ✓' : 'DESCUBRIR ↗'}</b></button>)}
+        </div>
+        <p className="service-copy">{seleccion.servicio.linea1}<br/>{seleccion.servicio.linea2}<br/>{seleccion.servicio.linea3}</p>
+      </section>
+
+      <section id="metodo" className="journey-section content-section">
+        <div className="section-meta"><span>03 / 06</span><span>MÉTODO</span></div>
+        <p className="eyebrow">UN PROCESO PERSONAL</p><h2>{advisorySubstages[0].titular.join(' ')}</h2>
+        <div className="method-grid">{advisorySubstages.slice(1).map(step => <article className="method-card" key={step.id}><small>{step.num}</small><h3>{step.n}</h3><p>{step.texto}</p>{step.elementos && <p className="method-tags">{step.elementos.join(' · ')}</p>}{step.destacada && <strong>{step.destacada}</strong>}</article>)}</div>
+        <div className="evaluation"><span>{evaluacionInicial.kicker}</span><h3>{evaluacionInicial.titulo} · {evaluacionInicial.precio}</h3><p>{evaluacionInicial.texto}</p><p>{evaluacionInicial.nota}</p><button className="primary-cta" onClick={() => go('reserva')}>{evaluacionInicial.cta} ↗</button><button className="text-link" onClick={() => setShowMore(!showMore)}>{evaluacionInicial.ctaMas}</button>{showMore && <ul>{evaluacionInicial.mas.map(([a,b]) => <li key={a}><b>{a}:</b> {b}</li>)}</ul>}</div>
+      </section>
+
+      <section id="entrenamiento" className="journey-section content-section">
+        <div className="section-meta"><span>04 / 06</span><span>ENTRENAMIENTO</span></div>
+        <p className="eyebrow">FORMATO Y PROGRESIÓN</p><h2>Entrenamiento diseñado alrededor de ti.</h2>
+        <div className="training-grid">{[
+          ['01 / PRIVATE','Entrenamiento 1:1','Sesión individual adaptada a tu nivel y objetivo.'],
+          ['02 / DUO','Entrena en pareja','Comparte sesión y progreso con otra persona.'],
+          ['03 / SMALL GROUP','Grupos reducidos','Máximo cuatro personas, con correcciones técnicas.'],
+          ['04 / B2B','Experiencias y eventos','Activaciones para hoteles, empresas y marcas.']
+        ].map(([n,t,d]) => <article className="training-card" key={n}><small>{n}</small><h3>{t}</h3><p>{d}</p></article>)}</div>
+        <div className="pricing-line"><span>1:1 · DESDE 30 €</span><span>PAREJAS · 20 € / PERSONA</span><span>GRUPOS · DESDE 15 €</span></div>
+        <p className="material-note">Material incluido · 60 minutos · Madrid</p>
+      </section>
+
+      <section id="alex" className="journey-section content-section">
+        <div className="section-meta"><span>05 / 06</span><span>SOBRE ALEX</span></div>
+        <p className="eyebrow">COACH / FOUNDER</p><h2>Experiencia dentro y fuera del ring.</h2>
+        {dossierItems.filter(item => item.id !== 'metodo').map(item => <article className="proof-card" key={item.id}><small>{item.label}</small>{item.titulo && <h3>{item.titulo}</h3>}{item.datos?.map(([a,b]) => <p key={a}><b>{a}:</b> {b}</p>)}{item.texto?.map((line,i) => <p key={i}>{line}</p>)}{item.enlace && <a href={item.enlace.href} target="_blank" rel="noreferrer">{item.enlace.label} ↗</a>}</article>)}
+      </section>
+
+      <section id="reserva" className="journey-section content-section booking-section">
+        <div className="section-meta"><span>06 / 06</span><span>RESERVA</span></div>
+        <p className="eyebrow">{reserva.subtitulo}</p><h2>{reserva.titulo}</h2><p className="lead">{reserva.texto}</p>
+        <div className="booking-grid"><article><h3>{reserva.caminos.directo.titulo}</h3><p>{reserva.caminos.directo.accion}</p><a className="primary-cta" href={site.calendly}>Elegir día y hora ↗</a></article><article><h3>{reserva.caminos.dudas.titulo}</h3><p>{reserva.caminos.dudas.accion}</p><a className="secondary-cta" href={waLink(cierre.mensajeAsesoria)} target="_blank" rel="noreferrer">Pedir asesoramiento ↗</a></article></div>
+        <h3>{reserva.despuesTitulo}</h3><ol className="booking-steps">{reserva.despues.map((item,i) => <li key={i}>{item}</li>)}</ol>
+        <div className="faq"><h3>Preguntas frecuentes</h3>{faq.map((item,i) => <article key={item.q}><button onClick={() => setFaqOpen(faqOpen === i ? -1 : i)}>{item.q}<span>{faqOpen === i ? '−' : '+'}</span></button>{faqOpen === i && <p>{item.a}</p>}</article>)}</div>
+      </section>
+
+      <section id="empresas" className="journey-section content-section">
+        <div className="section-meta"><span>EXTRA / B2B</span><span>PARTNERSHIPS</span></div>
+        <p className="eyebrow">BRING THE LAB TO YOUR SPACE</p><h2>Experiencias de combate para equipos y espacios.</h2><p className="lead">{empresas.texto}</p>
+        <div className="training-grid">{empresas.items.map(item => <article className="training-card" key={item.nombre}><h3>{item.nombre}</h3><p>{item.texto}</p></article>)}</div>
+        <p>{empresas.ayuda}</p><a className="primary-cta" href={waLink(empresas.mensaje)} target="_blank" rel="noreferrer">Hablar de una colaboración ↗</a>
+      </section>
+    </main>
+    <footer className="footer"><span>© {new Date().getFullYear()} {site.nombre}</span><span>{site.claim}</span><span><a href={site.instagram.url} target="_blank" rel="noreferrer">{site.instagram.handle}</a> · <a href="/academia">ACADEMIA</a> · <a href="/mi-sml">MI SML</a></span></footer>
+  </>;
 }
+export default App;
