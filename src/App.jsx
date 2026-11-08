@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import SpatialWorld from './scene/SpatialWorld.jsx';
+import LegacyWorld from './scene/LegacyWorld.jsx';
 import {
   site, hero, advisorySubstages, evaluacionInicial,
   dossierItems, reserva, faq, empresas, cierre, waLink
@@ -26,9 +26,7 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [faqOpen, setFaqOpen] = useState(-1);
   const [showMore, setShowMore] = useState(false);
-  const scrollProgress = useRef(0);
   const methodProgress = useRef(0);
-  const methodActive = useRef(false);
   const [activeMethodIndex, setActiveMethodIndex] = useState(0);
 
   useEffect(() => {
@@ -45,14 +43,11 @@ function App() {
 
   useEffect(() => {
     const updateProgress = () => {
-      const range = document.documentElement.scrollHeight - window.innerHeight;
-      scrollProgress.current = range > 0 ? window.scrollY / range : 0;
       const section = document.getElementById('metodo');
       if (section) {
         const rect = section.getBoundingClientRect();
         const travel = Math.max(1, rect.height - window.innerHeight);
         methodProgress.current = Math.max(0, Math.min(1, -rect.top / travel));
-        methodActive.current = rect.top <= 0 && rect.bottom >= window.innerHeight;
         const nextStep = Math.min(4, Math.floor(Math.max(0, Math.min(.999, methodProgress.current)) * 5));
         setActiveMethodIndex((current) => current === nextStep ? current : nextStep);
       }
@@ -73,7 +68,7 @@ function App() {
 
   return <>
     <a className="skip-link" href="#contenido">Saltar al contenido</a>
-    <SpatialBoundary><SpatialWorld progress={scrollProgress} methodProgress={methodProgress} methodActive={methodActive} /></SpatialBoundary>
+    <SpatialBoundary><LegacyWorld /></SpatialBoundary>
     <div className="grain" aria-hidden="true" />
     <header className="topbar">
       <a className="brand" href="#inicio" onClick={(e) => { e.preventDefault(); go('inicio'); }} aria-label="Striking Motion Lab, inicio">
