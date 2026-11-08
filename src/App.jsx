@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import SpatialWorld from './scene/SpatialWorld.jsx';
 import {
-  site, hero, advisorySubstages, evaluacionInicial,
+  site, hero, bridge, advisorySubstages, evaluacionInicial,
   dossierItems, reserva, faq, empresas, cierre, waLink
 } from './legacy/Data/Content.js';
 import { existingPlans, kitInicio } from './legacy/Data/Programs.js';
@@ -30,6 +30,7 @@ function App() {
   const methodProgress = useRef(0);
   const methodActive = useRef(false);
   const [activeMethodIndex, setActiveMethodIndex] = useState(0);
+  const [bridgeMoment, setBridgeMoment] = useState(0);
 
   useEffect(() => {
     const ids = navItems.map(([id]) => id);
@@ -55,6 +56,14 @@ function App() {
         methodActive.current = rect.top <= 0 && rect.bottom >= window.innerHeight;
         const nextStep = Math.min(4, Math.floor(Math.max(0, Math.min(.999, methodProgress.current)) * 5));
         setActiveMethodIndex((current) => current === nextStep ? current : nextStep);
+      }
+      const bridgeSection = document.getElementById('puente');
+      if (bridgeSection) {
+        const rect = bridgeSection.getBoundingClientRect();
+        const travel = Math.max(1, rect.height - window.innerHeight);
+        const progress = Math.max(0, Math.min(.999, -rect.top / travel));
+        const moment = Math.min(2, Math.floor(progress * 3));
+        setBridgeMoment((current) => current === moment ? current : moment);
       }
     };
     updateProgress();
@@ -102,6 +111,23 @@ function App() {
         <div className="hero-proof">{hero.confianza}</div>
         <div className="hero-quicklinks"><button type="button" onClick={() => go('entrenamiento')}>Ver precios</button><button type="button" onClick={() => go('empresas')}>Empresas y eventos</button></div>
         <div className="scroll-cue">SCROLL TO EXPLORE ↓</div>
+      </section>
+
+      <section id="puente" className="bridge-transition journey-section" aria-label="El combate y las distintas formas de moverse">
+        <div className="bridge-stage">
+          <div className="bridge-header"><span>01 / 05</span><span>EL COMBATE · UNA EXPERIENCIA PERSONAL</span></div>
+          <div className="bridge-content" aria-live="polite">
+            {bridgeMoment === 0 && <div className="bridge-body">
+              <p className="eyebrow">EL CUERPO</p>
+              <h2>{bridge.cuerpo.titulo[0]}</h2>
+              <p className="bridge-support">{bridge.cuerpo.apoyo}</p>
+              <div className="bridge-examples">{bridge.ejemplos.casos.map((item) => <article className="bridge-example" key={item.nombre}><small>{item.nombre}</small><p>{item.texto}</p></article>)}</div>
+            </div>}
+            {bridgeMoment === 1 && <div className="bridge-combat"><p className="eyebrow">NO HAY UNA ÚNICA FORMA</p><h2>{bridge.combate.texto}</h2></div>}
+            {bridgeMoment === 2 && <div className="bridge-map"><p className="eyebrow">DEL COMBATE AL STRIKING</p><h2>Un mundo. Distintas disciplinas.</h2><ol>{bridge.mapa.pasos.map((step, i) => <li key={step}><span>0{i + 1}</span>{step}</li>)}</ol></div>}
+          </div>
+          <div className="bridge-footer"><span>STRIKING MOTION LAB · MADRID</span><span>{String(bridgeMoment + 1).padStart(2, '0')} / 03</span></div>
+        </div>
       </section>
 
       <section id="metodo" className="method-section journey-section">
