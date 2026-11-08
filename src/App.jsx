@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import SpatialWorld from './scene/SpatialWorld.jsx';
 import {
-  site, hero, chapters, seleccion, advisorySubstages, evaluacionInicial,
+  site, hero, advisorySubstages, evaluacionInicial,
   dossierItems, reserva, faq, empresas, cierre, waLink
 } from './legacy/Data/Content.js';
-import { disciplines } from './legacy/Data/Disciplines.js';
 import { existingPlans, kitInicio } from './legacy/Data/Programs.js';
 import { RUTAS } from './legacy/Data/Legal.js';
 
@@ -16,7 +15,7 @@ class SpatialBoundary extends React.Component {
 }
 
 const navItems = [
-  ['inicio', 'Inicio'], ['descubrir', 'Descubrir'], ['metodo', 'Método'],
+  ['inicio', 'Inicio'], ['metodo', 'Método'],
   ['entrenamiento', 'Precios'], ['alex', 'Sobre Alex'], ['reserva', 'Reservar'],
   ['empresas', 'Empresas'],
 ];
@@ -26,8 +25,6 @@ function App() {
   const [active, setActive] = useState('inicio');
   const [menuOpen, setMenuOpen] = useState(false);
   const [faqOpen, setFaqOpen] = useState(-1);
-  const [mode, setMode] = useState(null);
-  const [discipline, setDiscipline] = useState(null);
   const [showMore, setShowMore] = useState(false);
   const scrollProgress = useRef(0);
   const methodProgress = useRef(0);
@@ -71,7 +68,6 @@ function App() {
     setMenuOpen(false);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
-  const selectedDiscipline = disciplines.find((item) => item.id === discipline);
   const formatPlans = existingPlans.filter((plan) => plan.tipo === 'formato');
   const monthlyPlans = existingPlans.filter((plan) => plan.tipo === 'mensual');
 
@@ -101,45 +97,17 @@ function App() {
         <p className="hero-context">{hero.contexto}</p>
         <div className="hero-actions">
           <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">Reservar evaluación · 30 € ↗</a>
-          <button className="secondary-cta" type="button" onClick={() => go('descubrir')}>No sé qué necesito · Descubrir</button>
+          <button className="secondary-cta" type="button" onClick={() => go('metodo')}>Conocer el método</button>
         </div>
         <div className="hero-proof">{hero.confianza}</div>
         <div className="hero-quicklinks"><button type="button" onClick={() => go('entrenamiento')}>Ver precios</button><button type="button" onClick={() => go('empresas')}>Empresas y eventos</button></div>
         <div className="scroll-cue">SCROLL TO EXPLORE ↓</div>
       </section>
 
-      <section id="descubrir" className="journey-section content-section">
-        <div className="section-meta"><span>{chapters[1]?.n} / 06</span><span>DESCUBRIR</span></div>
-        <p className="eyebrow">ANTES DE ELEGIR</p><h2>{seleccion.pregunta}</h2>
-        {seleccion.lead && <p className="lead">{seleccion.lead}</p>}
-        <p className="section-note">{seleccion.formasNota}</p>
-        <div className="choice-grid">
-          {seleccion.formas.map((item, i) => <button type="button" className={mode === item.id ? 'choice-card selected' : 'choice-card'} key={item.id} aria-expanded={mode === item.id} onClick={() => setMode(mode === item.id ? null : item.id)}>
-            <small>0{i + 1}</small><h3>{item.titulo}</h3><strong>{item.concepto}</strong>
-            {mode === item.id && <><p>{item.texto}</p>{item.destacada && <p className="choice-highlight">{item.destacada.join(' ')}</p>}<ul>{item.etiquetas?.map((tag) => <li key={tag}>{tag}</li>)}</ul>{item.cierre && <p className="choice-close">{item.cierre}</p>}</>}
-            <span>{mode === item.id ? 'CERRAR −' : 'EXPLORAR +'}</span>
-          </button>)}
-        </div>
-        <div className="discipline-intro"><h3>{seleccion.puente.titulo}</h3><p>{seleccion.puente.forma.etiqueta} · {seleccion.puente.disciplina.etiqueta}</p></div>
-        <p className="eyebrow">{seleccion.disciplinasIntro[0]}</p><p className="lead">{seleccion.disciplinasIntro[1]}</p>
-        <div className="discipline-grid">
-          {disciplines.map((item) => <button type="button" key={item.id} className={discipline === item.id ? 'discipline-card selected' : 'discipline-card'} aria-expanded={discipline === item.id} onClick={() => setDiscipline(discipline === item.id ? null : item.id)}><span>DISCIPLINA</span><h3>{item.name}</h3><p>{item.linea}</p><b>{discipline === item.id ? 'CERRAR −' : 'DESCUBRIR ↗'}</b></button>)}
-        </div>
-        {selectedDiscipline && <article className="discipline-detail" aria-live="polite">
-          <p className="eyebrow">{selectedDiscipline.tagline}</p>
-          {selectedDiscipline.descripcion.map((line) => <p key={line}>{line}</p>)}
-          <h4>Cómo se entrena</h4><p>{selectedDiscipline.entrenamiento}</p>
-          <div className="discipline-attributes">{selectedDiscipline.atributos.map((item) => <span key={item}>{item}</span>)}</div>
-          <dl>{selectedDiscipline.glosario.map((item) => <div key={item.t}><dt>{item.t}</dt><dd>{item.d}</dd></div>)}</dl>
-        </article>}
-        <div className="service-copy"><strong>{seleccion.servicio.linea1}</strong><br/>{seleccion.servicio.linea2}<br/>{seleccion.servicio.linea3}</div>
-        <button type="button" className="text-link section-next" onClick={() => go('metodo')}>Conoce cómo trabajamos →</button>
-      </section>
-
       <section id="metodo" className="method-section journey-section">
         <div className="method-stage">
           <div className="method-copy">
-            <div className="section-meta"><span>03 / 06</span><span>MÉTODO · LABORATORIO</span></div>
+            <div className="section-meta"><span>02 / 05</span><span>MÉTODO · LABORATORIO</span></div>
             <p className="eyebrow">UN PROCESO PERSONAL</p>
             <h2>{advisorySubstages[0].titular.map((line, i) => <React.Fragment key={line}>{line}{i === 0 && <br/>}</React.Fragment>)}</h2>
             <div className="method-evaluation">
@@ -164,7 +132,7 @@ function App() {
       </section>
 
       <section id="entrenamiento" className="journey-section content-section pricing-section">
-        <div className="section-meta"><span>04 / 06</span><span>ENTRENAMIENTO · FORMATOS Y PRECIOS</span></div>
+        <div className="section-meta"><span>03 / 05</span><span>ENTRENAMIENTO · FORMATOS Y PRECIOS</span></div>
         <p className="eyebrow">ELIGE CÓMO ENTRENAR</p><h2>Entrenamiento diseñado alrededor de ti.</h2>
         <p className="lead">Sesiones privadas y grupos reducidos. El material técnico está incluido y cada sesión dura 60 minutos.</p>
         <h3 className="subsection-title">Sesiones sueltas y formatos</h3>
@@ -180,13 +148,13 @@ function App() {
       </section>
 
       <section id="alex" className="journey-section content-section founder-section">
-        <div className="section-meta"><span>05 / 06</span><span>SOBRE ALEX</span></div>
+        <div className="section-meta"><span>04 / 05</span><span>SOBRE ALEX</span></div>
         <p className="eyebrow">COACH / COMPETIDOR</p><h2>Experiencia dentro y fuera del ring.</h2>
         {dossierItems.filter((item) => item.id !== 'metodo').map((item) => <article className="proof-card" key={item.id}><small>{item.label}</small>{item.titulo && <h3>{item.titulo}</h3>}{item.datos?.map(([a, b]) => <p key={a}><b>{a}:</b> {b}</p>)}{item.texto?.map((line, i) => <p key={i}>{line}</p>)}{item.resenas?.map((review, i) => <blockquote key={i}>“{review}”</blockquote>)}{item.enlace && <a href={item.enlace.href} target="_blank" rel="noopener noreferrer">{item.enlace.label} ↗</a>}</article>)}
       </section>
 
       <section id="reserva" className="journey-section content-section booking-section">
-        <div className="section-meta"><span>06 / 06</span><span>RESERVA</span></div>
+        <div className="section-meta"><span>05 / 05</span><span>RESERVA</span></div>
         <p className="eyebrow">{reserva.subtitulo}</p><h2>{reserva.titulo}</h2><p className="lead">{reserva.texto}</p>
         <div className="booking-grid"><article><h3>{reserva.caminos.directo.titulo}</h3><p>{reserva.caminos.directo.accion}</p><a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">Elegir día y hora ↗</a></article><article><h3>{reserva.caminos.dudas.titulo}</h3><p>{reserva.caminos.dudas.accion}</p><a className="secondary-cta" href={waLink(cierre.mensajeAsesoria)} target="_blank" rel="noopener noreferrer">Pedir asesoramiento ↗</a></article></div>
         <h3 className="subsection-title">Antes, durante y después</h3><ol className="booking-steps">{reserva.despues.map((item, i) => <li key={i}>{item}</li>)}</ol>
