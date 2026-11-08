@@ -214,3 +214,25 @@ main{position:relative;z-index:2}
 }
 
 @media(min-width:901px){.pricing-section .training-grid:not(.monthly-grid){grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+
+/* Spatial composition: keep the machine visible between the method panels. */
+@media(min-width:901px){
+  .method-stage{
+    grid-template-columns:minmax(300px,36%) minmax(300px,34%);
+    justify-content:space-between;
+    gap:0;
+    padding-left:clamp(28px,6vw,92px);
+    padding-right:clamp(28px,6vw,92px);
+  }
+  .method-copy{max-width:520px;padding:20px 22px 20px 0}
+  .method-stations{width:100%;max-width:490px}
+  .method-section:before{
+    background:linear-gradient(90deg,rgba(9,11,14,.56) 0%,rgba(9,11,14,.34) 34%,rgba(9,11,14,.025) 50%,rgba(9,11,14,.28) 67%,rgba(9,11,14,.58) 100%);
+  }
+}
+@media(min-width:901px) and (max-width:1120px){
+  .method-stage{grid-template-columns:minmax(285px,38%) minmax(285px,38%)}
+  .method-copy{padding-right:12px}
+  .method-evaluation{padding:13px 15px}
+}
