@@ -27,13 +27,14 @@ function App() {
   const [showMore, setShowMore] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [methodProgress, setMethodProgress] = useState(0);
+  const [methodActive, setMethodActive] = useState(false);
 
   useEffect(() => {
     const updateProgress = () => {
       const range = document.documentElement.scrollHeight - window.innerHeight;
       setScrollProgress(range > 0 ? window.scrollY / range : 0);
       const section = document.getElementById('metodo');
-      if (section) { const rect = section.getBoundingClientRect(); setMethodProgress(Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)))); }
+      if (section) { const rect = section.getBoundingClientRect(); const travel = Math.max(1, rect.height - window.innerHeight); setMethodProgress(Math.max(0, Math.min(1, -rect.top / travel))); setMethodActive(rect.top <= 0 && rect.bottom >= window.innerHeight); }
     };
     updateProgress();
     window.addEventListener('scroll', updateProgress, { passive: true });
@@ -56,7 +57,7 @@ function App() {
   };
 
   return <>
-    <SpatialBoundary><SpatialWorld progress={{ current: scrollProgress }} methodProgress={{ current: methodProgress }} /></SpatialBoundary>
+    <SpatialBoundary><SpatialWorld progress={{ current: scrollProgress }} methodProgress={{ current: methodProgress }} methodActive={{ current: methodActive }} /></SpatialBoundary>
     <div className="grain" aria-hidden="true" />
     <header className="topbar">
       <a className="brand" href="#inicio" onClick={e => { e.preventDefault(); go('inicio'); }}>
@@ -105,11 +106,31 @@ function App() {
         <p className="service-copy">{seleccion.servicio.linea1}<br/>{seleccion.servicio.linea2}<br/>{seleccion.servicio.linea3}</p>
       </section>
 
-      <section id="metodo" className="journey-section content-section">
-        <div className="section-meta"><span>03 / 06</span><span>MÉTODO</span></div>
-        <p className="eyebrow">UN PROCESO PERSONAL</p><h2>{advisorySubstages[0].titular.join(' ')}</h2>
-        <div className="method-grid">{advisorySubstages.slice(1).map((step, i) => <article className={activeMethodIndex === i ? 'method-card method-card-active' : 'method-card'} key={step.id} aria-current={activeMethodIndex === i ? 'step' : undefined}><small>{step.num}</small><h3>{step.n}</h3>{activeMethodIndex === i && <><p>{step.texto}</p>{step.elementos && <p className="method-tags">{step.elementos.join(' · ')}</p>}{step.destacada && <strong>{step.destacada}</strong>}{step.etiqueta && <span className="method-eval-tag">{step.etiqueta}</span>}</>}</article>)}</div>
-        <div className="evaluation"><span>{evaluacionInicial.kicker}</span><h3>{evaluacionInicial.titulo} · {evaluacionInicial.precio}</h3><p>{evaluacionInicial.texto}</p><p>{evaluacionInicial.nota}</p><button className="primary-cta" onClick={() => go('reserva')}>{evaluacionInicial.cta} ↗</button><button className="text-link" onClick={() => setShowMore(!showMore)}>{evaluacionInicial.ctaMas}</button>{showMore && <ul>{evaluacionInicial.mas.map(([a,b]) => <li key={a}><b>{a}:</b> {b}</li>)}</ul>}</div>
+      <section id="metodo" className="method-section journey-section">
+        <div className="method-stage">
+          <div className="method-copy">
+            <div className="section-meta"><span>03 / 06</span><span>MÉTODO · PROTOCOLO PERSONAL</span></div>
+            <p className="eyebrow">UN PROCESO PERSONAL</p>
+            <h2>{advisorySubstages[0].titular.map((line, i) => <React.Fragment key={line}>{line}{i === 0 && <br/>}</React.Fragment>)}</h2>
+            <div className="method-evaluation">
+              <span>{evaluacionInicial.kickerMetodo}</span>
+              <div className="method-evaluation-title"><h3>{evaluacionInicial.titulo}</h3><strong>{evaluacionInicial.precio}</strong></div>
+              <p>{evaluacionInicial.texto}</p>
+              <p className="method-evaluation-note">{evaluacionInicial.nota}</p>
+              <a className="primary-cta" href={site.calendly}>{evaluacionInicial.cta} ↗</a>
+              <button className="text-link" onClick={() => setShowMore(!showMore)}>{showMore ? 'Cerrar información −' : evaluacionInicial.ctaMas + ' +'}</button>
+              {showMore && <ul>{evaluacionInicial.mas.map(([a,b]) => <li key={a}><b>{a}:</b> {b}</li>)}</ul>}
+            </div>
+          </div>
+          <div className="method-stations" aria-label="Cinco pasos del método">
+            {advisorySubstages.slice(1).map((step, i) => <button className={activeMethodIndex === i ? 'method-station active' : 'method-station'} key={step.id} aria-current={activeMethodIndex === i ? 'step' : undefined} onClick={() => { const section=document.getElementById('metodo'); if(section){ const travel=section.offsetHeight-window.innerHeight; window.scrollTo({top:section.offsetTop+travel*((i+.5)/5),behavior:'smooth'}); } }}>
+              <span className="station-number">{step.num}</span><span className="station-content"><strong>{step.n}</strong>{activeMethodIndex === i && <><span className="station-description">{step.texto}</span>{step.elementos && <span className="station-tags">{step.elementos.join(' · ')}</span>}{step.destacada && <span className="station-highlight">{step.destacada}</span>}</>}</span>
+              {step.etiqueta && activeMethodIndex !== i && <small>{step.etiqueta}</small>}
+            </button>)}
+            <p className="method-closing">No solo entrenas. <span>Entiendes qué estás desarrollando.</span></p>
+          </div>
+          <span className="method-coordinate">LAB / 03 — {String(activeMethodIndex + 1).padStart(2,'0')} : 05</span>
+        </div>
       </section>
 
       <section id="entrenamiento" className="journey-section content-section">

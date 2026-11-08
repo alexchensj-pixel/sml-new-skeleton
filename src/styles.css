@@ -112,3 +112,37 @@ main{position:relative;z-index:2}
 @media(max-width:760px){
   .choice-grid,.discipline-grid,.method-grid,.training-grid,.booking-grid{grid-template-columns:1fr}
 }
+
+/* MÉTODO · recorrido sticky de cinco estaciones sincronizado con la máquina 3D */
+.method-section{height:250vh;min-height:250svh;padding:0!important;position:relative}
+.method-stage{position:sticky;top:0;height:100vh;height:100svh;min-height:620px;display:grid;grid-template-columns:minmax(340px,42%) minmax(320px,1fr);align-items:center;gap:clamp(28px,5vw,84px);padding:clamp(100px,12vh,132px) clamp(28px,7vw,112px) 64px;overflow:hidden;isolation:isolate}
+.method-copy{position:relative;z-index:2;max-width:560px;align-self:center;text-shadow:0 2px 20px #08090be0}
+.method-copy h2{font:800 clamp(2.1rem,4.1vw,4.3rem)/.98 'Barlow Condensed',sans-serif;letter-spacing:-.025em;text-transform:uppercase;max-width:11ch;margin:18px 0 24px}
+.method-evaluation{max-width:430px;padding:17px 19px 18px;border:1px solid rgba(224,90,43,.72);background:rgba(10,12,15,.88);backdrop-filter:blur(12px)}
+.method-evaluation>span{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);font-weight:800}
+.method-evaluation-title{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin:7px 0}
+.method-evaluation-title h3{font:700 clamp(1.25rem,2vw,1.8rem)/1 'Barlow Condensed',sans-serif;text-transform:uppercase}
+.method-evaluation-title strong{font:700 1.5rem 'Barlow Condensed',sans-serif;white-space:nowrap}
+.method-evaluation p{font-size:12px;line-height:1.55;color:#c5c8ce;margin:7px 0}
+.method-evaluation .method-evaluation-note{font-size:11px;color:#9ca2ad}
+.method-evaluation .primary-cta{display:inline-flex;margin-top:9px;min-height:42px;align-items:center}
+.method-evaluation .text-link{display:inline-block;margin-left:14px;font-size:11px;color:#e5e7eb;text-decoration:underline;text-underline-offset:4px}
+.method-evaluation ul{margin-top:10px;font-size:11px;line-height:1.7;color:#c5c8ce}
+.method-stations{position:relative;z-index:2;justify-self:end;width:min(100%,590px);display:flex;flex-direction:column;text-shadow:0 2px 18px #08090b}
+.method-station{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:13px;align-items:start;text-align:left;width:100%;padding:14px 10px;border-top:1px solid rgba(230,233,239,.22);background:linear-gradient(90deg,rgba(8,10,13,.78),rgba(8,10,13,.28));color:#f0f1ef;cursor:pointer;transition:background .25s,border-color .25s}
+.method-station:last-of-type{border-bottom:1px solid rgba(230,233,239,.22)}
+.method-station.active{border-top-color:var(--orange);background:linear-gradient(90deg,rgba(8,10,13,.94),rgba(8,10,13,.52))}
+.station-number{font:500 11px ui-monospace,monospace;color:#858c98;padding-top:3px}
+.method-station.active .station-number{color:var(--orange)}
+.station-content{display:grid;gap:7px}
+.station-content strong{font:800 clamp(1.2rem,2vw,1.75rem)/1 'Barlow Condensed',sans-serif;letter-spacing:.02em}
+.method-station:not(.active) .station-content strong{color:#a7adb7}
+.station-description{font-size:13px;line-height:1.5;color:#e0e2e7;max-width:36ch}
+.station-tags,.station-highlight{font-size:10px;line-height:1.5;letter-spacing:.04em;color:#c2c7d0}
+.station-highlight{color:var(--orange)}
+.method-station>small{font:9px ui-monospace,monospace;letter-spacing:.06em;color:var(--orange);padding-top:5px}
+.method-closing{font:700 clamp(1rem,1.7vw,1.4rem)/1.2 'Barlow Condensed',sans-serif;text-transform:uppercase;margin-top:20px;color:#f1f1ee}
+.method-closing span{color:var(--orange)}
+.method-coordinate{position:absolute;right:clamp(28px,7vw,112px);bottom:26px;font:9px ui-monospace,monospace;letter-spacing:.16em;color:#8b929d}
+@media(max-width:900px){.method-stage{grid-template-columns:minmax(260px,.9fr) minmax(280px,1fr);gap:20px;padding:100px 24px 54px}.method-copy h2{font-size:clamp(1.8rem,5vw,3rem)}.method-evaluation{padding:13px}.method-station{grid-template-columns:28px minmax(0,1fr);gap:8px;padding:12px 6px}.method-station>small{grid-column:2}.station-content strong{font-size:1.25rem}.station-description{font-size:12px}}
+@media(max-width:680px){.method-section{height:300svh;min-height:300svh}.method-stage{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:14px;padding:92px 18px 38px;min-height:0}.method-copy{max-width:none}.method-copy h2{font-size:clamp(1.75rem,8vw,2.5rem);margin:10px 0 13px;max-width:16ch}.method-evaluation{max-width:none;padding:11px 13px}.method-evaluation p{font-size:11px;margin:5px 0}.method-evaluation .method-evaluation-note{font-size:10px}.method-evaluation .primary-cta{min-height:38px;font-size:11px;padding:8px 12px}.method-stations{width:100%;max-width:none;margin-top:auto}.method-station{padding:9px 4px;grid-template-columns:28px minmax(0,1fr) auto}.station-content strong{font-size:1.18rem}.station-description{font-size:11px}.station-tags,.station-highlight{font-size:9px}.method-closing{font-size:1rem;margin-top:10px}.method-coordinate{right:18px;bottom:12px;font-size:8px}}
