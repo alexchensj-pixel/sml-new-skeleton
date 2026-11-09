@@ -159,7 +159,6 @@
   .ex__glow, .ex__disc { transition: none; }
 
 }
-}
 
 /* DESCUBRIR: el panel pasa de columna opaca a interfaz de análisis sobre el mundo (atmósfera + línea de laboratorio, sin caja). */
 .ex__panel {
@@ -177,6 +176,7 @@
 @media (max-aspect-ratio: 11/10) {
   .ex__panel { background: linear-gradient(180deg, rgba(5, 6, 8, 0) 0, rgba(5, 6, 8, .82) 1.6rem, rgba(5, 6, 8, .9) 100%); }
   .ex__panel::before { display: none; }
+}
 
 /* 1 · DESCUBRIR (Character Select): la información es un HUD sobre el mundo; el personaje manda. */
 .ex__panel { background: linear-gradient(90deg, rgba(5, 6, 8, .84) 0, rgba(5, 6, 8, .56) 58%, rgba(5, 6, 8, 0) 100%); }
