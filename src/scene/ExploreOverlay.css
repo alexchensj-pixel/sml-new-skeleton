@@ -1,0 +1,229 @@
+/* Original SML Explore HUD, scoped to the fixed overlay. No legacy global CSS is imported. */
+.ex-overlay{position:fixed;inset:0;z-index:5;display:none;pointer-events:none;color:#f4f6fa}
+.ex-overlay.is-active{display:block}
+.ex-overlay .ex{position:absolute;inset:0;--accent:#e05a2b;--font-display:'Barlow Condensed',sans-serif;--font-sans:'DM Sans',sans-serif;--font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;--pad-l:clamp(20px,5vw,76px);--tx-head-shadow:0 1px 12px rgba(0,0,0,.85);--cx-line:rgba(217,221,230,.18);--cx-line-hi:rgba(217,221,230,.34);--cx-vignette:radial-gradient(ellipse at 50% 50%,transparent 35%,rgba(0,0,0,.35) 100%)}
+.ex-overlay .ex__body{position:absolute;inset:0;pointer-events:none}
+.ex-overlay .ex__panel{pointer-events:auto}
+.ex-overlay .ex__scroll{pointer-events:auto}
+.ex-overlay .ex__scroll button,.ex-overlay .ex__scroll a{pointer-events:auto}
+.ex {
+  --ex-ink: #f4f6fa;
+  --ex-soft: rgba(226, 231, 240, .8);
+  --ex-mute: rgba(226, 231, 240, .55);
+  --ex-hair: rgba(217, 221, 230, .18);
+  --ex-accent: var(--accent);
+  --ex-rgb: 143, 179, 255;
+  --ex-display: var(--font-display);
+  --ex-sans: var(--font-sans);
+  --ex-mono: var(--font-mono);
+}
+.ex .stage { display: block; padding: 0; }
+.ex__body { position: absolute; inset: 0; pointer-events: none; }
+
+/* Luz de ambiente del color de la disciplina elegida, sobre la región del 3D. */
+.ex__glow {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 60%; pointer-events: none; opacity: 0;
+  background: radial-gradient(closest-side at 50% 52%, rgba(var(--ex-rgb), .22), rgba(var(--ex-rgb), .07) 55%, transparent 80%);
+  mix-blend-mode: screen; transition: opacity .7s ease;
+}
+
+/* PANEL (apaisado: columna izquierda con fundido hacia el 3D) */
+.ex__panel {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 42%; min-width: 25rem; max-width: 44rem;
+  pointer-events: auto;
+  background: linear-gradient(90deg, rgba(5, 6, 8, .96) 0%, rgba(5, 6, 8, .92) 74%, rgba(5, 6, 8, 0) 100%);
+}
+.ex__scroll {
+  position: relative; height: 100%; overflow-y: auto; overscroll-behavior: auto; -webkit-overflow-scrolling: touch;
+  padding: 4.5rem 3.25rem 5rem var(--pad-l);
+  scrollbar-width: thin; scrollbar-color: rgba(217, 221, 230, .28) transparent;
+}
+
+/* Cabecera */
+.ex__title {
+  margin: 0; font-family: var(--ex-display); font-weight: 900; text-transform: uppercase; color: #fff;
+  font-size: clamp(2.2rem, 1.2rem + 2.4vw, 3.4rem); line-height: .98; letter-spacing: .01em; max-width: 13ch;
+  text-shadow: var(--tx-head-shadow);
+}
+.ex__intro { margin: .9rem 0 0; font-family: var(--ex-sans); font-size: 1.05rem; line-height: 1.45; color: var(--ex-soft); max-width: 32ch; }
+
+/* 1 · Formas de entrenar */
+.ex__block { margin-top: 2rem; }
+.ex__modes, .ex__discs { list-style: none; margin: 0; padding: 0; }
+.ex__mode { border-top: 1px solid var(--ex-hair); }
+.ex__mode:last-child { border-bottom: 1px solid var(--ex-hair); }
+.ex__modeBtn {
+  display: grid; grid-template-columns: .6rem 1fr; column-gap: .85rem; align-items: start; width: 100%; min-height: 3.5rem;
+  padding: .85rem 0; text-align: left; color: var(--ex-soft);
+}
+.ex__modeBtn::before {
+  content: ''; grid-row: 1 / span 2; width: .6rem; height: .6rem; margin-top: .38rem;
+  border: 1px solid var(--ex-mute); background: transparent; transition: background .2s ease, border-color .2s ease;
+}
+.ex__mode[data-on="true"] .ex__modeBtn::before { background: var(--ex-accent); border-color: var(--ex-accent); }
+.ex__modeName {
+  grid-column: 2; font-family: var(--ex-display); font-weight: 800; text-transform: uppercase;
+  font-size: 1.3rem; line-height: 1.05; letter-spacing: .015em; color: var(--ex-soft);
+}
+.ex__modeLine { grid-column: 2; margin-top: .3rem; font-family: var(--ex-sans); font-size: .92rem; line-height: 1.4; color: var(--ex-mute); max-width: 34ch; }
+.ex__mode[data-on="true"] .ex__modeName { color: #fff; }
+.ex__mode[data-on="true"] .ex__modeLine { color: var(--ex-soft); }
+.ex__modeDetail { display: grid; gap: .7rem; padding: .15rem 0 1.15rem 1.45rem; animation: ex-in .28s ease both; }
+.ex__text { margin: 0; font-family: var(--ex-sans); font-size: .95rem; line-height: 1.55; color: var(--ex-soft); max-width: 46ch; }
+.ex__text--soft { color: var(--ex-mute); }
+.ex__hl { display: grid; margin: 0; font-family: var(--ex-display); font-weight: 800; text-transform: uppercase; font-size: 1.2rem; line-height: 1.1; color: #fff; }
+.ex__hl span:last-child { color: var(--ex-accent); }
+.ex__tags { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+.ex__tags li { padding: .25rem .55rem; border: 1px solid var(--ex-hair); font-family: var(--ex-mono); font-size: .7rem; line-height: 1.3; letter-spacing: .03em; color: var(--ex-soft); }
+.ex__note { margin: 1rem 0 0; font-family: var(--ex-sans); font-weight: 700; font-size: .95rem; line-height: 1.4; color: #fff; }
+
+/* 2 · Disciplinas */
+.ex__block--disc { margin-top: 2.6rem; }
+.ex__h {
+  margin: 0 0 .8rem; font-family: var(--ex-display); font-weight: 900; text-transform: uppercase; color: #fff;
+  font-size: clamp(1.8rem, 1rem + 1.8vw, 2.5rem); line-height: 1; letter-spacing: .01em; text-shadow: var(--tx-head-shadow);
+}
+
+.ex__disc { position: relative; border-top: 1px solid var(--ex-hair); border-left: 3px solid transparent; padding-left: .9rem; transition: border-color .25s ease, opacity .25s ease; }
+.ex__disc:last-child { border-bottom: 1px solid var(--ex-hair); }
+.ex__disc[data-on="true"] { border-left-color: var(--ex-accent); }
+.ex__disc[data-dim="true"] { opacity: .66; }
+.ex__discBtn { display: grid; gap: .3rem; justify-items: start; width: 100%; min-height: 4.5rem; padding: 1rem 0; text-align: left; }
+.ex__discName {
+  font-family: var(--ex-display); font-weight: 900; text-transform: uppercase; color: var(--ex-soft);
+  font-size: clamp(1.7rem, 1.1rem + 1.4vw, 2.2rem); line-height: 1; letter-spacing: .012em;
+}
+.ex__disc[data-on="true"] .ex__discName { color: #fff; text-shadow: var(--tx-head-shadow); }
+.ex__discLine { font-family: var(--ex-sans); font-size: .92rem; line-height: 1.4; color: var(--ex-mute); max-width: 34ch; }
+.ex__disc[data-on="true"] .ex__discLine { color: var(--ex-soft); }
+.ex__discTag { margin-top: .15rem; font-family: var(--ex-mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ex-accent); }
+
+/* Contenido de la disciplina elegida */
+.ex__detail { padding: 0 0 1.4rem; animation: ex-in .32s ease both; }
+.ex__tagline { margin: 0 0 .5rem; font-family: var(--ex-display); font-weight: 800; text-transform: uppercase; font-size: 1.15rem; letter-spacing: .03em; color: var(--ex-accent); }
+.ex__pick { margin: 0 0 .4rem; font-family: var(--ex-sans); font-weight: 700; font-size: .92rem; line-height: 1.4; color: #fff; }
+.ex__pick span { font-family: var(--ex-mono); font-weight: 500; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ex-mute); margin-right: .4rem; }
+.ex__pick i { font-style: normal; color: var(--ex-accent); }
+.ex__dh {
+  display: flex; align-items: center; gap: .7rem; margin: 1.35rem 0 .5rem;
+  font-family: var(--ex-mono); font-weight: 500; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ex-accent);
+}
+.ex__dh::after { content: ''; flex: 1; height: 1px; background: var(--ex-hair); }
+.ex__detail .ex__text + .ex__text { margin-top: .7rem; }
+.ex__attrs { display: flex; flex-wrap: wrap; gap: .3rem 1rem; margin: 0; padding: 0; list-style: none; }
+.ex__attrs li { font-family: var(--ex-display); font-weight: 800; text-transform: uppercase; font-size: 1.2rem; line-height: 1.15; letter-spacing: .02em; color: #fff; }
+.ex__gloss { display: grid; gap: .65rem; margin: 0; }
+.ex__gloss dt { font-family: var(--ex-sans); font-weight: 700; font-size: .95rem; letter-spacing: 0; color: #fff; }
+.ex__gloss dd { margin: .1rem 0 0; font-family: var(--ex-sans); font-size: .92rem; line-height: 1.5; color: var(--ex-soft); max-width: 44ch; }
+.ex__reset {
+  margin-top: 1.4rem; min-height: 2.75rem; padding: 0; font-family: var(--ex-mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ex-soft); text-decoration: underline; text-underline-offset: .35em;
+}
+
+/* Vídeo local del personaje (solo en vertical: ver Explore.jsx#useStacked). Negro puro + mix-blend-mode: se funde con el fondo. */
+.ex__media { height: min(34svh, 20rem); margin: .8rem 0 .2rem; }
+.ex__media video { display: block; width: 100%; height: 100%; object-fit: contain; mix-blend-mode: screen; cursor: pointer; }
+
+@keyframes ex-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Hover solo como refuerzo en escritorio: el estado nunca depende de él. */
+@media (hover: hover) and (pointer: fine) {
+  .ex__modeBtn:hover .ex__modeName, .ex__discBtn:hover .ex__discName { color: #fff; }
+  .ex__disc[data-dim="true"]:hover { opacity: .9; }
+  .ex__reset:hover { color: #fff; }
+
+}
+
+/* VERTICAL (móvil / tablet vertical): 3D arriba, panel debajo con scroll propio. Mismo corte que cells.js (aspect 1,1). */
+@media (max-aspect-ratio: 11/10) {
+  .ex__glow { top: 0; right: 0; bottom: auto; left: 0; width: auto; height: 32%; }
+  .ex__panel {
+    top: 32%; left: 0; right: 0; bottom: 0; width: auto; min-width: 0; max-width: none;
+    background: linear-gradient(180deg, rgba(5, 6, 8, 0) 0, rgba(5, 6, 8, .94) 1.6rem, rgba(5, 6, 8, .97) 100%);
+  }
+  .ex__scroll { padding: 1.8rem 1.25rem 6rem 1.25rem; }
+  .ex__title { font-size: clamp(1.9rem, 8.4vw, 2.6rem); max-width: 14ch; }
+  .ex__intro { font-size: 1rem; }
+  .ex__block { margin-top: 1.6rem; }
+  .ex__block--disc { margin-top: 2.1rem; }
+  .ex__modeName { font-size: 1.2rem; }
+  .ex__modeBtn { min-height: 3.75rem; }
+  .ex__discBtn { min-height: 4.75rem; }
+  .ex__discName { font-size: 1.75rem; }
+  .ex__text, .ex__modeLine, .ex__discLine, .ex__gloss dd { max-width: none; }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ex__modeDetail, .ex__detail { animation: none; }
+  .ex__glow, .ex__disc { transition: none; }
+
+}
+}
+
+/* DESCUBRIR: el panel pasa de columna opaca a interfaz de análisis sobre el mundo (atmósfera + línea de laboratorio, sin caja). */
+.ex__panel {
+  background: linear-gradient(90deg, rgba(5, 6, 8, .9) 0%, rgba(5, 6, 8, .74) 62%, rgba(5, 6, 8, 0) 100%);
+}
+.ex__panel::before {
+  content: ''; position: absolute; top: 4rem; bottom: 4rem; left: calc(var(--pad-l) - 1.1rem); width: 1px; pointer-events: none;
+  background: linear-gradient(180deg, transparent, var(--cx-line-hi) 18%, var(--cx-line-hi) 82%, transparent);
+}
+.ex__body::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: var(--cx-vignette);
+}
+.ex__title, .ex__h { text-shadow: var(--tx-head-shadow); }
+.ex__mode, .ex__disc { border-top-color: var(--cx-line); }
+@media (max-aspect-ratio: 11/10) {
+  .ex__panel { background: linear-gradient(180deg, rgba(5, 6, 8, 0) 0, rgba(5, 6, 8, .82) 1.6rem, rgba(5, 6, 8, .9) 100%); }
+  .ex__panel::before { display: none; }
+
+/* 1 · DESCUBRIR (Character Select): la información es un HUD sobre el mundo; el personaje manda. */
+.ex__panel { background: linear-gradient(90deg, rgba(5, 6, 8, .84) 0, rgba(5, 6, 8, .56) 58%, rgba(5, 6, 8, 0) 100%); }
+.ex__intro, .ex__text, .ex__modeLine, .ex__discLine, .ex__gloss dd { text-shadow: 0 1px 12px rgba(0, 0, 0, .85), 0 0 2px rgba(0, 0, 0, .9); }
+/* opciones no elegidas: bajan de protagonismo sin desaparecer */
+.ex__modes:has(.ex__mode[data-on="true"]) .ex__mode[data-on="false"] { opacity: .55; transition: opacity .25s ease; }
+.ex__modes:has(.ex__mode[data-on="true"]) .ex__mode[data-on="false"]:hover { opacity: .9; }
+/* disciplina activa: luz de su color en el borde + nombre dominante; el concepto va justo debajo */
+.ex__disc[data-on="true"] { box-shadow: -1px 0 22px -8px rgba(var(--ex-rgb), .6); }
+.ex__tagline { font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem); line-height: 1.05; }
+/* los títulos de bloque pasan a acotaciones: la lectura deja de ser TÍTULO → PÁRRAFO → LISTA */
+.ex__dh { font-family: var(--ex-mono); font-weight: 500; font-size: .72rem; letter-spacing: .14em; color: var(--ex-mute); }
+/* etiquetas sin caja */
+.ex__tags li { border: 0; border-bottom: 1px solid var(--cx-line-hi); padding: .1rem 0 .2rem; }
+@media (min-aspect-ratio: 11/10) {
+  .ex__disc[data-on="true"] .ex__discName { font-size: clamp(2.3rem, 1.5rem + 2.2vw, 3.5rem); line-height: .95; }
+}
+@media (max-aspect-ratio: 11/10) {
+  .ex__panel { background: linear-gradient(180deg, rgba(5, 6, 8, 0) 0, rgba(5, 6, 8, .7) 2.6rem, rgba(5, 6, 8, .9) 100%); }
+  /* el vídeo se disuelve en el contenido: continúa la escena, no es «vídeo + documento debajo» */
+  .ex__media { -webkit-mask-image: linear-gradient(180deg, #000 68%, transparent 100%); mask-image: linear-gradient(180deg, #000 68%, transparent 100%); }
+}
+
+.exs__sr { position: absolute !important; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
+.exs__sr:focus-within { position: static !important; width: auto; height: auto; overflow: visible; clip: auto; clip-path: none; white-space: normal; }
+.exs__cN { margin: 0 0 .3rem; font-family: var(--ex-display); font-weight: 800; text-transform: uppercase; font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem); line-height: 1; letter-spacing: .02em; animation: ex-in .28s ease both; }
+.exs__cN span { display: block; margin-top: .3rem; font-family: var(--ex-sans); font-weight: 600; font-size: .85rem; letter-spacing: 0; text-transform: none; color: var(--ex-soft); }
+
+/* v30b · EXPLORE sin panel: el texto es un pie de escena anclado abajo, sin fondo ni columna; antes de elegir solo queda el título.
+   La pista (intro / nota) es copy ya existente: se conserva para lector de pantalla pero no se pinta hasta que haya una selección. */
+.ex__panel, .ex__panel::before, .ex__body::after { background: none !important; }
+.ex__panel { pointer-events: none; }
+.ex__scroll { display: flex; flex-direction: column; justify-content: flex-start; pointer-events: none; }
+.ex__scroll button, .ex__scroll a, .exs__drawer, .exs__cD { pointer-events: auto; }
+.ex__body[data-empty="true"] .exs__hint { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; min-height: 0; margin: 0; }
+.ex__body:not([data-empty="true"]) .exs__sel, .ex__body:not([data-empty="true"]) .exs__proto { text-shadow: 0 1px 14px rgba(0,0,0,.95); }
+@media (max-aspect-ratio: 11/10) {
+  .ex__scroll { justify-content: flex-end; padding-bottom: 5.5rem; }
+  .ex__scroll > .exs__head { position: absolute; top: .6rem; left: 1.25rem; right: 1.25rem; }
+  .ex__panel { background: linear-gradient(0deg, rgba(5,6,8,.78) 0, rgba(5,6,8,0) 100%) !important; }
+  .ex__body[data-empty="true"] .ex__panel { background: none !important; }
+}
+
+/* Overlay-specific interaction: the world remains clickable outside the information panel. */
+.ex-overlay .ex__panel{pointer-events:auto}
+.ex-overlay .ex__scroll{pointer-events:auto}
+.ex-overlay .ex__scroll button,.ex-overlay .ex__scroll a{pointer-events:auto}
+.ex-overlay .ex__estudio{display:inline-flex;align-items:center;gap:.6rem;margin-top:1.1rem;padding:.5rem 0;border-bottom:1px solid rgba(217,221,230,.3);font-family:var(--ex-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ex-soft)}
+.ex-overlay .ex__estudio:hover{color:#fff}
+@media(max-width:700px){.ex-overlay .ex__panel{min-width:0}.ex-overlay .ex__scroll{padding-left:1.25rem;padding-right:1.25rem}}

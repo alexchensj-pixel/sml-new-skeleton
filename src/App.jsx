@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import LegacyWorld from './scene/LegacyWorld.jsx';
+import ExploreOverlay from './scene/ExploreOverlay.jsx';
 import {
   site, hero, advisorySubstages, evaluacionInicial,
   dossierItems, reserva, faq, empresas, cierre, waLink
@@ -69,6 +70,7 @@ function App() {
   return <>
     <a className="skip-link" href="#contenido">Saltar al contenido</a>
     <SpatialBoundary><LegacyWorld /></SpatialBoundary>
+    <ExploreOverlay />
     <div className="grain" aria-hidden="true" />
     <header className="topbar">
       <a className="brand" href="#inicio" onClick={(e) => { e.preventDefault(); go('inicio'); }} aria-label="Striking Motion Lab, inicio">
