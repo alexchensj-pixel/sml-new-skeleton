@@ -72,7 +72,9 @@ export default function LegacyWorld() {
         if (!sections.length) return;
         for (let i = 0; i < sections.length; i += 1) {
           const start = sections[i].node.getBoundingClientRect().top + y;
-          const next = sections[i + 1]?.node;
+          // Reserva ends where the existing Empresas section begins. Keep the camera
+          // parked at the final Door pose throughout B2B instead of scrolling past it.
+          const next = sections[i + 1]?.node || (sections[i].route.id === 'reserva' ? document.getElementById('empresas') : null);
           const end = next ? next.getBoundingClientRect().top + y : Math.max(start + 1, document.documentElement.scrollHeight - window.innerHeight);
           if (y >= start && (y < end || i === sections.length - 1)) {
             const progress = clamp((y - start) / Math.max(1, end - start));
