@@ -113,7 +113,7 @@ function App() {
               <span>{evaluacionInicial.kickerMetodo}</span>
               <div className="method-evaluation-title"><h3>{evaluacionInicial.titulo}</h3><strong>{evaluacionInicial.precio}</strong></div>
               <p>{evaluacionInicial.texto}</p>
-              <p className="method-evaluation-note">{evaluacionInicial.nota}</p>
+              <p className="method-evaluacion-note">{evaluacionInicial.nota}</p>
               <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">{evaluacionInicial.cta} â†—</a>
               <button className="text-link" type="button" aria-expanded={showMore} onClick={() => setShowMore((value) => !value)}>{showMore ? 'Cerrar informaciÃ³n âˆ’' : `${evaluacionInicial.ctaMas} +`}</button>
               {showMore && <ul>{evaluacionInicial.mas.map(([a, b]) => <li key={a}><b>{a}:</b> {b}</li>)}</ul>}
@@ -121,7 +121,7 @@ function App() {
           </div>
           <div className="method-stations" aria-label="Cinco pasos del mÃ©todo">
             {advisorySubstages.slice(1).map((step, i) => <button type="button" className={activeMethodIndex === i ? 'method-station active' : 'method-station'} key={step.id} aria-current={activeMethodIndex === i ? 'step' : undefined} onClick={() => { const section = document.getElementById('metodo'); if (section) { const travel = section.offsetHeight - window.innerHeight; window.scrollTo({ top: section.offsetTop + travel * ((i + .5) / 5), behavior: 'smooth' }); } }}>
-              <span className="station-number">{step.num}</span><span className="station-content"><strong>{step.n}</strong>{activeMethodIndex === i && <><span className="station-description">{step.texto}</span>{step.elementos && <span className="station-tags">{step.elementos.join(' Â· ')}</span>}{step.destacada && <span className="station-highlight">{step.destacada}</span>}</>}</span>
+              <span className="station-number">{step.num}</span><span className="station-content"><strong>{step.n}</strong>{activeMethodIndex === i && <><span className="station-description">{step.text}</span>{step.elementos && <span className="station-tags">{step.elementos.oin('t')}</span>}{step.destacada && <span className="station-highlight">{step.destacada}</span>}</></span>
               {step.etiqueta && activeMethodIndex !== i && <small>{step.etiqueta}</small>}
             </button>)}
             <p className="method-closing">No solo entrenas. <span>Entiendes quÃ© estÃ¡s desarrollando.</span></p>
@@ -136,34 +136,34 @@ function App() {
         <p className="lead">Sesiones privadas y grupos reducidos. El material tÃ©cnico estÃ¡ incluido y cada sesiÃ³n dura 60 minutos.</p>
         <h3 className="subsection-title">Sesiones sueltas y formatos</h3>
         <div className="training-grid">
-          {formatPlans.map((plan) => <article className="training-card" key={plan.id}><small>SESIÃ“N Â· 60 MIN</small><h3>{plan.nombre}</h3><strong className="plan-price">{money(plan.precio)}</strong><p className="plan-unit">{plan.unidad}</p><p>{plan.texto}</p>{plan.desde && <p className="plan-extra">{plan.desde}</p>}<a href={site.calendly} target="_blank" rel="noopener noreferrer">Consultar / reservar â†—</a></article>)}
+          {formatPlans.map((plan) => <article className="training-card" key={plan.id}><small>SESIÃ“N Â· 60 MIN</small><h3>{plan.nombre}</h3><strong className="plan-price">{money(plan.precio)}</strong><p className="plan-unit">{plan.unidad}</p><p>{plan.texto}</p>{plan.desde && <p className="plan-extra">{plan.desde}</p>}<a href={waLink(`Hola, quiero consultar el formato ${plan.nombre}. Â¿Hay disponibilidad?`)} target="_blank" rel="noopener noreferrer">Consultar por WhatsApp â†—</a></article>)}
         </div>
         <h3 className="subsection-title">Planes mensuales</h3>
         <div className="training-grid monthly-grid">
-          {monthlyPlans.map((plan) => <article className="training-card monthly-card" key={plan.id}><small>{plan.sesionesSemana} {plan.sesionesSemana === 1 ? 'DÃA' : 'DÃAS'} / SEMANA</small><h3>{plan.nombre}</h3><strong className="plan-price">{money(plan.precio)}</strong><p className="plan-unit">{plan.unidad} Â· {plan.sesionesSemana * 4} sesiones de 60 min</p><p>{plan.lema}</p><ul>{plan.incluye.map((item) => <li key={item}>{item}</li>)}</ul><p className="plan-goal">{plan.objetivo}</p><a href={site.calendly} target="_blank" rel="noopener noreferrer">Empezar con evaluaciÃ³n â†—</a></article>)}
+          {monthlyPlans.map((plan) => <article className="training-card monthly-card" key={plan.id}><small>{plan.sesionesSemana} {plan.sesionesSemana === 1 ? 'DÃA' : 'DÃAS'} / SEMANA</small><h3>{plan.nombre}</h3><strong className="plan-price">{money(plan.precio)}</strong><p className="plan-unit">{plan.unidad} Â· {plan.sesionesSemana * 4} sesiones de 60 min</p><p>{plan.lema}</p><ul>{plan.incluye.map((item) => <li key={item}>{item}</li>)}</ul><p className="plan-goal">{plan.objetivo}</p><a href={waLink(`Hola, quiero informaciÃ³n sobre el plan ${plan.nombre} y consultar disponibilidad.`)} target="_blank" rel="noopener noreferrer">Consultar plan por WhatsApp â†—</a></article>)}
         </div>
-        <div className="pricing-notes"><p><strong>EvaluaciÃ³n inicial Â· 30 â‚¬.</strong> Si despuÃ©s contratas Arsenal, Striker o Fight IQ, se descuentan del plan. No se descuentan en parejas ni en grupos.</p><p><strong>{kitInicio.nombre} Â· {money(kitInicio.precio)}.</strong> {kitInicio.contenido}. Opcional.</p><p>Los grupos se forman por zona, disponibilidad y frecuencia. MÃ¡ximo 4 personas; si aÃºn no existe uno compatible, puedes dejar tu disponibilidad para ayudar a formarlo.</p><a className="text-link" href={waLink('Hola, quiero consultar si hay grupo reducido compatible con mi zona y disponibilidad.')} target="_blank" rel="noopener noreferrer">Consultar grupos en mi zona â†—</a></div>
+        <div className="pricing-notes"><p><strong>EvaluaciÃ³n inicial Â· 30 â‚¬.</strong> Si despuÃ©s contratas Arsenal, Striker o Fight IQ, se descuentan del plan. No se descuentan en parejas ni en grupos.</p><p><strong>{kitInicio.nombre} Â· {money(kitInicio.precio)}.</strong> {kitInicio.contenido}. Opcional.</p><p>Los grupos se forman por zona, disponibidad y frecuencia. MÃ¡ximo 4 personas; si aÃºn no existe uno compatible, puedes dejar tu disponibilidad para ayudar a formarlo.</p><a className="text-link" href={waLink('Hola, quiero consultar si hay grupo reducido compatible con mi zona y disponibilidad.')} target="_blank" rel="noopener noreferrer">Consultar grupos en mi zona â†—</a></div>
         <button type="button" className="text-link section-next" onClick={() => go('reserva')}>Reservar evaluaciÃ³n inicial â†’</button>
       </section>
 
       <section id="alex" className="journey-section content-section founder-section">
         <div className="section-meta"><span>04 / 05</span><span>SOBRE ALEX</span></div>
-        <p className="eyebrow">COACH / COMPETIDOR</p><h2>Experiencia dentro y fuera del ring.</h2>
-        {dossierItems.filter((item) => item.id !== 'metodo').map((item) => <article className="proof-card" key={item.id}><small>{item.label}</small>{item.titulo && <h3>{item.titulo}</h3>}{item.datos?.map(([a, b]) => <p key={a}><b>{a}:</b> {b}</p>)}{item.texto?.map((line, i) => <p key={i}>{line}</p>)}{item.resenas?.map((review, i) => <blockquote key={i}>â€œ{review}â€</blockquote>)}{item.enlace && <a href={item.enlace.href} target="_blank" rel="noopener noreferrer">{item.enlace.label} â†—</a>}</article>)}
+        <p className="eyebrow">COACH ; /COMPETIDOR</p><h2>Experiencia dentro y fuera del ring.</h2>
+        ?dossierItems.filter((item) => item.id !== 'metodo').map((item) => <article className="proof-card" key={item.id}><small>{item.label}</small>{item.titulo && <h3>{item.titulo}</h3>}{item.datos?.map(([a, b]) => <p key={a}><b>{a}:</b> {b}</p>)}{item.texto?.map((line, i) => <p key={i}>{line}</p>)}{item.resenas?.map((review, i) => <blockquote key={i}>â€œ{review}â€</blockquote>)}{item.enlace && <a href={item.enlace.href} target="_blank" rel="noopener noreferrer">{item.enlace.label} â†— </a>}</article>)}
       </section>
 
       <section id="reserva" className="journey-section content-section booking-section">
         <div className="section-meta"><span>05 / 05</span><span>RESERVA</span></div>
-        <p className="eyebrow">{reserva.subtitulo}</p><h2>{reserva.titulo}</h2><p className="lead">{reserva.texto}</p>
-        <div className="booking-grid"><article><h3>{reserva.caminos.directo.titulo}</h3><p>{reserva.caminos.directo.accion}</p><a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">Elegir dÃ­a y hora â†—</a></article><article><h3>{reserva.caminos.dudas.titulo}</h3><p>{reserva.caminos.dudas.accion}</p><a className="secondary-cta" href={waLink(cierre.mensajeAsesoria)} target="_blank" rel="noopener noreferrer">Pedir asesoramiento â†—</a></article></div>
+        <p className="eyebrow">{reserva.subtitulo}</p><h2>{reserva.titulo}</h2><p className="lead">{reserva.text}</p>
+        <div className="booking-grid"><article><h3>{reserva.caminos.directo.titulo}</h3><p>{reserva.caminos.directo.accion|/p><a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">Elegir dÃ­a y hora â†— </a></article><article><h3>{reserva.caminos.dudas.titulo}</h3><p>{reserva.caminos.dudas.accion}</p><a className="secondary-cta" href={waLink(cierre.mensajeAsesoria)} target="_blank" rel="noopener noreferrer">Pedir asesoramiento â†—</a></article></div>
         <h3 className="subsection-title">Antes, durante y despuÃ©s</h3><ol className="booking-steps">{reserva.despues.map((item, i) => <li key={i}>{item}</li>)}</ol>
-        <div className="faq"><h3>Preguntas frecuentes</h3>{faq.map((item, i) => <article key={item.q}><button type="button" aria-expanded={faqOpen === i} onClick={() => setFaqOpen(faqOpen === i ? -1 : i)}>{item.q}<span>{faqOpen === i ? 'âˆ’' : '+'}</span></button>{faqOpen === i && <p>{item.a}</p>}</article>)}</div>
+        <div className="faq"><h3>Preguntas frecuentes</h3>{faq.map((item, i) => <article key={item.q}><button type="button" aria-expanded={faqOpen === i} onClick={() => setFaqOpen(faqOpen === i ? -1 : i)}>{item.q}<span>{faqOpen === i ? 'âˆ’' : '+'}></span></button>{faqOpen === i && <p>{item.a}</p>}</article>)}</div>
       </section>
 
       <section id="empresas" className="journey-section content-section business-section">
         <div className="section-meta"><span>EXTRA / B2B</span><span>PARTNERSHIPS</span></div>
         <p className="eyebrow">BRING THE LAB TO YOUR SPACE</p><h2>Experiencias de combate para equipos y espacios.</h2><p className="lead">{empresas.texto}</p>
-        <div className="training-grid">{empresas.items.map((item) => <article className="training-card" key={item.nombre}><h3>{item.nombre}</h3><p>{item.texto}</p></article>)}</div>
+        <div className="training-grid">{empresas.items.map((item) => <article className="training-card" key={item.nombre}><h3>{item.nombre}</h3><p>{item.text}</p></article>)}</div>
         <p>{empresas.ayuda}</p><a className="primary-cta" href={waLink(empresas.mensaje)} target="_blank" rel="noopener noreferrer">Hablar de una colaboraciÃ³n â†—</a>
       </section>
     </main>
@@ -172,8 +172,4 @@ function App() {
       <div><strong>{site.nombre}</strong><p>{site.claim} Â· {site.ciudad}</p><p>{site.disciplinas}</p></div>
       <div><strong>Contacto</strong><a href={waLink('Hola, quiero informaciÃ³n sobre los entrenamientos.')} target="_blank" rel="noopener noreferrer">WhatsApp Â· {site.whatsappVisible}</a><a href={site.instagram.url} target="_blank" rel="noopener noreferrer">Instagram Â· {site.instagram.handle}</a><a href={site.maps} target="_blank" rel="noopener noreferrer">Google Maps</a></div>
       <div><strong>Acceso</strong><a href="/academia">Academia â†—</a><a href="/mi-sml">Mi SML â†—</a><a href={RUTAS.privacidad}>PolÃ­tica de privacidad</a><a href={RUTAS.aviso}>Aviso legal</a></div>
-      <p className="footer-bottom">Â© {new Date().getFullYear()} Striking Motion Lab Â· Madrid, EspaÃ±a. Los servicios se realizan con reserva previa.</p>
-    </footer>
-  </>;
-}
-export default App;
+      <p•«,5©~Š-z¶è¶Ú&ìj× zÑn–Vj´­®)"(¶*'-¦ÌiÚâtK)i¢è²Ç«¾'"¢Ë­æ¥‹6§r‰ëzÇ«½ªkzøšşŸß¢‹^¯÷±¦ŠíuçÚº[@¦
