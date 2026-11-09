@@ -1,0 +1,52 @@
+/* Conversion pass: preserve the spatial identity, shorten the route to a decision. */
+@media (min-width: 681px) {
+  .method-section { height: 165vh !important; min-height: 165vh !important; }
+}
+@media (max-width: 680px) {
+  .method-section { height: 190svh !important; min-height: 190svh !important; }
+}
+
+/* Pricing should read as a set of clear choices, not distant narrative panels. */
+.pricing-section .training-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(220,228,239,.2);
+  background: linear-gradient(145deg, rgba(29,34,42,.94), rgba(10,12,16,.94));
+  box-shadow: 0 18px 55px rgba(0,0,0,.22), inset 0 1px rgba(255,255,255,.045);
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.pricing-section .training-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(224,90,43,.7);
+  box-shadow: 0 22px 60px rgba(0,0,0,.32), 0 0 34px rgba(224,90,43,.08);
+}
+.pricing-section .monthly-card { border-top: 2px solid #e05a2b; }
+.pricing-section .training-card .plan-price { letter-spacing: -.025em; }
+.pricing-section .training-card > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 11px 14px;
+  border: 1px solid rgba(224,90,43,.72);
+  background: rgba(224,90,43,.1);
+  text-decoration: none;
+  transition: background .2s ease, border-color .2s ease;
+}
+.pricing-section .training-card > a:hover {
+  color: #fff;
+  background: #b94725;
+  border-color: #e05a2b;
+}
+.pricing-section .pricing-notes { border-color: rgba(220,228,239,.2); }
+.hero-actions .primary-cta, .method-evaluation .primary-cta { box-shadow: 0 8px 30px rgba(224,90,43,.18); }
+@media (max-width: 680px) {
+  .pricing-section { padding-top: 112px; }
+  .pricing-section .training-card { padding: 20px; }
+  .pricing-section .training-card > a { width: 100%; }
+  .method-stage { min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pricing-section .training-card { transition: none; }
+  .pricing-section .training-card:hover { transform: none; }
+}
