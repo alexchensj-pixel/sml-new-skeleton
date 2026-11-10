@@ -284,7 +284,7 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 @media (max-width: 390px) { .hero .hero-overline { font-size: 8px; letter-spacing: .07em; } }
 
 
-/* Monthly plans: game-inspired development upgrades */
+/* Monthly plans: game-inspired upgrades grounded in real programme content */
 .upgrade-heading{display:flex;align-items:end;justify-content:space-between;gap:28px;margin:34px 0 8px}
 .upgrade-heading .subsection-title{margin:0}
 .upgrade-heading>p{max-width:340px;margin:0 0 4px;color:#aeb4be;font-size:12px;line-height:1.65}
@@ -301,14 +301,28 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 .upgrade-price-line{position:relative;z-index:1;display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;padding:14px 0;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1)}
 .upgrade-price-line .plan-price{margin:0;font-size:clamp(2.4rem,4vw,3.3rem)}
 .upgrade-price-line>span{color:#aeb4be;font-size:9px;letter-spacing:.08em;text-transform:uppercase}
-.upgrade-stats{position:relative;z-index:1;margin:18px 0 8px;padding:13px 14px;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.07)}
-.upgrade-stats-label,.upgrade-stat-meta{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.upgrade-stats-label{margin-bottom:13px;color:#858d99;font-size:7px;letter-spacing:.14em}
-.upgrade-stat{margin:10px 0}
-.upgrade-stat-meta{margin-bottom:6px;color:#d9dde3;font-size:9px;letter-spacing:.07em;text-transform:uppercase}
-.upgrade-stat-meta b{color:#e9784e;font:700 10px 'DM Sans',sans-serif}
-.upgrade-track{height:4px;overflow:hidden;background:rgba(255,255,255,.1)}
-.upgrade-track span{display:block;height:100%;background:linear-gradient(90deg,#9e3e22,#ef784c);box-shadow:0 0 12px rgba(224,90,43,.35)}
+.upgrade-profile{position:relative;z-index:1;margin:18px 0 8px;padding:14px;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.07)}
+.upgrade-profile-head,.upgrade-frequency-title{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.upgrade-profile-head{color:#858d99;font-size:7px;letter-spacing:.14em}
+.upgrade-profile-head b{color:#e9784e;font-size:9px}
+.upgrade-path{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:14px 0 9px}
+.upgrade-path span{display:flex;flex-direction:column;gap:5px;padding:8px 6px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025);opacity:.48}
+.upgrade-path span.is-included{opacity:.82;border-color:rgba(224,90,43,.24)}
+.upgrade-path span.is-current{opacity:1;border-color:rgba(224,90,43,.72);background:rgba(224,90,43,.1);box-shadow:inset 0 0 18px rgba(224,90,43,.06)}
+.upgrade-path i{font:700 16px/.9 'Barlow Condensed',sans-serif;color:#e9784e;font-style:normal}
+.upgrade-path em{font-size:7px;letter-spacing:.1em;color:#c7cbd2;font-style:normal}
+.upgrade-inheritance{margin:0 0 12px;color:#e9784e;font-size:8px;letter-spacing:.12em;font-weight:800}
+.upgrade-profile-details{display:grid;grid-template-columns:.85fr 1.15fr;gap:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
+.upgrade-frequency-title{color:#d9dde3;font-size:8px;letter-spacing:.08em}
+.upgrade-frequency-title b{color:#e9784e;font-size:10px}
+.upgrade-frequency-meter{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:9px 0 6px}
+.upgrade-frequency-meter i{height:5px;background:rgba(255,255,255,.12)}
+.upgrade-frequency-meter i.is-active{background:linear-gradient(90deg,#9e3e22,#ef784c);box-shadow:0 0 10px rgba(224,90,43,.22)}
+.upgrade-frequency small{color:#929aa6;font-size:8px;line-height:1.4}
+.upgrade-focus{display:flex;flex-direction:column;gap:5px}
+.upgrade-focus small{color:#858d99;font-size:7px;letter-spacing:.12em}
+.upgrade-focus strong{color:#f1f2f3;font-size:9px;line-height:1.45}
+.upgrade-focus span{color:#aeb4be;font-size:8px;line-height:1.45}
 .upgrade-disclaimer{position:relative;z-index:1;margin:8px 0 14px;color:#858d99;font-size:8px;line-height:1.5}
 .upgrade-card>ul{position:relative;z-index:1;margin:14px 0;padding-left:16px;color:#bfc5ce;font-size:10px;line-height:1.75}
 .upgrade-card .plan-goal{position:relative;z-index:1;min-height:50px;margin-top:auto;color:#f1f2f3!important;font-size:11px;line-height:1.6}
@@ -316,3 +330,4 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 .upgrade-action b{font-size:16px;color:#f07b50}
 .upgrade-action:hover{background:rgba(224,90,43,.2);border-color:#ef784c;color:#fff!important}
 @media(max-width:760px){.upgrade-heading{display:block;margin-top:28px}.upgrade-heading>p{margin-top:10px}.upgrade-grid{grid-template-columns:1fr}.upgrade-card{min-height:0}.upgrade-tagline,.upgrade-card .plan-goal{min-height:0}}
+@media(max-width:420px){.upgrade-profile-details{grid-template-columns:1fr}.upgrade-path em{font-size:6px}}

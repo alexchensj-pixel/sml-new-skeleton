@@ -23,6 +23,12 @@ const navItems = [
 ];
 const money = (value) => `${value} €`;
 
+const upgradeLevels = {
+  arsenal: { stage: '01', tier: 'FOUNDATION', inheritance: 'NIVEL DE ENTRADA', monthlySessions: 4, addition: 'Evaluación técnica + análisis de vídeo', focus: 'Técnica y condición física' },
+  striker: { stage: '02', tier: 'DEVELOPMENT', inheritance: 'INCLUYE LA BASE ARSENAL', monthlySessions: 8, addition: 'Plan personalizado + biblioteca de ejercicios', focus: 'Trabajo específico según objetivos' },
+  'fight-iq': { stage: '03', tier: 'FIGHT IQ', inheritance: 'INCLUYE LA BASE STRIKER', monthlySessions: 12, addition: 'Preparación específica + estrategia y táctica', focus: 'Desarrollo de estilo + sparring supervisado' },
+};
+
 function App() {
   const [active, setActive] = useState('inicio');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -143,24 +149,35 @@ function App() {
         </div>
         <div className="upgrade-heading">
           <div><p className="eyebrow">PLAYER DEVELOPMENT / 03 UPGRADES</p><h3 className="subsection-title">Elige tu siguiente nivel.</h3></div>
-          <p>Más frecuencia. Más continuidad. Más herramientas para desarrollar tu combate.</p>
+          <p>Cada nivel añade frecuencia y herramientas reales de entrenamiento. Elige el ritmo que puedes mantener.</p>
         </div>
         <div className="training-grid monthly-grid upgrade-grid">
           {monthlyPlans.map((plan, index) => {
-            const tiers = ['BASE BUILD', 'COMBAT BUILD', 'FULL DEVELOPMENT'];
-            const focusLabels = ['Técnica', 'Personalización', 'Estrategia'];
+            const level = upgradeLevels[plan.id];
             return <article className={`training-card monthly-card upgrade-card upgrade-${plan.id}`} key={plan.id}>
-              <div className="upgrade-card-top"><small>UPGRADE 0{index + 1} / {tiers[index]}</small><span className="upgrade-index">{String(index + 1).padStart(2, '0')}</span></div>
+              <div className="upgrade-card-top"><small>UPGRADE {level.stage} / {level.tier}</small><span className="upgrade-index">{level.stage}</span></div>
               <h3>{plan.nombre}</h3>
               <p className="upgrade-tagline">{plan.lema}</p>
               <div className="upgrade-price-line"><strong className="plan-price">{money(plan.precio)}</strong><span>{plan.unidad} · {plan.sesionesSemana} {plan.sesionesSemana === 1 ? 'sesión' : 'sesiones'} / semana</span></div>
-              <div className="upgrade-stats"><div className="upgrade-stats-label"><span>DEVELOPMENT PROFILE</span><span>PLAN FOCUS</span></div>
-                {plan.enfasis.map(([label, value], statIndex) => <div className="upgrade-stat" key={label}><div className="upgrade-stat-meta"><span>{focusLabels[statIndex] || label}</span><b>{String(value).padStart(2, '0')}</b></div><div className="upgrade-track"><span style={{ width: `${value}%` }} /></div></div>)}
+              <div className="upgrade-profile">
+                <div className="upgrade-profile-head"><span>PROGRESIÓN DEL PROGRAMA</span><b>{level.stage} / 03</b></div>
+                <div className="upgrade-path" aria-label={`Etapa ${level.stage} de 3`}>
+                  {['BASE', 'BUILD', 'FIGHT IQ'].map((step, stepIndex) => <span key={step} className={stepIndex === index ? 'is-current' : stepIndex < index ? 'is-included' : ''}><i>{String(stepIndex + 1).padStart(2, '0')}</i><em>{step}</em></span>)}
+                </div>
+                <p className="upgrade-inheritance">{level.inheritance}</p>
+                <div className="upgrade-profile-details">
+                  <div className="upgrade-frequency">
+                    <div className="upgrade-frequency-title"><span>RITMO SEMANAL</span><b>{plan.sesionesSemana} / 3</b></div>
+                    <div className="upgrade-frequency-meter" aria-hidden="true">{Array.from({ length: 3 }, (_, slot) => <i key={slot} className={slot < plan.sesionesSemana ? 'is-active' : ''} />)}</div>
+                    <small>{level.monthlySessions} sesiones al mes · 60 min</small>
+                  </div>
+                  <div className="upgrade-focus"><small>QUÉ AÑADE ESTE NIVEL</small><strong>{level.addition}</strong><span>{level.focus}</span></div>
+                </div>
               </div>
-              <p className="upgrade-disclaimer">Indicadores de orientación y énfasis del plan. No representan mejoras físicas garantizadas.</p>
+              <p className="upgrade-disclaimer">La escala muestra la frecuencia y el contenido del programa; no mide habilidades ni garantiza resultados.</p>
               <ul>{plan.incluye.map((item) => <li key={item}>{item}</li>)}</ul>
               <p className="plan-goal">{plan.objetivo}</p>
-              <a className="upgrade-action" href={waLink(`Hola, quiero información sobre el plan ${plan.nombre} y consultar disponibilidad.`)} target="_blank" rel="noopener noreferrer"><span>DESBLOQUEAR PLAN</span><b>↗</b></a>
+              <a className="upgrade-action" href={waLink(`Hola, quiero información sobre el plan ${plan.nombre} y consultar disponibilidad.`)} target="_blank" rel="noopener noreferrer"><span>ELEGIR ESTE PLAN</span><b>↗</b></a>
             </article>;
           })}
         </div>
