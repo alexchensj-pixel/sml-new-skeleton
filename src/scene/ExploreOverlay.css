@@ -293,3 +293,44 @@
     background: rgba(var(--ex-rgb), .16);
   }
 }
+
+
+/* v31 - Movil / iOS Safari. Maquetacion en flujo real, botones sin aspecto nativo y un solo capitulo visible.
+   No toca escritorio, camara, geometria, iluminacion ni transiciones de la escena. */
+
+/* Reset explicito de TODOS los botones del overlay (especificidad 0: cualquier regla propia gana).
+   Evita el gris nativo de Safari tambien en "Profundizar" y "Ver las 3", que no tenian reset. */
+:where(.ex-overlay) :where(button) {
+  -webkit-appearance: none; appearance: none;
+  margin: 0; border: 0; border-radius: 0; background: transparent;
+  font: inherit; color: inherit; text-align: left; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-aspect-ratio: 11/10) {
+  /* Causa de los dos titulares superpuestos: .ex__scroll era flex con justify-content:flex-end (lo que no cabe desborda por
+     ARRIBA y no se puede desplazar) y la cabecera iba en absolute. Ahora todo ocupa espacio real: cabecera arriba, disciplinas
+     empujadas abajo con margin-top:auto (se anula solo si no hay hueco) y scroll normal desde el principio. */
+  .ex-overlay .ex__scroll { justify-content: flex-start; padding-top: 1.25rem; overscroll-behavior-y: auto; }
+  .ex-overlay .ex__scroll > .exs__head { position: static; flex: 0 0 auto; margin: 0; }
+  .ex-overlay .ex__scroll > .ex__block--disc { flex: 0 0 auto; margin-top: auto; padding-top: 1.25rem; }
+
+  /* Tarjetas: fondo oscuro casi opaco (no depende de backdrop-filter), texto claro, borde sutil, sin doble borde. */
+  .ex-overlay .ex__discs { display: grid; gap: .6rem; }
+  .ex-overlay .ex__disc,
+  .ex-overlay .ex__disc:last-child { border: 0; padding-left: 0; box-shadow: none; }
+  .ex-overlay .ex__disc[data-dim="true"] { opacity: .88; }
+  .ex-overlay .ex__discBtn { background: rgba(7, 9, 13, .9); border-color: rgba(226, 231, 240, .28); }
+  .ex-overlay .ex__disc[data-on="true"] .ex__discBtn {
+    border-color: var(--ex-accent);
+    background: linear-gradient(rgba(var(--ex-rgb), .16), rgba(var(--ex-rgb), .16)), rgba(7, 9, 13, .92);
+  }
+  .ex-overlay .ex__discName { color: #fff; }
+  .ex-overlay .ex__discTag { color: var(--ex-accent); }
+
+  /* Un solo capitulo a la vez: #metodo es contenido de pagina y se desplaza bajo este overlay fijo mientras el capitulo activo
+     todavia es Entrada / Explore (de ahi "UN PROCESO PERSONAL / No empezamos... / TU PRIMER PASO" detras). Solo se pinta cuando
+     su capitulo es el activo. */
+  html[data-sml-chapter="entrada"] #metodo .method-stage,
+  html[data-sml-chapter="character-select"] #metodo .method-stage { visibility: hidden; }
+}

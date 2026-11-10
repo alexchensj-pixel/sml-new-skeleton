@@ -68,6 +68,13 @@ export default function Explore() {
   const forma = seleccion.formas.find((f) => f.id === mode) || null;
   const modeTitle = mode ? explore.modosTitulo[mode] : null;
 
+  // Capitulo activo expuesto al CSS (data-sml-chapter en <html>): las secciones DOM de otros capitulos no deben pintarse bajo este overlay.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.smlChapter = activeChapter || '';
+    return () => { delete root.dataset.smlChapter; };
+  }, [activeChapter]);
+
   // Cambiar de personaje o de concepto cierra el nivel 3 anterior: la información es consecuencia de la selección, no un resto.
   useEffect(() => { setDeep(false); }, [discId]);
   useEffect(() => { setModeDeep(false); }, [mode]);
