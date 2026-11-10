@@ -91,6 +91,10 @@ patchCopiedSource(
 patchCopiedSource(
   'src/legacy/Scene/Environment/cells.js',
   'return { split: false, fx: 1, fy: EXPLORE_STACK_FY, cx: 0.5, cy: EXPLORE_STACK_FY / 2 };',
-  'const viewportHeight = Math.max(height, 1);\n  const topInset = Math.min(86, viewportHeight * 0.14); // 70px mobile header + 16px clear space.\n  return { split: false, fx: 1, fy: EXPLORE_STACK_FY, cx: 0.5, cy: topInset / viewportHeight + EXPLORE_STACK_FY / 2 };'
+  [
+    'const viewportHeight = Math.max(height, 1);',
+    'const topInset = Math.min(86, viewportHeight * 0.14); // 70px mobile header + 16px clear space.',
+    'return { split: false, fx: 1, fy: EXPLORE_STACK_FY, cx: 0.5, cy: topInset / viewportHeight + EXPLORE_STACK_FY / 2 };'
+  ].join('\n')
 );
 console.log('Hybrid routing ready: immersive skeleton at /; original Mi SML, Academy and legal modules on their own routes.');
