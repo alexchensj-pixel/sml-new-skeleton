@@ -14,17 +14,8 @@ const copy = (from, to) => {
 // Keep the immersive skeleton as the actual home application. The original product modules live in an isolated namespace.
 copy(path.join(legacy, 'src'), path.join(root, 'src/legacy'));
 
-// Discover has a visible discipline selector in ExploreOverlay. Keep the original corridor and
-// architecture, but remove the three-person roster video as a decorative background.
-const environmentPath = path.join(root, 'src/legacy/Scene/Environment/blockouts.jsx');
-let environmentSource = fs.readFileSync(environmentPath, 'utf8');
-const rosterImport = "import RosterGroup from './RosterGroup.jsx';\n";
-const rosterMount = '      <RosterGroup />\n';
-if (!environmentSource.includes(rosterImport) || !environmentSource.includes(rosterMount)) {
-  throw new Error('Expected original roster layer was not found; refusing to build a partial Discover scene.');
-}
-environmentSource = environmentSource.replace(rosterImport, '').replace(rosterMount, '');
-fs.writeFileSync(environmentPath, environmentSource);
+// Preserve the original 3D roster layer. RosterGroup is the overview state for the three fighters;
+// it is synchronized with the individual Fighter videos through getCharactersReveal().
 copy(path.join(legacy, 'server'), path.join(root, 'server'));
 copy(path.join(legacy, 'netlify/functions'), path.join(root, 'netlify/functions'));
 copy(path.join(legacy, 'vite.config.js'), path.join(root, 'vite.config.js'));
