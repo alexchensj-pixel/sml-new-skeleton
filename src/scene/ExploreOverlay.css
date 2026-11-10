@@ -227,3 +227,69 @@
 .ex-overlay .ex__estudio{display:inline-flex;align-items:center;gap:.6rem;margin-top:1.1rem;padding:.5rem 0;border-bottom:1px solid rgba(217,221,230,.3);font-family:var(--ex-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ex-soft)}
 .ex-overlay .ex__estudio:hover{color:#fff}
 @media(max-width:700px){.ex-overlay .ex__panel{min-width:0}.ex-overlay .ex__scroll{padding-left:1.25rem;padding-right:1.25rem}}
+
+
+/* iOS Safari: keep the Explore HUD inside its reserved lower viewport region. */
+@media (max-aspect-ratio: 11/10) {
+  .ex-overlay .ex__panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .ex-overlay .ex__scroll {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  }
+  .ex-overlay .ex__disc,
+  .ex-overlay .ex__discBtn { box-sizing: border-box; min-width: 0; }
+  .ex-overlay .ex__discBtn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    min-height: 4rem;
+    padding: .8rem .9rem;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid rgba(226, 231, 240, .22);
+    border-radius: 2px;
+    background: rgba(7, 9, 13, .82);
+    color: #f4f6fa;
+    box-shadow: none;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ex-overlay .ex__discName {
+    color: #f4f6fa;
+    text-shadow: none;
+    filter: none;
+    opacity: 1;
+  }
+  .ex-overlay .ex__discLine,
+  .ex-overlay .ex__discTag,
+  .ex-overlay .ex__pick,
+  .ex-overlay .exs__hint,
+  .ex-overlay .ex__intro,
+  .ex-overlay .ex__text,
+  .ex-overlay .ex__modeLine,
+  .ex-overlay .ex__gloss dd {
+    color: rgba(226, 231, 240, .84);
+    text-shadow: none;
+    filter: none;
+    opacity: 1;
+  }
+  .ex-overlay .ex__disc[data-on="true"] .ex__discBtn {
+    border-color: var(--ex-accent);
+    background: rgba(var(--ex-rgb), .16);
+  }
+}

@@ -18,7 +18,7 @@ const ROUTES = [
     { key: 'character-select', from: 0.90, to: 1 },
   ] },
   { id: 'metodo', steps: [
-    { key: 'character-select>asesoria-lab', from: 0, to: 0.12 },
+    { key: 'asesoria-lab', from: 0, to: 0.12 },
     { key: 'asesoria-lab', from: 0.12, to: 1 },
   ] },
   { id: 'entrenamiento', steps: [
