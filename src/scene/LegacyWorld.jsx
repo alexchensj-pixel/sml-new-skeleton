@@ -35,11 +35,28 @@ const ROUTES = [
   ] },
 ];
 
+// El 3D (Scene/Transitions/scrollState.js#isExploreActive) solo acepta toques sobre los luchadores cuando el umbral
+// 'entrada>character-select' esta COMPLETO (>= .999). El overlay de Explore debe mostrarse justo entonces, no antes: si no,
+// hay un tramo con panel visible y luchadores que no responden.
+const CHAPTER_GATE = { 'entrada>character-select': 0.999 };
 const chapterFor = (key, progress) => {
   if (!key.includes('>')) return key;
   const [from, to] = key.split('>');
-  return progress >= 0.72 ? to : from;
+  return progress >= (CHAPTER_GATE[key] ?? 0.72) ? to : from;
 };
+
+// Permanencia de EXPLORE. Original: 120vh de scroll propio; en la preview todo Inicio -> Explore cabia en ~1 pantalla y Explore
+// recibia ~10vh (imposible quedarse a tocar un luchador). En movil vertical hay un hueco transparente (.explore-dwell, entre
+// #inicio y #metodo): el recorrido previo (entrada + umbral) conserva su ritmo y Explore (progreso EXPLORE_AT..1) recorre el hueco.
+const EXPLORE_AT = 0.90; // = 'from' del paso 'character-select' en ROUTES.inicio
+function withExploreDwell(progress, px, total) {
+  const dwell = document.querySelector('.explore-dwell')?.offsetHeight || 0;
+  if (dwell <= 0 || dwell >= total) return progress;
+  const body = total - dwell;
+  return px <= body
+    ? clamp(px / body) * EXPLORE_AT
+    : EXPLORE_AT + (1 - EXPLORE_AT) * clamp((px - body) / dwell);
+}
 
 function applyRoute(route, progress, lastChapter) {
   const step = route.steps.find((item, index) => progress < item.to || index === route.steps.length - 1);
@@ -77,7 +94,8 @@ export default function LegacyWorld() {
           const next = sections[i + 1]?.node || (sections[i].route.id === 'reserva' ? document.getElementById('empresas') : null);
           const end = next ? next.getBoundingClientRect().top + y : Math.max(start + 1, document.documentElement.scrollHeight - window.innerHeight);
           if (y >= start && (y < end || i === sections.length - 1)) {
-            const progress = clamp((y - start) / Math.max(1, end - start));
+            let progress = clamp((y - start) / Math.max(1, end - start));
+            if (sections[i].route.id === 'inicio') progress = withExploreDwell(progress, y - start, Math.max(1, end - start));
             lastChapter = applyRoute(sections[i].route, progress, lastChapter);
             return;
           }

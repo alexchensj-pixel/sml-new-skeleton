@@ -103,6 +103,8 @@ function App() {
 
 
 
+      <div className="explore-dwell" aria-hidden="true" />
+
       <section id="metodo" className="method-section journey-section">
         <div className="method-stage">
           <div className="method-copy">

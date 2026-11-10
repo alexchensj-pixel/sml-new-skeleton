@@ -334,3 +334,9 @@
   html[data-sml-chapter="entrada"] #metodo .method-stage,
   html[data-sml-chapter="character-select"] #metodo .method-stage { visibility: hidden; }
 }
+
+/* v32 - Permanencia de EXPLORE en movil vertical (ver LegacyWorld.jsx#withExploreDwell). Hueco transparente: deja ver y tocar el 3D. */
+.explore-dwell { display: none; }
+@media (max-aspect-ratio: 11/10) {
+  .explore-dwell { display: block; height: 100svh; pointer-events: none; }
+}
