@@ -23,16 +23,43 @@ const navItems = [
 ];
 const money = (value) => `${value} €`;
 
-const upgradeLevels = {
-  arsenal: { stage: '01', tier: 'FOUNDATION', inheritance: 'NIVEL DE ENTRADA', monthlySessions: 4, addition: 'Evaluación técnica + análisis de vídeo', focus: 'Técnica y condición física' },
-  striker: { stage: '02', tier: 'DEVELOPMENT', inheritance: 'INCLUYE LA BASE ARSENAL', monthlySessions: 8, addition: 'Plan personalizado + biblioteca de ejercicios', focus: 'Trabajo específico según objetivos' },
-  'fight-iq': { stage: '03', tier: 'FIGHT IQ', inheritance: 'INCLUYE LA BASE STRIKER', monthlySessions: 12, addition: 'Preparación específica + estrategia y táctica', focus: 'Desarrollo de estilo + sparring supervisado' },
+const monthlyPlanCopy = {
+  arsenal: {
+    descriptor: 'FUNDAMENTOS',
+    identity: 'Aprende lo esencial y construye una base técnica sólida.',
+    intro: 'INCLUYE',
+    highlights: ['Evaluación técnica inicial', 'Análisis técnico en vídeo', 'Comba de entrenamiento de boxeo'],
+    cta: 'Empezar con Arsenal',
+  },
+  striker: {
+    descriptor: 'DESARROLLO',
+    identity: 'Más continuidad y trabajo específico para progresar con estructura.',
+    intro: 'TODO ARSENAL +',
+    highlights: ['Plan de entrenamiento personalizado', 'Biblioteca personalizada de ejercicios', 'Trabajo específico según objetivos'],
+    cta: 'Reservar Striker',
+    popular: true,
+  },
+  'fight-iq': {
+    descriptor: 'DOMINIO',
+    identity: 'Entrena con criterio: estrategia, estilo y sparring supervisado.',
+    intro: 'TODO STRIKER +',
+    highlights: ['Preparación específica para combate', 'Estrategia y táctica', 'Desarrollo del estilo de pelea + sparring supervisado con peleador'],
+    cta: 'Reservar Fight IQ',
+  },
 };
+
+const planComparisonRows = [
+  { label: 'Técnica y vídeo', arsenal: 'Evaluación + análisis en vídeo', striker: 'Incluido', fightIq: 'Incluido' },
+  { label: 'Personalización', arsenal: '—', striker: 'Plan + biblioteca + objetivos', fightIq: 'Incluida' },
+  { label: 'Estrategia y combate', arsenal: '—', striker: '—', fightIq: 'Táctica + estilo + sparring supervisado' },
+  { label: 'Frecuencia', arsenal: '1 sesión/semana', striker: '2 sesiones/semana', fightIq: '3 sesiones/semana' },
+];
 
 function App() {
   const [active, setActive] = useState('inicio');
   const [menuOpen, setMenuOpen] = useState(false);
   const [faqOpen, setFaqOpen] = useState(-1);
+  const [showPlanComparison, setShowPlanComparison] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const methodProgress = useRef(0);
   const [activeMethodIndex, setActiveMethodIndex] = useState(0);
@@ -147,40 +174,38 @@ function App() {
         <div className="training-grid">
           {formatPlans.map((plan) => <article className="training-card" key={plan.id}><small>SESIÓN · 60 MIN</small><h3>{plan.nombre}</h3><strong className="plan-price">{money(plan.precio)}</strong><p className="plan-unit">{plan.unidad}</p><p>{plan.texto}</p>{plan.desde && <p className="plan-extra">{plan.desde}</p>}<a href={waLink(`Hola, quiero consultar el formato ${plan.nombre}. ¿Hay disponibilidad?`)} target="_blank" rel="noopener noreferrer">Consultar por WhatsApp ↗</a></article>)}
         </div>
-        <div className="upgrade-heading">
-          <div><p className="eyebrow">PLAYER DEVELOPMENT / 03 UPGRADES</p><h3 className="subsection-title">Elige tu siguiente nivel.</h3></div>
-          <p>Cada nivel añade frecuencia y herramientas reales de entrenamiento. Elige el ritmo que puedes mantener.</p>
+        <div className="plan-cards-heading">
+          <div><p className="eyebrow">PLANES MENSUALES</p><h3 className="subsection-title">Elige tu plan de entrenamiento.</h3></div>
+          <p>Cada plan incluye el anterior y añade más frecuencia y trabajo específico.</p>
         </div>
-        <div className="training-grid monthly-grid upgrade-grid">
-          {monthlyPlans.map((plan, index) => {
-            const level = upgradeLevels[plan.id];
-            return <article className={`training-card monthly-card upgrade-card upgrade-${plan.id}`} key={plan.id}>
-              <div className="upgrade-card-top"><small>UPGRADE {level.stage} / {level.tier}</small><span className="upgrade-index">{level.stage}</span></div>
+        <div className="training-grid monthly-grid plan-grid">
+          {monthlyPlans.map((plan) => {
+            const card = monthlyPlanCopy[plan.id];
+            return <article className={`training-card monthly-card plan-card plan-card-${plan.id} ${card.popular ? 'is-popular' : ''}`} key={plan.id}>
+              <div className="plan-card-top"><span>{card.descriptor}</span>{card.popular && <strong className="plan-popular-badge">MÁS POPULAR</strong>}</div>
               <h3>{plan.nombre}</h3>
-              <p className="upgrade-tagline">{plan.lema}</p>
-              <div className="upgrade-price-line"><strong className="plan-price">{money(plan.precio)}</strong><span>{plan.unidad} · {plan.sesionesSemana} {plan.sesionesSemana === 1 ? 'sesión' : 'sesiones'} / semana</span></div>
-              <div className="upgrade-profile">
-                <div className="upgrade-profile-head"><span>PROGRESIÓN DEL PROGRAMA</span><b>{level.stage} / 03</b></div>
-                <div className="upgrade-path" aria-label={`Etapa ${level.stage} de 3`}>
-                  {['BASE', 'BUILD', 'FIGHT IQ'].map((step, stepIndex) => <span key={step} className={stepIndex === index ? 'is-current' : stepIndex < index ? 'is-included' : ''}><i>{String(stepIndex + 1).padStart(2, '0')}</i><em>{step}</em></span>)}
-                </div>
-                <p className="upgrade-inheritance">{level.inheritance}</p>
-                <div className="upgrade-profile-details">
-                  <div className="upgrade-frequency">
-                    <div className="upgrade-frequency-title"><span>RITMO SEMANAL</span><b>{plan.sesionesSemana} / 3</b></div>
-                    <div className="upgrade-frequency-meter" aria-hidden="true">{Array.from({ length: 3 }, (_, slot) => <i key={slot} className={slot < plan.sesionesSemana ? 'is-active' : ''} />)}</div>
-                    <small>{level.monthlySessions} sesiones al mes · 60 min</small>
-                  </div>
-                  <div className="upgrade-focus"><small>QUÉ AÑADE ESTE NIVEL</small><strong>{level.addition}</strong><span>{level.focus}</span></div>
-                </div>
+              <p className="plan-card-identity">{card.identity}</p>
+              <div className="plan-card-price"><strong>{money(plan.precio)}</strong><span>/ mes</span></div>
+              <p className="plan-card-frequency">{plan.sesionesSemana} {plan.sesionesSemana === 1 ? 'sesión' : 'sesiones'} / semana <span>·</span> 60 min</p>
+              <div className="plan-card-content">
+                <p className="plan-card-intro">{card.intro}</p>
+                <ul>{card.highlights.map((item) => <li key={item}>{item}</li>)}</ul>
               </div>
-              <p className="upgrade-disclaimer">La escala muestra la frecuencia y el contenido del programa; no mide habilidades ni garantiza resultados.</p>
-              <ul>{plan.incluye.map((item) => <li key={item}>{item}</li>)}</ul>
-              <p className="plan-goal">{plan.objetivo}</p>
-              <a className="upgrade-action" href={waLink(`Hola, quiero información sobre el plan ${plan.nombre} y consultar disponibilidad.`)} target="_blank" rel="noopener noreferrer"><span>ELEGIR ESTE PLAN</span><b>↗</b></a>
+              <a className="plan-card-action" href={waLink(`Hola, quiero información sobre el plan ${plan.nombre} y consultar disponibilidad.`)} target="_blank" rel="noopener noreferrer"><span>{card.cta} · {money(plan.precio)}/mes</span><b>↗</b></a>
             </article>;
           })}
         </div>
+        <div className="plan-comparison-control">
+          <button type="button" className="plan-comparison-toggle" aria-expanded={showPlanComparison} aria-controls="plan-comparison" onClick={() => setShowPlanComparison((value) => !value)}>{showPlanComparison ? 'Ocultar atributos' : 'Ver todos los atributos'} <span>{showPlanComparison ? '−' : '+'}</span></button>
+        </div>
+        {showPlanComparison && <div id="plan-comparison" className="plan-comparison-panel">
+          <div className="plan-comparison-scroll">
+            <table className="plan-comparison-table">
+              <thead><tr><th scope="col">Atributo</th><th scope="col">Arsenal</th><th scope="col">Striker</th><th scope="col">Fight IQ</th></tr></thead>
+              <tbody>{planComparisonRows.map((row) => <tr key={row.label}><th scope="row">{row.label}</th><td>{row.arsenal}</td><td>{row.striker}</td><td>{row.fightIq}</td></tr>)}</tbody>
+            </table>
+          </div>
+        </div>}
         <div className="pricing-notes"><p><strong>Evaluación inicial · 30 €.</strong> Si después contratas Arsenal, Striker o Fight IQ, se descuentan del plan. No se descuentan en parejas ni en grupos.</p><p><strong>{kitInicio.nombre} · {money(kitInicio.precio)}.</strong> {kitInicio.contenido}. Opcional.</p><p>Los grupos se forman por zona, disponibilidad y frecuencia. Máximo 4 personas; si aún no existe uno compatible, puedes dejar tu disponibilidad para ayudar a formarlo.</p><a className="text-link" href={waLink('Hola, quiero consultar si hay grupo reducido compatible con mi zona y disponibilidad.')} target="_blank" rel="noopener noreferrer">Consultar grupos en mi zona ↗</a></div>
         <button type="button" className="text-link section-next" onClick={() => go('reserva')}>Reservar evaluación inicial →</button>
       </section>

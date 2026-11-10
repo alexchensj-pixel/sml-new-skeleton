@@ -116,7 +116,7 @@ export default function LegacyWorld() {
     <div className="world" aria-hidden="true">
       <Canvas
         shadows
-        dpr={[1, 1.75]}
+        dpr={[1, 2.5]}
         camera={{ fov: 50, near: 0.1, far: 220, position: [0, 1.6, 0] }}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
       >
