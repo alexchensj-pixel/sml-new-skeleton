@@ -1,0 +1,36 @@
+
+/* DISCOVER / DISCIPLINES */
+.discover-section { min-height: 112svh; padding-top: 145px; padding-bottom: 110px; }
+.discover-layout { width: min(1160px, 100%); margin: 0 auto; display: grid; grid-template-columns: minmax(0, .92fr) minmax(360px, 1.08fr); gap: clamp(36px, 7vw, 112px); align-items: center; }
+.discover-intro h2 { font: 900 clamp(62px, 9vw, 112px)/.82 'Barlow Condensed'; letter-spacing: -.04em; margin: 26px 0 28px; }
+.discover-intro h2 em { color: var(--orange); font-style: normal; }
+.discover-intro .section-copy { max-width: 430px; }
+.discipline-selector { margin-top: 42px; border-top: 1px solid var(--line); }
+.discipline-tab { width: 100%; display: grid; grid-template-columns: 42px 1fr 22px; align-items: center; gap: 14px; padding: 19px 4px; text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--line); color: #c6cbd0; font: 700 19px 'Barlow Condensed'; letter-spacing: 1.5px; cursor: pointer; transition: color .25s, padding .25s; }
+.discipline-tab span { color: #727b84; font: 10px 'DM Sans'; }
+.discipline-tab b { color: var(--orange); font-size: 18px; opacity: 0; transition: opacity .25s; }
+.discipline-tab:hover,.discipline-tab.is-selected { color: #fff; padding-left: 12px; }
+.discipline-tab.is-selected b,.discipline-tab:hover b { opacity: 1; }
+.discipline-detail { position: relative; min-height: 580px; padding: 25px 30px 30px; border: 1px solid rgba(220,225,230,.2); background: linear-gradient(145deg,rgba(37,42,49,.74),rgba(13,15,18,.82)); box-shadow: 0 30px 100px rgba(0,0,0,.25); overflow: hidden; }
+.detail-topline { display: flex; justify-content: space-between; gap: 12px; color: #8b949e; font-size: 8px; letter-spacing: 1.5px; }
+.detail-visual { height: 230px; position: relative; display: grid; place-items: center; overflow: hidden; }
+.detail-orbit { position: absolute; width: 220px; height: 220px; border: 1px solid rgba(224,90,43,.38); border-radius: 50%; transform: rotate(-28deg) scaleX(.7); }
+.orbit-two { width: 300px; height: 170px; border-color: rgba(210,218,226,.2); transform: rotate(34deg) scaleX(.8); }
+.detail-number { font: 900 150px/.8 'Barlow Condensed'; color: rgba(230,234,238,.09); }
+.detail-cross { position: absolute; color: var(--orange); font-size: 28px; transform: translate(88px,-66px); }
+.detail-sub { color: var(--orange); font-size: 9px; letter-spacing: 2px; margin: 10px 0; }
+.discipline-detail h3 { font: 900 clamp(48px,6vw,76px)/.9 'Barlow Condensed'; margin: 0 0 18px; letter-spacing: -.02em; }
+.detail-copy { max-width: 470px; color: #c0c5ca; font-size: 13px; line-height: 1.8; }
+.detail-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 26px; }
+.detail-tags span { border: 1px solid rgba(224,230,236,.18); padding: 7px 10px; color: #aeb6bf; font-size: 9px; letter-spacing: .6px; }
+@media(max-width:760px) {
+ .discover-section { padding-top: 118px; }
+ .discover-layout { grid-template-columns: 1fr; gap: 34px; }
+ .discover-intro h2 { font-size: clamp(62px,18vw,90px); }
+ .discipline-selector { margin-top: 28px; }
+ .discipline-detail { min-height: 0; padding: 20px; }
+ .detail-visual { height: 170px; }
+ .detail-number { font-size: 118px; }
+ .detail-orbit { width: 170px; height: 170px; }
+ .orbit-two { width: 230px; height: 130px; }
+}
