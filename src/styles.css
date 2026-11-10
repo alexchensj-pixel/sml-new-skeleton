@@ -239,3 +239,10 @@ main{position:relative;z-index:2}
 
 
 /* BRIDGE · restored as a cinematic scroll transition, not an Explore/options page. */
+
+
+/* SML 3D character selection: let canvas receive pointer input without blocking page controls. */
+.world { pointer-events: auto; }
+.world canvas { pointer-events: auto; touch-action: pan-y; }
+main { pointer-events: none; }
+main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: auto; }
