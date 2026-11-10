@@ -282,3 +282,37 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 .hero .hero-overline { margin: 0 0 8px; font-size: clamp(9px, 1vw, 11px); letter-spacing: .16em; white-space: nowrap; color: var(--orange); }
 @media (max-width: 760px) { .hero .hero-overline { font-size: 9px; letter-spacing: .09em; } }
 @media (max-width: 390px) { .hero .hero-overline { font-size: 8px; letter-spacing: .07em; } }
+
+
+/* Monthly plans: game-inspired development upgrades */
+.upgrade-heading{display:flex;align-items:end;justify-content:space-between;gap:28px;margin:34px 0 8px}
+.upgrade-heading .subsection-title{margin:0}
+.upgrade-heading>p{max-width:340px;margin:0 0 4px;color:#aeb4be;font-size:12px;line-height:1.65}
+.upgrade-grid{align-items:stretch;gap:16px}
+.upgrade-card{position:relative;overflow:hidden;min-height:100%;padding:clamp(18px,2.2vw,28px);border:1px solid rgba(255,255,255,.14);background:linear-gradient(155deg,rgba(29,32,39,.96),rgba(9,11,15,.96) 68%);box-shadow:inset 0 1px rgba(255,255,255,.045),0 18px 55px rgba(0,0,0,.22);transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease}
+.upgrade-card:before{content:"";position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,rgba(224,90,43,.12),#e05a2b,rgba(224,90,43,.12));opacity:.8}
+.upgrade-card:after{content:"";position:absolute;width:190px;height:190px;right:-90px;top:70px;border:1px solid rgba(224,90,43,.12);border-radius:50%;box-shadow:0 0 0 18px rgba(224,90,43,.018),0 0 0 38px rgba(224,90,43,.012);pointer-events:none}
+.upgrade-card:hover{transform:translateY(-4px);border-color:rgba(224,90,43,.65);box-shadow:0 22px 65px rgba(0,0,0,.32),0 0 28px rgba(224,90,43,.07)}
+.upgrade-card-top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.upgrade-card-top small{color:#e9784e;letter-spacing:.17em;font-size:8px}
+.upgrade-index{font:700 30px/.9 'Barlow Condensed',sans-serif;color:rgba(255,255,255,.18)}
+.upgrade-card>h3{position:relative;z-index:1;margin:16px 0 4px;font-size:clamp(2rem,3vw,2.7rem);letter-spacing:.015em}
+.upgrade-tagline{position:relative;z-index:1;min-height:38px;margin:0 0 18px;color:#c2c7cf;font-size:11px;line-height:1.55}
+.upgrade-price-line{position:relative;z-index:1;display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;padding:14px 0;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1)}
+.upgrade-price-line .plan-price{margin:0;font-size:clamp(2.4rem,4vw,3.3rem)}
+.upgrade-price-line>span{color:#aeb4be;font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+.upgrade-stats{position:relative;z-index:1;margin:18px 0 8px;padding:13px 14px;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.07)}
+.upgrade-stats-label,.upgrade-stat-meta{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.upgrade-stats-label{margin-bottom:13px;color:#858d99;font-size:7px;letter-spacing:.14em}
+.upgrade-stat{margin:10px 0}
+.upgrade-stat-meta{margin-bottom:6px;color:#d9dde3;font-size:9px;letter-spacing:.07em;text-transform:uppercase}
+.upgrade-stat-meta b{color:#e9784e;font:700 10px 'DM Sans',sans-serif}
+.upgrade-track{height:4px;overflow:hidden;background:rgba(255,255,255,.1)}
+.upgrade-track span{display:block;height:100%;background:linear-gradient(90deg,#9e3e22,#ef784c);box-shadow:0 0 12px rgba(224,90,43,.35)}
+.upgrade-disclaimer{position:relative;z-index:1;margin:8px 0 14px;color:#858d99;font-size:8px;line-height:1.5}
+.upgrade-card>ul{position:relative;z-index:1;margin:14px 0;padding-left:16px;color:#bfc5ce;font-size:10px;line-height:1.75}
+.upgrade-card .plan-goal{position:relative;z-index:1;min-height:50px;margin-top:auto;color:#f1f2f3!important;font-size:11px;line-height:1.6}
+.upgrade-action{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-top:14px;padding:13px 14px;border:1px solid rgba(224,90,43,.7);background:rgba(224,90,43,.09);color:#fff;text-decoration:none!important;font-size:9px;letter-spacing:.14em;font-weight:800;transition:background .2s ease,border-color .2s ease}
+.upgrade-action b{font-size:16px;color:#f07b50}
+.upgrade-action:hover{background:rgba(224,90,43,.2);border-color:#ef784c;color:#fff!important}
+@media(max-width:760px){.upgrade-heading{display:block;margin-top:28px}.upgrade-heading>p{margin-top:10px}.upgrade-grid{grid-template-columns:1fr}.upgrade-card{min-height:0}.upgrade-tagline,.upgrade-card .plan-goal{min-height:0}}

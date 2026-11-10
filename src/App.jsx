@@ -141,9 +141,28 @@ function App() {
         <div className="training-grid">
           {formatPlans.map((plan) => <article className="training-card" key={plan.id}><small>SESIÓN · 60 MIN</small><h3>{plan.nombre}</h3><strong className="plan-price">{money(plan.precio)}</strong><p className="plan-unit">{plan.unidad}</p><p>{plan.texto}</p>{plan.desde && <p className="plan-extra">{plan.desde}</p>}<a href={waLink(`Hola, quiero consultar el formato ${plan.nombre}. ¿Hay disponibilidad?`)} target="_blank" rel="noopener noreferrer">Consultar por WhatsApp ↗</a></article>)}
         </div>
-        <h3 className="subsection-title">Planes mensuales</h3>
-        <div className="training-grid monthly-grid">
-          {monthlyPlans.map((plan) => <article className="training-card monthly-card" key={plan.id}><small>{plan.sesionesSemana} {plan.sesionesSemana === 1 ? 'DÍA' : 'DÍAS'} / SEMANA</small><h3>{plan.nombre}</h3><strong className="plan-price">{money(plan.precio)}</strong><p className="plan-unit">{plan.unidad} · {plan.sesionesSemana * 4} sesiones de 60 min</p><p>{plan.lema}</p><ul>{plan.incluye.map((item) => <li key={item}>{item}</li>)}</ul><p className="plan-goal">{plan.objetivo}</p><a href={waLink(`Hola, quiero información sobre el plan ${plan.nombre} y consultar disponibilidad.`)} target="_blank" rel="noopener noreferrer">Consultar plan por WhatsApp ↗</a></article>)}
+        <div className="upgrade-heading">
+          <div><p className="eyebrow">PLAYER DEVELOPMENT / 03 UPGRADES</p><h3 className="subsection-title">Elige tu siguiente nivel.</h3></div>
+          <p>Más frecuencia. Más continuidad. Más herramientas para desarrollar tu combate.</p>
+        </div>
+        <div className="training-grid monthly-grid upgrade-grid">
+          {monthlyPlans.map((plan, index) => {
+            const tiers = ['BASE BUILD', 'COMBAT BUILD', 'FULL DEVELOPMENT'];
+            const focusLabels = ['Técnica', 'Personalización', 'Estrategia'];
+            return <article className={`training-card monthly-card upgrade-card upgrade-${plan.id}`} key={plan.id}>
+              <div className="upgrade-card-top"><small>UPGRADE 0{index + 1} / {tiers[index]}</small><span className="upgrade-index">{String(index + 1).padStart(2, '0')}</span></div>
+              <h3>{plan.nombre}</h3>
+              <p className="upgrade-tagline">{plan.lema}</p>
+              <div className="upgrade-price-line"><strong className="plan-price">{money(plan.precio)}</strong><span>{plan.unidad} · {plan.sesionesSemana} {plan.sesionesSemana === 1 ? 'sesión' : 'sesiones'} / semana</span></div>
+              <div className="upgrade-stats"><div className="upgrade-stats-label"><span>DEVELOPMENT PROFILE</span><span>PLAN FOCUS</span></div>
+                {plan.enfasis.map(([label, value], statIndex) => <div className="upgrade-stat" key={label}><div className="upgrade-stat-meta"><span>{focusLabels[statIndex] || label}</span><b>{String(value).padStart(2, '0')}</b></div><div className="upgrade-track"><span style={{ width: `${value}%` }} /></div></div>)}
+              </div>
+              <p className="upgrade-disclaimer">Indicadores de orientación y énfasis del plan. No representan mejoras físicas garantizadas.</p>
+              <ul>{plan.incluye.map((item) => <li key={item}>{item}</li>)}</ul>
+              <p className="plan-goal">{plan.objetivo}</p>
+              <a className="upgrade-action" href={waLink(`Hola, quiero información sobre el plan ${plan.nombre} y consultar disponibilidad.`)} target="_blank" rel="noopener noreferrer"><span>DESBLOQUEAR PLAN</span><b>↗</b></a>
+            </article>;
+          })}
         </div>
         <div className="pricing-notes"><p><strong>Evaluación inicial · 30 €.</strong> Si después contratas Arsenal, Striker o Fight IQ, se descuentan del plan. No se descuentan en parejas ni en grupos.</p><p><strong>{kitInicio.nombre} · {money(kitInicio.precio)}.</strong> {kitInicio.contenido}. Opcional.</p><p>Los grupos se forman por zona, disponibilidad y frecuencia. Máximo 4 personas; si aún no existe uno compatible, puedes dejar tu disponibilidad para ayudar a formarlo.</p><a className="text-link" href={waLink('Hola, quiero consultar si hay grupo reducido compatible con mi zona y disponibilidad.')} target="_blank" rel="noopener noreferrer">Consultar grupos en mi zona ↗</a></div>
         <button type="button" className="text-link section-next" onClick={() => go('reserva')}>Reservar evaluación inicial →</button>
