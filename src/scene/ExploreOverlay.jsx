@@ -79,25 +79,27 @@ export default function Explore() {
   //   DISCIPLINAS (disciplinas) → el 3D manda: primero el roster de luchadores; las formas quedan después.
   // PERSONAJE — selector de disciplina. Tocar al luchador en el 3D hace lo mismo (blockouts.jsx#CharacterHitArea).
   const discSection = (
-    <section className="exs__sel" aria-label={explore.disciplinasTitulo}>
-      <ul className="exs__discs exs__sr">
-        {disciplines.map((d, i) => {
+    <section className="ex__block ex__block--disc" aria-label={explore.disciplinasTitulo}>
+      <h3 className="ex__h">{explore.disciplinasTitulo}</h3>
+      <ul className="ex__discs">
+        {disciplines.map((d) => {
           const on = d.id === discId;
           return (
-            <li key={d.id} data-on={on} data-dim={!!active && !on} style={{ '--ex-accent': d.accent, '--ex-rgb': rgbTriplet(d.accent) }}>
-              <button type="button" aria-pressed={on} onClick={() => selectDiscipline(on ? null : d.id)}>
-                <span className="exs__n">{pad(i + 1)}</span>
-                <span className="exs__dn">{d.name}</span>
+            <li className="ex__disc" key={d.id} data-on={on} data-dim={!!active && !on} style={{ '--ex-accent': d.accent, '--ex-rgb': rgbTriplet(d.accent) }}>
+              <button className="ex__discBtn" type="button" aria-pressed={on} onClick={() => selectDiscipline(on ? null : d.id)}>
+                <span className="ex__discName">{d.name}</span>
+                <span className="ex__discLine">{d.tagline}</span>
+                <span className="ex__discTag">{d.atributos.slice(0, 3).join(' · ')}</span>
               </button>
             </li>
           );
         })}
       </ul>
-      {active && <p className="exs__cN" key={active.id} style={{ color: active.accent }}>{active.name}<span>{active.tagline}</span></p>}
-      <p className={active ? 'exs__line' : 'exs__line exs__hint'} aria-live="polite">{active ? active.linea : explore.intro}</p>
+      {active && <p className="ex__tagline" key={active.id} style={{ color: active.accent }}>{active.tagline}</p>}
+      <p className={active ? 'ex__pick' : 'ex__intro'} aria-live="polite">{active ? active.linea : explore.intro}</p>
       {active && (
-        <button type="button" className="exs__more" aria-expanded={deep} aria-controls={`ex-detail-${active.id}`} onClick={() => setDeep((v) => !v)}>
-          {deep ? explore.cerrar : explore.profundizar} <i aria-hidden="true">{deep ? '−' : '+'}</i>
+        <button type="button" className="ex__reset" aria-expanded={deep} aria-controls={`ex-detail-${active.id}`} onClick={() => setDeep((v) => !v)}>
+          {deep ? explore.cerrar : explore.profundizar} {deep ? '−' : '+'}
         </button>
       )}
       {active && deep && (
@@ -107,7 +109,6 @@ export default function Explore() {
     </section>
   );
 
-  // PROTOCOLO — las cinco formas de entrenar como regla 01–05 del sistema; solo la activa explica su contenido.
   const modeSection = (
     <section className="exs__proto" aria-label={seleccion.pregunta}>
       <ol className="exs__rail exs__sr">
@@ -161,13 +162,10 @@ export default function Explore() {
               
             </header>
 
-            {focus === 'disciplinas' ? <>{discSection}{modeSection}</> : <>{modeSection}{discSection}</>}
+            {discSection}
             {/* V27 · paso 7: objeción de quien llega sin saber qué quiere (puerta DESCUBRIR). La puerta DISCIPLINAS es de quien ya sabe: no se le añade. */}
             
             {/* Entre las dos puertas, sin pasar por el menú: quien llega por DISCIPLINAS sin saber qué quiere descubre; quien descubre puede ver las disciplinas. */}
-            {focus === 'disciplinas'
-              ? <button type="button" className="ex__estudio" onClick={() => setExploreFocus('modos')}>{hero.noSe.pre} → {hero.noSe.accion}</button>
-              : <button type="button" className="ex__estudio" onClick={() => setExploreFocus('disciplinas')}>Disciplinas →</button>}
           </div>
         </div>
       </div>
@@ -180,7 +178,7 @@ export default function Explore() {
 function DisciplineDetail({ discipline: d, stacked, onReset }) {
   const b = explore.bloques;
   return (
-    <div className="exs__drawer" id={`ex-detail-${d.id}`}>
+    <div className="exs__drawer ex__detail" id={`ex-detail-${d.id}`}>
       {stacked && <DisciplineMedia discipline={d} label={b.personaje} />}
 
       <h4 className="ex__dh">{b.que}</h4>
