@@ -340,3 +340,12 @@
 @media (max-aspect-ratio: 11/10) {
   .explore-dwell { display: block; height: 100svh; pointer-events: none; }
 }
+
+
+/* Preview correction: keep the mobile 3D roster clear of the fixed 70px header. */
+@media (max-aspect-ratio: 11/10) {
+  .ex-overlay .ex__glow { top: 86px; height: 32%; }
+  .ex-overlay .ex__panel { top: calc(32% + 86px); }
+  .ex-overlay .ex__scroll { padding-top: 2rem; }
+  .explore-dwell { height: 50svh; }
+}

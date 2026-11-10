@@ -73,4 +73,24 @@ createRoot(document.getElementById('root')).render(
   </React.StrictMode>
 );
 `);
+// Preview-only scene corrections: keep the pinned legacy source untouched while applying
+// deterministic fixes after sync-legacy copies it into the immersive app.
+const patchCopiedSource = (relativePath, before, after) => {
+  const target = path.join(root, relativePath);
+  const source = fs.readFileSync(target, 'utf8');
+  if (source.includes(after)) return;
+  if (!source.includes(before)) throw new Error(`Expected scene source not found in ${relativePath}`);
+  fs.writeFileSync(target, source.replace(before, after));
+};
+
+patchCopiedSource(
+  'src/legacy/Scene/Environment/RosterGroup.jsx',
+  's.mix = MathUtils.damp(s.mix, playing ? 1 : 0, 6, dt);',
+  's.mix = playing ? 1 : 0; // Switch poster → first decoded video frame without a ghosted crossfade.'
+);
+patchCopiedSource(
+  'src/legacy/Scene/Environment/cells.js',
+  'return { split: false, fx: 1, fy: EXPLORE_STACK_FY, cx: 0.5, cy: EXPLORE_STACK_FY / 2 };',
+  'const viewportHeight = Math.max(height, 1);\n  const topInset = Math.min(86, viewportHeight * 0.14); // 70px mobile header + 16px clear space.\n  return { split: false, fx: 1, fy: EXPLORE_STACK_FY, cx: 0.5, cy: topInset / viewportHeight + EXPLORE_STACK_FY / 2 };'
+);
 console.log('Hybrid routing ready: immersive skeleton at /; original Mi SML, Academy and legal modules on their own routes.');
