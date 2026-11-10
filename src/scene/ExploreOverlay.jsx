@@ -96,7 +96,7 @@ export default function Explore() {
         })}
       </ul>
       {active && <p className="ex__tagline" key={active.id} style={{ color: active.accent }}>{active.tagline}</p>}
-      <p className={active ? 'ex__pick' : 'ex__intro'} aria-live="polite">{active ? active.linea : explore.intro}</p>
+      <p className={active ? 'ex__pick' : 'exs__hint'} aria-live="polite">{active ? active.linea : explore.intro}</p>
       {active && (
         <button type="button" className="ex__reset" aria-expanded={deep} aria-controls={`ex-detail-${active.id}`} onClick={() => setDeep((v) => !v)}>
           {deep ? explore.cerrar : explore.profundizar} {deep ? '−' : '+'}
