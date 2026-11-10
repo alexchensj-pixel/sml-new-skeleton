@@ -276,3 +276,9 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
   .hero-actions { width: min(92vw, 24rem); grid-template-columns: 1fr; gap: 8px; margin: 16px 0 8px; }
 }
 @media (max-width: 390px) { .hero-overline { font-size: 8px; letter-spacing: .07em; } }
+
+/* Specificity guard for the original chapter-level hero rules. */
+.hero.journey-section { gap: 8px; }
+.hero .hero-overline { margin: 0 0 8px; font-size: clamp(9px, 1vw, 11px); letter-spacing: .16em; white-space: nowrap; color: var(--orange); }
+@media (max-width: 760px) { .hero .hero-overline { font-size: 9px; letter-spacing: .09em; } }
+@media (max-width: 390px) { .hero .hero-overline { font-size: 8px; letter-spacing: .07em; } }
