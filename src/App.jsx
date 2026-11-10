@@ -5,6 +5,7 @@ import {
   site, hero, advisorySubstages, evaluacionInicial,
   dossierItems, reserva, faq, empresas, cierre, waLink
 } from './legacy/Data/Content.js';
+import { image } from './legacy/Data/Media.js';
 import { existingPlans, kitInicio } from './legacy/Data/Programs.js';
 import { RUTAS } from './legacy/Data/Legal.js';
 
@@ -87,13 +88,13 @@ function App() {
 
     <main id="contenido">
       <section id="inicio" className="hero journey-section">
-        <div className="hero-kicker">PERSONAL COMBAT SPORTS LAB · {site.ciudad.toUpperCase()}</div>
+        <img className="hero-photo" src={image.chenRing} alt="" aria-hidden="true" decoding="async" fetchPriority="high" />
         <p className="hero-overline">{hero.kicker}</p>
         <h1>{hero.titulo.map((line, i) => <React.Fragment key={line}>{line}{i < hero.titulo.length - 1 && <br/>}</React.Fragment>)}</h1>
         <p className="hero-disciplines">{hero.disciplinasLinea}</p>
         <p className="hero-context">{hero.contexto}</p>
         <div className="hero-actions">
-          <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">Reservar evaluación · 30 € ↗</a>
+          <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer"><span>{hero.ctaReservar}</span><svg className="hero-cta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
           <button className="secondary-cta" type="button" onClick={() => go('metodo')}>Conocer el método</button>
         </div>
         <div className="hero-proof">{hero.confianza}</div>
