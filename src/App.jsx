@@ -21,7 +21,7 @@ const navItems = [
   ['entrenamiento', 'Precios'], ['alex', 'Sobre Alex'], ['reserva', 'Reservar'],
   ['empresas', 'Empresas'],
 ];
-const money = (value) => `${value} €`;
+const money = (value) => `${Number(value).toLocaleString('es-ES', { maximumFractionDigits: 2 })} €`;
 
 const monthlyPlanCopy = {
   arsenal: {
@@ -173,6 +173,7 @@ function App() {
               <div className="method-evaluation-title"><h3>{evaluacionInicial.titulo}</h3><strong>{evaluacionInicial.precio}</strong></div>
               <p>{evaluacionInicial.texto}</p>
               <p className="method-evaluation-note">{evaluacionInicial.nota}</p>
+              <p className="method-material-note">No necesitas comprar nada para empezar. Si no tienes material, lo llevo yo.</p>
               <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">{evaluacionInicial.cta} <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
               <p className="method-cta-note">30 € descontables al contratar un plan mensual 1:1 · Sin permanencia.</p>
               <button className="text-link" type="button" aria-expanded={showMore} onClick={() => setShowMore((value) => !value)}>{showMore ? 'Cerrar información −' : `${evaluacionInicial.ctaMas} +`}</button>
@@ -226,6 +227,7 @@ function App() {
                   </div>
                   <a className="plan-card-action" href={waLink(`Hola, quiero información sobre el plan ${plan.nombre} y consultar disponibilidad.`)} target="_blank" rel="noopener noreferrer"><span>{card.cta} · {money(plan.precio)}/mes</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
                   <p className="plan-card-footnote">Evaluación inicial · 30 € descontables al contratar este plan. Sin permanencia · cambios con 24 h y recuperación en el mismo mes según disponibilidad.</p>
+                  <p className="plan-kit-note">Kit completo opcional con tu plan mensual: <strong>{money(kitInicio.precio)}.</strong></p>
                 </article>;
               })}
             </div>
@@ -246,20 +248,16 @@ function App() {
                 </table>
               </div>
             </div>}
-            <div className="service-terms"><p>La evaluación inicial cuesta 30 € y se descuenta si después contratas un plan mensual. No hay permanencia. Los cambios de sesión deben avisarse con 24 h de antelación y pueden recuperarse dentro del mismo mes, según disponibilidad.</p></div>
           </>}
           {activeService === 'parejas' && <>
             <div className="plan-cards-heading"><div><p className="eyebrow">ENTRENAMIENTO COMPARTIDO</p><h3 className="subsection-title">Entrenad juntos.</h3></div><p>Una sesión privada para dos personas, adaptada a vuestro nivel y objetivos.</p></div>
             <article className="training-card format-service-card"><small>SESIÓN PARA 2 PERSONAS</small><h3>Parejas</h3><div className="format-service-price">{money(coupleFormat.precio)} <span>/ persona / sesión</span></div><p>{coupleFormat.texto}</p><a href={waLink('Hola, quiero consultar disponibilidad para entrenar en pareja.')} target="_blank" rel="noopener noreferrer">Consultar disponibilidad <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a><p className="format-risk-note">Sin permanencia · cambios con 24 h de antelación. La evaluación inicial no se descuenta en este formato.</p></article>
-            <div className="service-terms"><p>Tarifa por persona. La evaluación inicial de 30 € no se descuenta de las sesiones en pareja. No hay permanencia; los cambios deben avisarse con 24 h de antelación y la recuperación depende de la disponibilidad.</p></div>
           </>}
           {activeService === 'grupos' && <>
             <div className="plan-cards-heading"><div><p className="eyebrow">ENTRENAMIENTO EN EQUIPO</p><h3 className="subsection-title">Grupo reducido.</h3></div><p>Entrenamiento compartido, con atención técnica y un máximo de cuatro personas.</p></div>
             <article className="training-card format-service-card"><small>GRUPO REDUCIDO · MÁXIMO 4 PERSONAS</small><h3>Grupos reducidos</h3><div className="format-service-price">{money(groupFormat.precio)} <span>/ persona / sesión</span></div><p>{groupFormat.texto}</p><p className="format-bonuses">{groupFormat.desde}</p><a href={waLink('Hola, quiero consultar si hay grupo reducido compatible con mi zona y disponibilidad.')} target="_blank" rel="noopener noreferrer">Consultar grupos en mi zona <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a><p className="format-risk-note">Sin permanencia · grupos sujetos a zona y plazas disponibles. Si no existe uno compatible, puedes apuntarte para formarlo.</p></article>
-            <div className="service-terms"><p>Los grupos se forman por zona, disponibilidad y frecuencia. Si aún no existe uno compatible, puedes dejar tu disponibilidad para ayudar a formarlo. No hay permanencia; los cambios deben avisarse con 24 h de antelación y la recuperación depende de la disponibilidad del grupo.</p></div>
           </>}
         </div>
-        <div className="pricing-common-note"><p><strong>{kitInicio.nombre} · {money(kitInicio.precio)}.</strong> {kitInicio.contenido}. Opcional.</p></div>
         <button type="button" className="text-link section-next" onClick={() => go('reserva')}>Reservar evaluación inicial →</button>
       </section>
 
@@ -275,6 +273,7 @@ function App() {
         <p className="eyebrow">{reserva.subtitulo}</p><h2>{reserva.titulo}</h2><p className="lead">{reserva.texto}</p>
         <div className="booking-grid"><article><h3>{reserva.caminos.directo.titulo}</h3><p>{reserva.caminos.directo.accion}</p><a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">Elegir día y hora ↗</a></article><article><h3>{reserva.caminos.dudas.titulo}</h3><p>{reserva.caminos.dudas.accion}</p><a className="secondary-cta" href={waLink(cierre.mensajeAsesoria)} target="_blank" rel="noopener noreferrer">Pedir asesoramiento ↗</a></article></div>
         <h3 className="subsection-title">Antes, durante y después</h3><ol className="booking-steps">{reserva.despues.map((item, i) => <li key={i}>{item}</li>)}</ol>
+        <aside className="what-to-bring"><p className="eyebrow">QUÉ TRAER</p><h3>No necesitas comprar material.</h3><p>Si no tienes, lo llevo yo. Si prefieres material nuevo y tuyo, puedes adquirir el kit opcional: guantes, vendas y bucal.</p><p><strong>Kit completo: {money(kitInicio.precioSinPlan)}.</strong> Con un plan mensual: <strong>{money(kitInicio.precio)}.</strong></p></aside>
         <div className="faq"><h3>Preguntas frecuentes</h3>{faq.map((item, i) => <article key={item.q}><button type="button" aria-expanded={faqOpen === i} onClick={() => setFaqOpen(faqOpen === i ? -1 : i)}>{item.q}<span>{faqOpen === i ? '−' : '+'}</span></button>{faqOpen === i && <p>{item.a}</p>}</article>)}</div>
       </section>
 
@@ -294,7 +293,7 @@ function App() {
         </div>
         <div className="b2b-case">
           <div>
-            <p className="eyebrow">SELECTED WORK / EXECUTED</p><h3 className="subsection-title">El Corte Inglés · Experiencia Muay Thai</h3>
+            <p className="eyebrow">PROYECTO REALIZADO</p><h3 className="subsection-title">El Corte Inglés · Experiencia Muay Thai</h3>
             <p>Activación realizada durante dos jornadas, con ocho intervenciones programadas de 20 minutos. Un entrenador y dos peleadores realizaron demostraciones técnicas y participación guiada. SML se encargó de la dirección deportiva y del material.</p>
             <div className="b2b-facts"><div className="b2b-fact"><strong>2</strong><span>jornadas</span></div><div className="b2b-fact"><strong>8</strong><span>intervenciones programadas</span></div><div className="b2b-fact"><strong>2026</strong><span>Madrid</span></div></div>
             <p>Un formato que combina exhibición y participación: el público no solo observa, también puede probar la actividad con acompañamiento profesional.</p>

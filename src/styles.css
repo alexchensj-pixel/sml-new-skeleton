@@ -457,3 +457,17 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 .method-cta-note{color:#f0c0ad}
 .pricing-common-note{margin-top:22px;font-size:12px;color:#bfc5ce}
 @media(max-width:680px){.hero-offer{font-size:12px;margin-top:13px}.pricing-followup{padding:13px 0 13px 14px}.pricing-followup p{font-size:13px;line-height:1.55}.plan-card-footnote,.format-risk-note,.method-cta-note{font-size:11px}}
+
+
+/* 2026-11 · jerarquía del hero y política de material */
+.hero-quicklinks{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px}
+.hero-quicklinks .intro-skip{margin-left:auto;white-space:nowrap}
+.scroll-cue{display:block;position:relative;z-index:2;width:max-content;max-width:100%;margin-top:clamp(24px,4vh,48px);clear:both}
+.method-material-note{margin:12px 0 0;color:#f1f1ee;font-size:13px;line-height:1.55;border-left:2px solid var(--orange);padding-left:12px}
+.plan-kit-note{margin:12px 0 0;color:#cbd0d8;font-size:12px;line-height:1.45}
+.plan-kit-note strong{color:#f1f1ee}
+.what-to-bring{margin:34px 0 24px;padding:20px 22px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.018));max-width:760px}
+.what-to-bring h3{margin:4px 0 10px;font-size:clamp(19px,2.2vw,25px)}
+.what-to-bring p{color:#d1d5dc;line-height:1.6;font-size:14px}
+.what-to-bring p:last-child{margin-bottom:0}
+@media(max-width:640px){.hero-quicklinks .intro-skip{margin-left:0}.scroll-cue{margin-top:22px}.what-to-bring{padding:16px;margin-top:26px}}

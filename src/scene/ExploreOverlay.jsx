@@ -76,6 +76,28 @@ export default function Explore() {
 
   // Cambiar de personaje o de concepto cierra el nivel 3 anterior: la información es consecuencia de la selección, no un resto.
   useEffect(() => { setDeep(false); }, [discId]);
+  useEffect(() => {
+    if (!discId || activeChapter !== 'character-select') return;
+    const target = document.querySelector(`[data-discipline-id="${discId}"]`);
+    target?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, [discId, activeChapter]);
+  useEffect(() => {
+    if (activeChapter !== 'character-select') return undefined;
+    const root = document.querySelector('.ex-overlay .ex__scroll');
+    if (!root) return undefined;
+    const syncFigureToCard = () => {
+      const rootRect = root.getBoundingClientRect();
+      const anchor = rootRect.top + Math.min(130, rootRect.height * 0.38);
+      const cards = [...root.querySelectorAll('[data-discipline-id]')];
+      const nearest = cards
+        .map((node) => ({ node, distance: Math.abs(node.getBoundingClientRect().top - anchor) }))
+        .sort((a, b) => a.distance - b.distance)[0]?.node;
+      const id = nearest?.getAttribute('data-discipline-id');
+      if (id && useStore.getState().selectedDiscipline !== id) selectDiscipline(id);
+    };
+    root.addEventListener('scroll', syncFigureToCard, { passive: true });
+    return () => root.removeEventListener('scroll', syncFigureToCard);
+  }, [activeChapter, selectDiscipline]);
   useEffect(() => { setModeDeep(false); }, [mode]);
 
   const style = active ? { '--ex-accent': active.accent, '--ex-rgb': rgbTriplet(active.accent) } : undefined;
@@ -87,11 +109,16 @@ export default function Explore() {
   const discSection = (
     <section className="ex__block ex__block--disc" aria-label={explore.disciplinasTitulo}>
       <h3 className="ex__h">{explore.disciplinasTitulo}</h3>
+      <div className="ex__figure-rail" aria-label="Figuras y disciplinas">
+        {disciplines.map((d, i) => (
+          <button key={d.id} type="button" className="ex__figure-label" data-active={d.id === discId} style={{ "--figure-order": i }} aria-pressed={d.id === discId} onClick={() => selectDiscipline(d.id)}>{d.id === 'k1' ? 'K1' : d.name}</button>
+        ))}
+      </div>
       <ul className="ex__discs">
         {disciplines.map((d) => {
           const on = d.id === discId;
           return (
-            <li className="ex__disc" key={d.id} data-on={on} data-dim={!!active && !on} style={{ '--ex-accent': d.accent, '--ex-rgb': rgbTriplet(d.accent) }}>
+            <li className="ex__disc" key={d.id} data-discipline-id={d.id} data-on={on} data-dim={!!active && !on} style={{ '--ex-accent': d.accent, '--ex-rgb': rgbTriplet(d.accent) }}>
               <button className="ex__discBtn" type="button" aria-pressed={on} onClick={() => selectDiscipline(on ? null : d.id)}>
                 <span className="ex__discName">{d.name}</span>
                 <span className="ex__discLine">{d.tagline}</span>
