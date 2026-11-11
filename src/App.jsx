@@ -27,14 +27,14 @@ const money = (value) => `${value} €`;
 const monthlyPlanCopy = {
   arsenal: {
     descriptor: 'FUNDAMENTOS',
-    identity: 'Aprende lo esencial y construye una base técnica sólida.',
+    identity: 'Ideal si empiezas o quieres construir una buena base técnica.',
     intro: 'INCLUYE',
     highlights: ['Evaluación técnica inicial', 'Análisis técnico en vídeo', 'Comba de entrenamiento de boxeo'],
     cta: 'Empezar con Arsenal',
   },
   striker: {
     descriptor: 'DESARROLLO',
-    identity: 'Más continuidad y trabajo específico para progresar con estructura.',
+    identity: 'Ideal si quieres progresar con constancia y trabajar tu técnica.',
     intro: 'TODO ARSENAL +',
     highlights: ['Plan de entrenamiento personalizado', 'Biblioteca personalizada de ejercicios', 'Trabajo específico según objetivos'],
     cta: 'Reservar Striker',
@@ -42,9 +42,9 @@ const monthlyPlanCopy = {
   },
   'fight-iq': {
     descriptor: 'DOMINIO',
-    identity: 'Entrena con criterio: estrategia, estilo y sparring supervisado.',
+    identity: 'Ideal si buscas entrenar con criterio de combate o avanzar hacia la competición.',
     intro: 'TODO STRIKER +',
-    highlights: ['Preparación específica para combate', 'Estrategia y táctica', 'Desarrollo del estilo de pelea + sparring supervisado con peleador'],
+    highlights: ['Preparación específica para combate', 'Estrategia y táctica', 'Desarrollo del estilo de pelea y sparring supervisado, progresivo y adaptado a tu nivel técnico; no es un requisito para empezar'],
     cta: 'Reservar Fight IQ',
   },
 };
@@ -62,6 +62,7 @@ function App() {
   const [faqOpen, setFaqOpen] = useState(-1);
   const [showPlanComparison, setShowPlanComparison] = useState(false);
   const [showMore, setShowMore] = useState(false);
+  const [activeService, setActiveService] = useState('individual');
   const methodProgress = useRef(0);
   const [activeMethodIndex, setActiveMethodIndex] = useState(0);
 
@@ -75,6 +76,17 @@ function App() {
     }, { rootMargin: '-25% 0px -55% 0px', threshold: [0, .15, .35, .6] });
     nodes.forEach((node) => observer.observe(node));
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const validTabs = new Set(['individual', 'parejas', 'grupos']);
+    const syncTabFromHash = () => {
+      const requested = window.location.hash.slice(1);
+      if (validTabs.has(requested)) setActiveService(requested);
+    };
+    syncTabFromHash();
+    window.addEventListener('hashchange', syncTabFromHash);
+    return () => window.removeEventListener('hashchange', syncTabFromHash);
   }, []);
 
   useEffect(() => {
@@ -101,6 +113,15 @@ function App() {
   };
   const formatPlans = existingPlans.filter((plan) => plan.tipo === 'formato');
   const monthlyPlans = existingPlans.filter((plan) => plan.tipo === 'mensual');
+  const chooseService = (id) => {
+    setActiveService(id);
+    window.history.replaceState(null, '', `#${id}`);
+  };
+  const serviceTabs = [
+    { id: 'individual', label: '1:1', detail: 'Seguimiento individual' },
+    { id: 'parejas', label: 'Parejas', detail: 'Dos personas' },
+    { id: 'grupos', label: 'Grupos reducidos', detail: 'Máximo 4 personas' },
+  ];
 
   return <>
     <a className="skip-link" href="#contenido">Saltar al contenido</a>
@@ -169,46 +190,72 @@ function App() {
 
       <section id="entrenamiento" className="journey-section content-section pricing-section">
         <div className="section-meta"><span>03 / 05</span><span>ENTRENAMIENTO · FORMATOS Y PRECIOS</span></div>
-        <p className="eyebrow">ELIGE CÓMO ENTRENAR</p><h2>Entrenamiento diseñado alrededor de ti.</h2>
+        <p className="eyebrow">ELIGE CÓMO ENTRENAR</p><h2 className="pricing-title">Entrenamiento diseñado alrededor de ti.</h2>
+        <p className="pricing-social" aria-label="Valoración en Google: 5,0 estrellas y 18 reseñas">{site.rating.valor.replace('.', ',')} ★ · {site.rating.resenas} reseñas</p>
         <p className="lead">Sesiones privadas y grupos reducidos. El material técnico está incluido y cada sesión dura 60 minutos.</p>
-        <RecommendationRoulette />
-        <h3 className="subsection-title">Sesiones sueltas y formatos</h3>
-        <div className="training-grid">
-          {formatPlans.map((plan) => <article className="training-card" key={plan.id}><small>SESIÓN · 60 MIN</small><h3>{plan.nombre}</h3><strong className="plan-price">{money(plan.precio)}</strong><p className="plan-unit">{plan.unidad}</p><p>{plan.texto}</p>{plan.desde && <p className="plan-extra">{plan.desde}</p>}<a href={waLink(`Hola, quiero consultar el formato ${plan.nombre}. ¿Hay disponibilidad?`)} target="_blank" rel="noopener noreferrer">Consultar por WhatsApp ↗</a></article>)}
-        </div>
-        <div className="plan-cards-heading">
-          <div><p className="eyebrow">PLANES MENSUALES</p><h3 className="subsection-title">Elige tu plan de entrenamiento.</h3></div>
-          <p>Cada plan incluye el anterior y añade más frecuencia y trabajo específico.</p>
-        </div>
-        <div className="training-grid monthly-grid plan-grid">
-          {monthlyPlans.map((plan) => {
-            const card = monthlyPlanCopy[plan.id];
-            return <article className={`training-card monthly-card plan-card plan-card-${plan.id} ${card.popular ? 'is-popular' : ''}`} key={plan.id}>
-              <div className="plan-card-top"><span>{card.descriptor}</span>{card.popular && <strong className="plan-popular-badge">MÁS POPULAR</strong>}</div>
-              <h3>{plan.nombre}</h3>
-              <p className="plan-card-identity">{card.identity}</p>
-              <div className="plan-card-price"><strong>{money(plan.precio)}</strong><span>/ mes</span></div>
-              <p className="plan-card-frequency">{plan.sesionesSemana} {plan.sesionesSemana === 1 ? 'sesión' : 'sesiones'} / semana <span>·</span> 60 min</p>
-              <div className="plan-card-content">
-                <p className="plan-card-intro">{card.intro}</p>
-                <ul>{card.highlights.map((item) => <li key={item}>{item}</li>)}</ul>
+        <nav className="pricing-tabs" role="tablist" aria-label="Tipo de entrenamiento">
+          {serviceTabs.map((tab) => <a key={tab.id} id={`tab-${tab.id}`} href={`#${tab.id}`} role="tab" aria-selected={activeService === tab.id} aria-controls={activeService} className={`pricing-tab ${activeService === tab.id ? 'is-active' : ''}`} onClick={(event) => { event.preventDefault(); chooseService(tab.id); }}>
+            <strong>{tab.label}</strong><span>{tab.detail}</span>
+          </a>)}
+        </nav>
+        <div id={activeService} className="pricing-tab-panel" role="tabpanel" aria-labelledby={`tab-${activeService}`}>
+          {activeService === 'individual' && <>
+            <div className="plan-cards-heading">
+              <div><p className="eyebrow">PLANES MENSUALES · 1:1</p><h3 className="subsection-title">Elige tu plan de entrenamiento.</h3></div>
+              <p>Cada plan incluye el anterior y añade más frecuencia y trabajo específico.</p>
+            </div>
+            <div className="training-grid monthly-grid plan-grid">
+              {monthlyPlans.map((plan) => {
+                const card = monthlyPlanCopy[plan.id];
+                const monthlySessions = plan.sesionesSemana * 4;
+                const perSession = (plan.precio / monthlySessions).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                return <article className={`training-card monthly-card plan-card plan-card-${plan.id} ${card.popular ? 'is-popular' : ''}`} key={plan.id}>
+                  <div className="plan-card-top"><span>{card.descriptor}</span>{card.popular && <strong className="plan-popular-badge">MÁS POPULAR</strong>}</div>
+                  <h3>{plan.nombre}</h3>
+                  <p className="plan-card-identity">{card.identity}</p>
+                  <div className="plan-card-price"><strong>{money(plan.precio)}</strong><span>/ mes</span></div>
+                  <p className="plan-card-per-session">{perSession} € / sesión</p>
+                  <p className="plan-card-frequency">{plan.sesionesSemana} {plan.sesionesSemana === 1 ? 'sesión' : 'sesiones'} / semana <span>·</span> 60 min</p>
+                  <div className="plan-card-content">
+                    <p className="plan-card-intro">{card.intro}</p>
+                    <ul>{card.highlights.map((item) => <li key={item}>{item}</li>)}</ul>
+                  </div>
+                  <a className="plan-card-action" href={waLink(`Hola, quiero información sobre el plan ${plan.nombre} y consultar disponibilidad.`)} target="_blank" rel="noopener noreferrer"><span>{card.cta} · {money(plan.precio)}/mes</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
+                  <p className="plan-card-footnote">Empiezas con la evaluación (30 €), que se descuenta del plan.</p>
+                </article>;
+              })}
+            </div>
+            <div className="single-session-card">
+              <div><small>SESIÓN INDIVIDUAL · 60 MIN</small><h3>Sesión suelta 1:1</h3><p>Máxima personalización y adaptación a tu nivel y objetivo.</p></div>
+              <strong>30 € <span>/ sesión</span></strong>
+              <a href={waLink('Hola, quiero consultar disponibilidad para una sesión individual 1:1.')} target="_blank" rel="noopener noreferrer">Consultar sesión <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
+            </div>
+            <div className="plan-comparison-control">
+              <button type="button" className="plan-comparison-toggle" aria-expanded={showPlanComparison} aria-controls="plan-comparison" onClick={() => setShowPlanComparison((value) => !value)}>{showPlanComparison ? 'Ocultar comparación' : 'Comparar qué incluye cada plan'} <span>{showPlanComparison ? '−' : '+'}</span></button>
+            </div>
+            {showPlanComparison && <div id="plan-comparison" className="plan-comparison-panel">
+              <div className="plan-comparison-scroll">
+                <table className="plan-comparison-table">
+                  <thead><tr><th scope="col">Atributo</th><th scope="col">Arsenal</th><th scope="col">Striker</th><th scope="col">Fight IQ</th></tr></thead>
+                  <tbody>{planComparisonRows.map((row) => <tr key={row.label}><th scope="row">{row.label}</th><td>{row.arsenal}</td><td>{row.striker}</td><td>{row.fightIq}</td></tr>)}</tbody>
+                </table>
               </div>
-              <a className="plan-card-action" href={waLink(`Hola, quiero información sobre el plan ${plan.nombre} y consultar disponibilidad.`)} target="_blank" rel="noopener noreferrer"><span>{card.cta} · {money(plan.precio)}/mes</span><b>↗</b></a>
-            </article>;
-          })}
+            </div>}
+            <div className="service-terms"><p>La evaluación inicial cuesta 30 € y se descuenta si después contratas un plan mensual. No hay permanencia. Los cambios de sesión deben avisarse con 24 h de antelación y pueden recuperarse dentro del mismo mes, según disponibilidad.</p></div>
+          </>}
+          {activeService === 'parejas' && <>
+            <div className="plan-cards-heading"><div><p className="eyebrow">ENTRENAMIENTO COMPARTIDO</p><h3 className="subsection-title">Entrenad juntos.</h3></div><p>Una sesión privada para dos personas, adaptada a vuestro nivel y objetivos.</p></div>
+            <article className="training-card format-service-card"><small>SESIÓN · 60 MIN · 2 PERSONAS</small><h3>Parejas</h3><div className="format-service-price">20 € <span>/ persona / sesión</span></div><p>Mismo formato personalizado, entrenando junto a otra persona — pareja, amigo o familiar.</p><a href={waLink('Hola, quiero consultar disponibilidad para entrenar en pareja.')} target="_blank" rel="noopener noreferrer">Consultar disponibilidad <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a></article>
+            <div className="service-terms"><p>Tarifa por persona. La evaluación inicial de 30 € no se descuenta de las sesiones en pareja. No hay permanencia; los cambios deben avisarse con 24 h de antelación y la recuperación depende de la disponibilidad.</p></div>
+          </>}
+          {activeService === 'grupos' && <>
+            <div className="plan-cards-heading"><div><p className="eyebrow">ENTRENAMIENTO EN EQUIPO</p><h3 className="subsection-title">Grupo reducido.</h3></div><p>Entrenamiento compartido, con atención técnica y un máximo de cuatro personas.</p></div>
+            <article className="training-card format-service-card"><small>SESIÓN · 60 MIN · MÁXIMO 4 PERSONAS</small><h3>Grupos reducidos</h3><div className="format-service-price">15 € <span>/ persona / sesión</span></div><p>Entrenamiento en grupos pequeños, con más interacción sin perder la corrección individual.</p><p className="format-bonuses"><strong>Bonos:</strong> 55 € · 4 clases/mes <span>·</span> 95 € · 8 clases/mes</p><a href={waLink('Hola, quiero consultar si hay grupo reducido compatible con mi zona y disponibilidad.')} target="_blank" rel="noopener noreferrer">Consultar grupos en mi zona <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a></article>
+            <div className="service-terms"><p>Los grupos se forman por zona, disponibilidad y frecuencia. Si aún no existe uno compatible, puedes dejar tu disponibilidad para ayudar a formarlo. No hay permanencia; los cambios deben avisarse con 24 h de antelación y la recuperación depende de la disponibilidad del grupo.</p></div>
+          </>}
         </div>
-        <div className="plan-comparison-control">
-          <button type="button" className="plan-comparison-toggle" aria-expanded={showPlanComparison} aria-controls="plan-comparison" onClick={() => setShowPlanComparison((value) => !value)}>{showPlanComparison ? 'Ocultar atributos' : 'Ver todos los atributos'} <span>{showPlanComparison ? '−' : '+'}</span></button>
-        </div>
-        {showPlanComparison && <div id="plan-comparison" className="plan-comparison-panel">
-          <div className="plan-comparison-scroll">
-            <table className="plan-comparison-table">
-              <thead><tr><th scope="col">Atributo</th><th scope="col">Arsenal</th><th scope="col">Striker</th><th scope="col">Fight IQ</th></tr></thead>
-              <tbody>{planComparisonRows.map((row) => <tr key={row.label}><th scope="row">{row.label}</th><td>{row.arsenal}</td><td>{row.striker}</td><td>{row.fightIq}</td></tr>)}</tbody>
-            </table>
-          </div>
-        </div>}
-        <div className="pricing-notes"><p><strong>Evaluación inicial · 30 €.</strong> Si después contratas Arsenal, Striker o Fight IQ, se descuentan del plan. No se descuentan en parejas ni en grupos.</p><p><strong>{kitInicio.nombre} · {money(kitInicio.precio)}.</strong> {kitInicio.contenido}. Opcional.</p><p>Los grupos se forman por zona, disponibilidad y frecuencia. Máximo 4 personas; si aún no existe uno compatible, puedes dejar tu disponibilidad para ayudar a formarlo.</p><a className="text-link" href={waLink('Hola, quiero consultar si hay grupo reducido compatible con mi zona y disponibilidad.')} target="_blank" rel="noopener noreferrer">Consultar grupos en mi zona ↗</a></div>
+        <div className="pricing-common-note"><p><strong>{kitInicio.nombre} · {money(kitInicio.precio)}.</strong> {kitInicio.contenido}. Opcional.</p></div>
+        <RecommendationRoulette />
         <button type="button" className="text-link section-next" onClick={() => go('reserva')}>Reservar evaluación inicial →</button>
       </section>
 
