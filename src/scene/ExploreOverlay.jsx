@@ -109,26 +109,19 @@ export default function Explore() {
   const discSection = (
     <section className="ex__block ex__block--disc" aria-label={explore.disciplinasTitulo}>
       <h3 className="ex__h">{explore.disciplinasTitulo}</h3>
-      <div className="ex__figure-rail" aria-label="Figuras y disciplinas">
+      <div className="ex__figure-rail" role="group" aria-label="Selecciona una disciplina">
         {disciplines.map((d, i) => (
-          <button key={d.id} type="button" className="ex__figure-label" data-active={d.id === discId} style={{ "--figure-order": i }} aria-pressed={d.id === discId} onClick={() => selectDiscipline(d.id)}>{d.id === 'k1' ? 'K1' : d.name}</button>
+          <button
+            key={d.id}
+            type="button"
+            className="ex__figure-label"
+            data-active={d.id === discId}
+            style={{ "--figure-order": i, "--figure-accent": d.accent, "--figure-rgb": rgbTriplet(d.accent) }}
+            aria-pressed={d.id === discId}
+            onClick={() => selectDiscipline(d.id)}
+          >{d.id === 'k1' ? 'K1' : d.name}</button>
         ))}
       </div>
-      <ul className="ex__discs">
-        {disciplines.map((d) => {
-          const on = d.id === discId;
-          return (
-            <li className="ex__disc" key={d.id} data-discipline-id={d.id} data-on={on} data-dim={!!active && !on} style={{ '--ex-accent': d.accent, '--ex-rgb': rgbTriplet(d.accent) }}>
-              <button className="ex__discBtn" type="button" aria-pressed={on} onClick={() => selectDiscipline(on ? null : d.id)}>
-                <span className="ex__discName">{d.name}</span>
-                <span className="ex__discLine">{d.tagline}</span>
-                <span className="ex__discTag">{d.atributos.slice(0, 3).join(' · ')}</span>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-      {active && <p className="ex__tagline" key={active.id} style={{ color: active.accent }}>{active.tagline}</p>}
       <p className={active ? 'ex__pick' : 'exs__hint'} aria-live="polite">{active ? active.linea : explore.intro}</p>
       {active && (
         <button type="button" className="ex__reset" aria-expanded={deep} aria-controls={`ex-detail-${active.id}`} onClick={() => setDeep((v) => !v)}>
