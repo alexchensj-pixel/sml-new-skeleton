@@ -475,3 +475,7 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 .what-to-bring p{color:#d1d5dc;line-height:1.6;font-size:14px}
 .what-to-bring p:last-child{margin-bottom:0}
 @media(max-width:640px){.hero-quicklinks .intro-skip{margin-left:0}.scroll-cue{margin-top:22px}.what-to-bring{padding:16px;margin-top:26px}}
+
+/* Evaluación: el descuento debe leerse completo también en pantallas estrechas. */
+.method-evaluation .method-discount-note{max-width:38ch;overflow-wrap:normal;text-wrap:pretty}
+.method-evaluation .method-discount-exception{max-width:42ch}

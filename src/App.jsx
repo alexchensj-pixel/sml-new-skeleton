@@ -171,12 +171,11 @@ function App() {
             <div className="method-evaluation">
               <span>{evaluacionInicial.kickerMetodo}</span>
               <div className="method-evaluation-title"><h3>{evaluacionInicial.titulo}</h3><strong>{evaluacionInicial.precio}</strong></div>
-              <p>{evaluacionInicial.texto}</p>
               <p className="method-evaluation-note">{evaluacionInicial.texto}</p>
               <p className="method-material-note">No necesitas comprar nada para empezar. Si no tienes material, lo llevo yo.</p>
-              <p className="method-discount-note">Si después contratas un plan mensual 1:1, los 30 € se descuentan.</p>
-              <p className="method-discount-exception">No aplica a parejas ni a grupos.</p>
-              <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">Reservar evaluación · 30 € <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
+              <p className="method-discount-note">Si contratas un plan mensual individual, los 30 € se descuentan de su precio.</p>
+              <p className="method-discount-exception">En pareja o en grupo, la evaluación no se descuenta.</p>
+              <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer"><span>{hero.ctaReservar}</span></a>
               <p className="method-cta-note">Sin permanencia en los planes.</p>
               <button className="text-link" type="button" aria-expanded={showMore} onClick={() => setShowMore((value) => !value)}>{showMore ? 'Cerrar información −' : `${evaluacionInicial.ctaMas} +`}</button>
               {showMore && <ul>{evaluacionInicial.mas.map(([a, b]) => <li key={a}><b>{a}:</b> {b}</li>)}</ul>}
@@ -275,7 +274,7 @@ function App() {
         <p className="eyebrow">{reserva.subtitulo}</p><h2>{reserva.titulo}</h2><p className="lead">{reserva.texto}</p>
         <div className="booking-grid"><article><h3>{reserva.caminos.directo.titulo}</h3><p>{reserva.caminos.directo.accion}</p><a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">Elegir día y hora ↗</a></article><article><h3>{reserva.caminos.dudas.titulo}</h3><p>{reserva.caminos.dudas.accion}</p><a className="secondary-cta" href={waLink(cierre.mensajeAsesoria)} target="_blank" rel="noopener noreferrer">Pedir asesoramiento ↗</a></article></div>
         <h3 className="subsection-title">Antes, durante y después</h3><ol className="booking-steps">{reserva.despues.map((item, i) => <li key={i}>{item}</li>)}</ol>
-        <aside className="what-to-bring"><p className="eyebrow">QUÉ TRAER</p><h3>No necesitas comprar material.</h3><p>Si no tienes, lo llevo yo. Si prefieres material nuevo y tuyo, puedes adquirir el kit opcional: guantes, vendas y bucal.</p><p><strong>Kit completo: {money(kitInicio.precioSinPlan)}.</strong> Con un plan mensual: <strong>{money(kitInicio.precio)}.</strong></p></aside>
+        <aside className="what-to-bring"><p className="eyebrow">MATERIAL OPCIONAL</p><h3>Tu propio kit de entrenamiento.</h3><p>Yo llevo el material necesario para las sesiones. Si prefieres tener el tuyo, puedes adquirir el kit completo: guantes, vendas y bucal.</p><p><strong>Kit completo: {money(kitInicio.precioSinPlan)}.</strong> Con un plan mensual: <strong>{money(kitInicio.precio)}.</strong></p></aside>
         <div className="faq"><h3>Preguntas frecuentes</h3>{faq.map((item, i) => <article key={item.q}><button type="button" aria-expanded={faqOpen === i} onClick={() => setFaqOpen(faqOpen === i ? -1 : i)}>{item.q}<span>{faqOpen === i ? '−' : '+'}</span></button>{faqOpen === i && <p>{item.a}</p>}</article>)}</div>
       </section>
 
