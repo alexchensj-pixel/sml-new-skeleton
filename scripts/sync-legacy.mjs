@@ -1,10 +1,17 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const legacy = path.join(root, 'current-site');
 const academy = path.join(legacy, 'sml-v31/sml-v31-academy');
+
+// Netlify may check out the superproject without populating the public legacy submodule.
+// Initialize only this direct submodule (the Academy directory is tracked inside it).
+if (!fs.existsSync(path.join(legacy, 'src'))) {
+  execFileSync('git', ['submodule', 'update', '--init', 'current-site'], { cwd: root, stdio: 'inherit' });
+}
 const copy = (from, to) => {
   if (!fs.existsSync(from)) throw new Error(`SML migration source missing: ${path.relative(root, from)}`);
   fs.mkdirSync(path.dirname(to), { recursive: true });
