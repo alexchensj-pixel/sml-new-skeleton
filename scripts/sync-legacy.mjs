@@ -88,6 +88,19 @@ patchCopiedSource(
   's.mix = MathUtils.damp(s.mix, playing ? 1 : 0, 6, dt);',
   's.mix = playing ? 1 : 0; // Switch poster → first decoded video frame without a ghosted crossfade.'
 );
+// Restore richer color across every 3D character (overview roster + focused fighter).
+// The source clips are keyed over pure black; adjust saturation in the shared shader.
+patchCopiedSource(
+  'src/legacy/Scene/Environment/RosterGroup.jsx',
+  'vec3 c = mix(texture2D(uStill, uv).rgb, texture2D(uVideo, uv).rgb, uMix);',
+  'vec3 c = mix(texture2D(uStill, uv).rgb, texture2D(uVideo, uv).rgb, uMix);\n  float luminance = dot(c, vec3(0.2126, 0.7152, 0.0722));\n  c = mix(vec3(luminance), c, 1.2);'
+);
+patchCopiedSource(
+  'src/legacy/Scene/Environment/Fighter.jsx',
+  'vec3 c = mix(texture2D(uStill, vUv).rgb, texture2D(uVideo, vUv).rgb, uMix);',
+  'vec3 c = mix(texture2D(uStill, vUv).rgb, texture2D(uVideo, vUv).rgb, uMix);\n  float luminance = dot(c, vec3(0.2126, 0.7152, 0.0722));\n  c = mix(vec3(luminance), c, 1.2);'
+);
+
 patchCopiedSource(
   'src/legacy/Scene/Environment/cells.js',
   'return { split: false, fx: 1, fy: EXPLORE_STACK_FY, cx: 0.5, cy: EXPLORE_STACK_FY / 2 };',
