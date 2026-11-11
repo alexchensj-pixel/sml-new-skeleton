@@ -340,12 +340,12 @@
 }
 
 /* No pantalla vacía entre Inicio (01) y Método (02). */
-.explore-dwell { display: none !important; height: 0 !important; }
+.explore-dwell { display: none; height: 0; }
 
 /* Preview correction: keep the mobile 3D roster clear of the fixed 70px header. */
 @media (max-aspect-ratio: 11/10) {
   .ex-overlay .ex__glow { top: 86px; height: 32%; }
   .ex-overlay .ex__panel { top: calc(32% + 86px); }
   .ex-overlay .ex__scroll { padding-top: 2rem; }
-  .explore-dwell { display: none !important; height: 0 !important; }
+  .explore-dwell { display: block !important; height: 10svh !important; min-height: 44px; max-height: 72px; pointer-events: none; }
 }

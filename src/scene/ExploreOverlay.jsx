@@ -111,7 +111,6 @@ export default function Explore() {
       {active && deep && (
         <DisciplineDetail key={active.id} discipline={active} stacked={stacked} onReset={() => { setDeep(false); selectDiscipline(null); }} />
       )}
-      {active && !deep && stacked && <DisciplineMedia discipline={active} label={explore.bloques.personaje} />}
     </section>
   );
 
@@ -185,7 +184,6 @@ function DisciplineDetail({ discipline: d, stacked, onReset }) {
   const b = explore.bloques;
   return (
     <div className="exs__drawer ex__detail" id={`ex-detail-${d.id}`}>
-      {stacked && <DisciplineMedia discipline={d} label={b.personaje} />}
 
       <h4 className="ex__dh">{b.que}</h4>
       {d.descripcion.map((p, i) => <p key={i} className="ex__text">{p}</p>)}
@@ -212,20 +210,4 @@ function DisciplineDetail({ discipline: d, stacked, onReset }) {
   );
 }
 
-// Retrato fijo del personaje: sin vídeo ni movimiento. Tocar permite ampliarlo y volver.
-function DisciplineMedia({ discipline: d, label }) {
-  const [zoomed, setZoomed] = useState(false);
-  return (
-    <button
-      type="button"
-      className={`ex__media${zoomed ? ' is-zoomed' : ''}`}
-      aria-label={zoomed ? `Cerrar ampliación de ${d.name}` : `Ampliar personaje: ${d.name}`}
-      aria-pressed={zoomed}
-      onClick={() => setZoomed((value) => !value)}
-    >
-      <img src={d.poster} alt={`${d.name} — retrato estático`} loading="lazy" />
-      <span className="ex__mediaHint">{zoomed ? 'CERRAR ×' : 'AMPLIAR +'}</span>
-    </button>
-  );
-}
 
