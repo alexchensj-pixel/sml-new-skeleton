@@ -479,3 +479,17 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 /* Evaluación: el descuento debe leerse completo también en pantallas estrechas. */
 .method-evaluation .method-discount-note{max-width:38ch;overflow-wrap:normal;text-wrap:pretty}
 .method-evaluation .method-discount-exception{max-width:42ch}
+
+
+/* Character Select: reserva un tramo de pantalla real para ver los tres luchadores.
+   El controlador mantiene la cámara en esta pose mientras la sección está visible. */
+.explore-dwell {
+  display: block;
+  height: 110vh;
+  height: 110svh;
+  min-height: 110vh;
+  min-height: 110svh;
+  flex: 0 0 auto;
+  position: relative;
+  pointer-events: none;
+}

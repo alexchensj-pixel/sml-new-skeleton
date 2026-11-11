@@ -49,7 +49,9 @@ const chapterFor = (key, progress) => {
 // Al entrar en esa región, el reveal se ejecuta por tiempo (1,5 s), no por la velocidad del dedo.
 const EXPLORE_START = 0.78;
 const EXPLORE_END = 0.90;
-const EXPLORE_DURATION_MS = 1500;
+const BRIDGE_PHASE_MS = 3000;
+const SELECT_REVEAL_MS = 4200;
+const EXPLORE_DURATION_MS = BRIDGE_PHASE_MS + SELECT_REVEAL_MS;
 
 function applyRoute(route, progress, lastChapter) {
   const step = route.steps.find((item, index) => progress < item.to || index === route.steps.length - 1);
@@ -93,9 +95,19 @@ export default function LegacyWorld() {
       setSegment('entrada>character-select', 0.0001);
       const startedAt = performance.now();
       const tick = (now) => {
-        const t = clamp((now - startedAt) / EXPLORE_DURATION_MS);
-        const eased = t * t * (3 - 2 * t);
-        lastChapter = applyRoute(ROUTES[0], EXPLORE_START + (EXPLORE_END - EXPLORE_START) * eased, lastChapter);
+        const elapsed = Math.max(0, now - startedAt);
+        // Primera fase: dejar que el Bridge termine su recorrido sin solaparse con
+        // la selección. Segunda fase: reservar 4,2 s completos para revelar los 3 luchadores.
+        const bridgeT = clamp(elapsed / BRIDGE_PHASE_MS);
+        const revealT = clamp((elapsed - BRIDGE_PHASE_MS) / SELECT_REVEAL_MS);
+        const bridgeEase = bridgeT * bridgeT * (3 - 2 * bridgeT);
+        const revealEase = revealT * revealT * (3 - 2 * revealT);
+        const localProgress = elapsed < BRIDGE_PHASE_MS
+          ? 0.82 * bridgeEase
+          : 0.82 + 0.18 * revealEase;
+        const t = clamp(elapsed / EXPLORE_DURATION_MS);
+        const routeProgress = EXPLORE_START + (EXPLORE_END - EXPLORE_START) * localProgress;
+        lastChapter = applyRoute(ROUTES[0], routeProgress, lastChapter);
         if (t < 1) {
           revealFrame = requestAnimationFrame(tick);
           return;
