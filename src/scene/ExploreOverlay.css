@@ -20,7 +20,7 @@
 .ex .stage { display: block; padding: 0; }
 .ex__body { position: absolute; inset: 0; pointer-events: none; }
 
-/* Luz de ambiente del color de la disciplina elegida, sobre la región del 3D. */
+/* Luz de ambiente del color de la disciplina elegida, sobre la regiÃ³n del 3D. */
 .ex__glow {
   position: absolute; top: 0; right: 0; bottom: 0; width: 60%; pointer-events: none; opacity: 0;
   background: radial-gradient(closest-side at 50% 52%, rgba(var(--ex-rgb), .22), rgba(var(--ex-rgb), .07) 55%, transparent 80%);
@@ -47,7 +47,7 @@
 }
 .ex__intro { margin: .9rem 0 0; font-family: var(--ex-sans); font-size: 1.05rem; line-height: 1.45; color: var(--ex-soft); max-width: 32ch; }
 
-/* 1 · Formas de entrenar */
+/* 1 Â· Formas de entrenar */
 .ex__block { margin-top: 2rem; }
 .ex__modes, .ex__discs { list-style: none; margin: 0; padding: 0; }
 .ex__mode { border-top: 1px solid var(--ex-hair); }
@@ -77,7 +77,7 @@
 .ex__tags li { padding: .25rem .55rem; border: 1px solid var(--ex-hair); font-family: var(--ex-mono); font-size: .7rem; line-height: 1.3; letter-spacing: .03em; color: var(--ex-soft); }
 .ex__note { margin: 1rem 0 0; font-family: var(--ex-sans); font-weight: 700; font-size: .95rem; line-height: 1.4; color: #fff; }
 
-/* 2 · Disciplinas */
+/* 2 Â· Disciplinas */
 .ex__block--disc { margin-top: 2.6rem; }
 .ex__h {
   margin: 0 0 .8rem; font-family: var(--ex-display); font-weight: 900; text-transform: uppercase; color: #fff;
@@ -120,7 +120,7 @@
   color: var(--ex-soft); text-decoration: underline; text-underline-offset: .35em;
 }
 
-/* Vídeo local del personaje (solo en vertical: ver Explore.jsx#useStacked). Negro puro + mix-blend-mode: se funde con el fondo. */
+/* VÃ­deo local del personaje (solo en vertical: ver Explore.jsx#useStacked). Negro puro + mix-blend-mode: se funde con el fondo. */
 .ex__media { position: relative; display: block; width: 100%; height: min(34svh, 20rem); margin: .8rem 0 .2rem; padding: 0; overflow: hidden; background: transparent; isolation: isolate; mix-blend-mode: screen; cursor: zoom-in; }
 .ex__media img { display: block; width: 100%; height: 100%; object-fit: contain; mix-blend-mode: screen; filter: saturate(1.08) contrast(1.04); }
 .ex__mediaHint { position: absolute; right: .2rem; bottom: .25rem; padding: .25rem .4rem; color: rgba(244,246,250,.72); background: rgba(5,6,8,.55); font: 10px ui-monospace,monospace; letter-spacing: .12em; }
@@ -130,7 +130,7 @@
 
 @keyframes ex-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-/* Hover solo como refuerzo en escritorio: el estado nunca depende de él. */
+/* Hover solo como refuerzo en escritorio: el estado nunca depende de Ã©l. */
 @media (hover: hover) and (pointer: fine) {
   .ex__modeBtn:hover .ex__modeName, .ex__discBtn:hover .ex__discName { color: #fff; }
   .ex__disc[data-dim="true"]:hover { opacity: .9; }
@@ -138,7 +138,7 @@
 
 }
 
-/* VERTICAL (móvil / tablet vertical): 3D arriba, panel debajo con scroll propio. Mismo corte que cells.js (aspect 1,1). */
+/* VERTICAL (mÃ³vil / tablet vertical): 3D arriba, panel debajo con scroll propio. Mismo corte que cells.js (aspect 1,1). */
 @media (max-aspect-ratio: 11/10) {
   .ex__glow { top: 0; right: 0; bottom: auto; left: 0; width: auto; height: 32%; }
   .ex__panel {
@@ -164,7 +164,7 @@
 
 }
 
-/* DESCUBRIR: el panel pasa de columna opaca a interfaz de análisis sobre el mundo (atmósfera + línea de laboratorio, sin caja). */
+/* DESCUBRIR: el panel pasa de columna opaca a interfaz de anÃ¡lisis sobre el mundo (atmÃ³sfera + lÃ­nea de laboratorio, sin caja). */
 .ex__panel {
   background: linear-gradient(90deg, rgba(5, 6, 8, .9) 0%, rgba(5, 6, 8, .74) 62%, rgba(5, 6, 8, 0) 100%);
 }
@@ -182,7 +182,7 @@
   .ex__panel::before { display: none; }
 }
 
-/* 1 · DESCUBRIR (Character Select): la información es un HUD sobre el mundo; el personaje manda. */
+/* 1 Â· DESCUBRIR (Character Select): la informaciÃ³n es un HUD sobre el mundo; el personaje manda. */
 .ex__panel { background: linear-gradient(90deg, rgba(5, 6, 8, .84) 0, rgba(5, 6, 8, .56) 58%, rgba(5, 6, 8, 0) 100%); }
 .ex__intro, .ex__text, .ex__modeLine, .ex__discLine, .ex__gloss dd { text-shadow: 0 1px 12px rgba(0, 0, 0, .85), 0 0 2px rgba(0, 0, 0, .9); }
 /* opciones no elegidas: bajan de protagonismo sin desaparecer */
@@ -191,7 +191,7 @@
 /* disciplina activa: luz de su color en el borde + nombre dominante; el concepto va justo debajo */
 .ex__disc[data-on="true"] { box-shadow: -1px 0 22px -8px rgba(var(--ex-rgb), .6); }
 .ex__tagline { font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem); line-height: 1.05; }
-/* los títulos de bloque pasan a acotaciones: la lectura deja de ser TÍTULO → PÁRRAFO → LISTA */
+/* los tÃ­tulos de bloque pasan a acotaciones: la lectura deja de ser TÃTULO â PÃRRAFO â LISTA */
 .ex__dh { font-family: var(--ex-mono); font-weight: 500; font-size: .72rem; letter-spacing: .14em; color: var(--ex-mute); }
 /* etiquetas sin caja */
 .ex__tags li { border: 0; border-bottom: 1px solid var(--cx-line-hi); padding: .1rem 0 .2rem; }
@@ -200,7 +200,7 @@
 }
 @media (max-aspect-ratio: 11/10) {
   .ex__panel { background: linear-gradient(180deg, rgba(5, 6, 8, 0) 0, rgba(5, 6, 8, .7) 2.6rem, rgba(5, 6, 8, .9) 100%); }
-  /* el vídeo se disuelve en el contenido: continúa la escena, no es «vídeo + documento debajo» */
+  /* el vÃ­deo se disuelve en el contenido: continÃºa la escena, no es Â«vÃ­deo + documento debajoÂ» */
   .ex__media { -webkit-mask-image: linear-gradient(180deg, #000 68%, transparent 100%); mask-image: linear-gradient(180deg, #000 68%, transparent 100%); }
 }
 
@@ -209,8 +209,8 @@
 .exs__cN { margin: 0 0 .3rem; font-family: var(--ex-display); font-weight: 800; text-transform: uppercase; font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem); line-height: 1; letter-spacing: .02em; animation: ex-in .28s ease both; }
 .exs__cN span { display: block; margin-top: .3rem; font-family: var(--ex-sans); font-weight: 600; font-size: .85rem; letter-spacing: 0; text-transform: none; color: var(--ex-soft); }
 
-/* v30b · EXPLORE sin panel: el texto es un pie de escena anclado abajo, sin fondo ni columna; antes de elegir solo queda el título.
-   La pista (intro / nota) es copy ya existente: se conserva para lector de pantalla pero no se pinta hasta que haya una selección. */
+/* v30b Â· EXPLORE sin panel: el texto es un pie de escena anclado abajo, sin fondo ni columna; antes de elegir solo queda el tÃ­tulo.
+   La pista (intro / nota) es copy ya existente: se conserva para lector de pantalla pero no se pinta hasta que haya una selecciÃ³n. */
 .ex__panel, .ex__panel::before, .ex__body::after { background: none !important; }
 .ex__panel { pointer-events: none; }
 .ex__scroll { display: flex; flex-direction: column; justify-content: flex-start; pointer-events: none; }
@@ -339,7 +339,7 @@
   html[data-sml-chapter="character-select"] #metodo .method-stage { visibility: hidden; }
 }
 
-/* No pantalla vacía entre Inicio (01) y Método (02). */
+/* No pantalla vacÃ­a entre Inicio (01) y MÃ©todo (02). */
 .explore-dwell { display: none; height: 0; }
 
 /* Preview correction: keep the mobile 3D roster clear of the fixed 70px header. */
@@ -347,5 +347,5 @@
   .ex-overlay .ex__glow { top: 86px; height: 32%; }
   .ex-overlay .ex__panel { top: calc(32% + 86px); }
   .ex-overlay .ex__scroll { padding-top: 2rem; }
-  .explore-dwell { display: block !important; height: 10svh !important; min-height: 44px; max-height: 72px; pointer-events: none; }
+  .explore-dwell { display: block !important; height: 3svh !important; min-height: 14px !important; max-height: 22px !important; pointer-events: none; }
 }
