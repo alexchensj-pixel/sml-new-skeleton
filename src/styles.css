@@ -445,3 +445,15 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 .method-evaluation .method-evaluation-note { font-size: 15px; color: #e0e3e8; }
 .plan-card-footnote { font-size: 13px !important; line-height: 1.5; color: #d0d4db !important; }
 @media(max-width:760px) { .ex-overlay .ex__panel { background: linear-gradient(180deg,rgba(5,6,8,.52) 0%,rgba(5,6,8,.76) 100%) !important; } }
+
+/* 2026-11 · jerarquía comercial, claridad de formatos y condiciones junto al CTA */
+.hero-offer{margin:18px 0 0;color:#f3f5f8;font-size:clamp(13px,1.15vw,16px);font-weight:700;line-height:1.55;letter-spacing:.015em;text-shadow:0 2px 14px rgba(0,0,0,.8)}
+.hero-offer span{color:#d2d7df;font-size:.9em;font-weight:500}
+.pricing-followup{max-width:900px;padding:18px 0 18px 20px;border-left:3px solid var(--orange);background:linear-gradient(90deg,rgba(224,90,43,.10),transparent 78%)}
+.pricing-followup>span{display:block;margin-bottom:7px;color:#f0784e;font-size:11px;font-weight:800;letter-spacing:.13em}
+.pricing-followup p{max-width:820px;margin:0;color:#e3e6eb;font-size:15px;line-height:1.65}
+.plan-card-footnote,.format-risk-note,.method-cta-note{margin:10px 0 0;color:#d8dde5;font-size:12px;line-height:1.5}
+.format-risk-note{padding-top:8px;border-top:1px solid rgba(255,255,255,.12)}
+.method-cta-note{color:#f0c0ad}
+.pricing-common-note{margin-top:22px;font-size:12px;color:#bfc5ce}
+@media(max-width:680px){.hero-offer{font-size:12px;margin-top:13px}.pricing-followup{padding:13px 0 13px 14px}.pricing-followup p{font-size:13px;line-height:1.55}.plan-card-footnote,.format-risk-note,.method-cta-note{font-size:11px}}

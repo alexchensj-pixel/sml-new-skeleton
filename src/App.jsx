@@ -8,7 +8,6 @@ import {
 import { image, eci, entrenamientoMedia } from './legacy/Data/Media.js';
 import { existingPlans, kitInicio } from './legacy/Data/Programs.js';
 import { RUTAS } from './legacy/Data/Legal.js';
-import RecommendationRoulette from './scene/RecommendationRoulette.jsx';
 
 class SpatialBoundary extends React.Component {
   constructor(props) { super(props); this.state = { failed: false }; }
@@ -27,14 +26,14 @@ const money = (value) => `${value} €`;
 const monthlyPlanCopy = {
   arsenal: {
     descriptor: 'FUNDAMENTOS',
-    identity: 'Ideal si empiezas o quieres construir una buena base técnica.',
+    identity: 'Empiezas con evaluación y análisis en vídeo para orientar qué corregir en tus siguientes sesiones.',
     intro: 'INCLUYE',
     highlights: ['Evaluación técnica inicial', 'Análisis técnico en vídeo', 'Comba de entrenamiento de boxeo'],
     cta: 'Empezar con Arsenal',
   },
   striker: {
     descriptor: 'DESARROLLO',
-    identity: 'Ideal si quieres progresar con constancia y trabajar tu técnica.',
+    identity: 'Añade planificación personalizada y una biblioteca de ejercicios para dar continuidad al trabajo entre sesiones.',
     intro: 'TODO ARSENAL +',
     highlights: ['Plan de entrenamiento personalizado', 'Biblioteca personalizada de ejercicios', 'Trabajo específico según objetivos'],
     cta: 'Reservar Striker',
@@ -42,7 +41,7 @@ const monthlyPlanCopy = {
   },
   'fight-iq': {
     descriptor: 'DOMINIO',
-    identity: 'Ideal si buscas entrenar con criterio de combate o avanzar hacia la competición.',
+    identity: 'Para desarrollar estrategia, estilo y preparación específica de combate con seguimiento técnico.',
     intro: 'TODO STRIKER +',
     highlights: ['Preparación específica para combate', 'Estrategia y táctica', 'Desarrollo del estilo de pelea y sparring supervisado, progresivo y adaptado a tu nivel técnico; no es un requisito para empezar'],
     cta: 'Reservar Fight IQ',
@@ -62,7 +61,7 @@ function App() {
   const [faqOpen, setFaqOpen] = useState(-1);
   const [showPlanComparison, setShowPlanComparison] = useState(false);
   const [showMore, setShowMore] = useState(false);
-  const [activeService, setActiveService] = useState('individual');
+  const [activeService, setActiveService] = useState('grupos');
   const methodProgress = useRef(0);
   const [activeMethodIndex, setActiveMethodIndex] = useState(0);
 
@@ -121,9 +120,9 @@ function App() {
     window.history.replaceState(null, '', `#${id}`);
   };
   const serviceTabs = [
-    { id: 'individual', label: '1:1', detail: 'Seguimiento individual' },
-    { id: 'parejas', label: 'Parejas', detail: 'Dos personas' },
-    { id: 'grupos', label: 'Grupos reducidos', detail: 'Máximo 4 personas' },
+    { id: 'grupos', label: 'Grupos reducidos', detail: 'Hasta 4 · por zona' },
+    { id: 'parejas', label: 'Parejas', detail: 'Entrenad juntos' },
+    { id: 'individual', label: '1:1', detail: 'Atención individual' },
   ];
 
   return <>
@@ -150,6 +149,7 @@ function App() {
         <p className="hero-overline">{hero.kicker}</p>
         <h1>{hero.titulo.map((line, i) => <React.Fragment key={line}>{line}{i < hero.titulo.length - 1 && <br/>}</React.Fragment>)}</h1>
         <p className="hero-context">{hero.contexto}</p>
+        <p className="hero-offer">Muay Thai · Boxeo · Kickboxing / K1 en Madrid<br/><span>1:1 · Parejas · Grupos reducidos de hasta 4</span></p>
         <div className="hero-actions">
           <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer"><span>{hero.ctaReservar}</span><svg className="hero-cta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
           <button className="secondary-cta" type="button" onClick={() => go('metodo')}>Conocer el método</button>
@@ -174,6 +174,7 @@ function App() {
               <p>{evaluacionInicial.texto}</p>
               <p className="method-evaluation-note">{evaluacionInicial.nota}</p>
               <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">{evaluacionInicial.cta} <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
+              <p className="method-cta-note">30 € descontables al contratar un plan mensual 1:1 · Sin permanencia.</p>
               <button className="text-link" type="button" aria-expanded={showMore} onClick={() => setShowMore((value) => !value)}>{showMore ? 'Cerrar información −' : `${evaluacionInicial.ctaMas} +`}</button>
               {showMore && <ul>{evaluacionInicial.mas.map(([a, b]) => <li key={a}><b>{a}:</b> {b}</li>)}</ul>}
             </div>
@@ -193,9 +194,8 @@ function App() {
         <div className="section-meta"><span>03 / 05</span><span>ENTRENAMIENTO · FORMATOS Y PRECIOS</span></div>
         <p className="eyebrow">ELIGE CÓMO ENTRENAR</p><h2 className="pricing-title">Entrenamiento diseñado alrededor de ti.</h2>
         <p className="pricing-social" aria-label="Valoración en Google: 5,0 estrellas y 18 reseñas">{site.rating.valor.replace('.', ',')} ★ · {site.rating.resenas} reseñas</p>
-        <p className="lead">Sesiones privadas y grupos reducidos. El material técnico está incluido y cada sesión dura 60 minutos.</p>
-        <div className="pricing-followup"><span>EL VALOR ESTÁ EN EL PROCESO</span><p>No pagas solo por venir a entrenar: trabajamos sobre tu técnica, revisamos cómo evolucionas y ajustamos el entrenamiento a lo que necesitas desarrollar.</p></div>
-        <div className="entry-clarity"><p><strong>Evaluación inicial · 30 €</strong><span>Analizamos tu punto de partida y definimos qué necesitas trabajar. Si contratas un plan mensual, se descuentan esos 30 €.</span></p><p><strong>Sesión suelta 1:1 · 30 €</strong><span>Una sesión de entrenamiento privado, sin contratar un plan mensual. No incluye la evaluación ni el diseño inicial del plan.</span></p></div>
+        <p className="lead">Muay Thai, boxeo, kickboxing y K1 en Madrid. Entrenamiento 1:1, en pareja o en grupos de hasta cuatro personas.</p>
+        <div className="pricing-followup"><span>NO ES SOLO UNA SESIÓN. ES UN PROCESO.</span><p>La evaluación y el análisis en vídeo identifican qué mejorar. El plan convierte ese diagnóstico en trabajo concreto: continuidad técnica en Arsenal, planificación y biblioteca personalizada en Striker, y estrategia y preparación específica en Fight IQ. El valor está en saber qué trabajar y cómo avanzar entre sesiones, no en un pequeño descuento por clase.</p></div>
         {entrenamientoMedia.sala?.poster && <figure className="session-proof"><img src={entrenamientoMedia.sala.poster} alt="Sesión real de entrenamiento privado de combate en interior" loading="lazy"/><figcaption>Trabajo técnico real · Sesiones privadas</figcaption></figure>}
         <nav className="pricing-tabs" role="tablist" aria-label="Tipo de entrenamiento">
           {serviceTabs.map((tab) => <a key={tab.id} id={`tab-${tab.id}`} href={`#${tab.id}`} role="tab" aria-selected={activeService === tab.id} aria-controls="service-pricing-panel" className={`pricing-tab ${activeService === tab.id ? 'is-active' : ''}`} onClick={(event) => { event.preventDefault(); chooseService(tab.id); }}>
@@ -225,14 +225,15 @@ function App() {
                     <ul>{card.highlights.map((item) => <li key={item}>{item}</li>)}</ul>
                   </div>
                   <a className="plan-card-action" href={waLink(`Hola, quiero información sobre el plan ${plan.nombre} y consultar disponibilidad.`)} target="_blank" rel="noopener noreferrer"><span>{card.cta} · {money(plan.precio)}/mes</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
-                  <p className="plan-card-footnote">Empiezas con la evaluación (30 €), que se descuenta del plan.</p>
+                  <p className="plan-card-footnote">Evaluación inicial · 30 € descontables al contratar este plan. Sin permanencia · cambios con 24 h y recuperación en el mismo mes según disponibilidad.</p>
                 </article>;
               })}
             </div>
             <div className="single-session-card">
-              <div><small>SESIÓN INDIVIDUAL · 60 MIN</small><h3>Sesión suelta 1:1</h3><p>{individualFormat.texto}</p></div>
+              <div><small>SESIÓN INDIVIDUAL · 60 MIN</small><h3>Sesión suelta 1:1</h3><p>{individualFormat.texto} No incluye evaluación técnica inicial ni diseño de un plan mensual.</p></div>
               <strong>{money(individualFormat.precio)} <span>/ sesión</span></strong>
               <a href={waLink('Hola, quiero consultar disponibilidad para una sesión individual 1:1.')} target="_blank" rel="noopener noreferrer">Consultar sesión <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
+              <p className="format-risk-note">60 min · Sin plan mensual ni permanencia · cambios con 24 h de antelación.</p>
             </div>
             <div className="plan-comparison-control">
               <button type="button" className="plan-comparison-toggle" aria-expanded={showPlanComparison} aria-controls="plan-comparison" onClick={() => setShowPlanComparison((value) => !value)}>{showPlanComparison ? 'Ocultar comparación' : 'Comparar qué incluye cada plan'} <span>{showPlanComparison ? '−' : '+'}</span></button>
@@ -249,17 +250,16 @@ function App() {
           </>}
           {activeService === 'parejas' && <>
             <div className="plan-cards-heading"><div><p className="eyebrow">ENTRENAMIENTO COMPARTIDO</p><h3 className="subsection-title">Entrenad juntos.</h3></div><p>Una sesión privada para dos personas, adaptada a vuestro nivel y objetivos.</p></div>
-            <article className="training-card format-service-card"><small>SESIÓN · 60 MIN · 2 PERSONAS</small><h3>Parejas</h3><div className="format-service-price">{money(coupleFormat.precio)} <span>/ persona / sesión</span></div><p>{coupleFormat.texto}</p><a href={waLink('Hola, quiero consultar disponibilidad para entrenar en pareja.')} target="_blank" rel="noopener noreferrer">Consultar disponibilidad <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a></article>
+            <article className="training-card format-service-card"><small>SESIÓN PARA 2 PERSONAS</small><h3>Parejas</h3><div className="format-service-price">{money(coupleFormat.precio)} <span>/ persona / sesión</span></div><p>{coupleFormat.texto}</p><a href={waLink('Hola, quiero consultar disponibilidad para entrenar en pareja.')} target="_blank" rel="noopener noreferrer">Consultar disponibilidad <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a><p className="format-risk-note">Sin permanencia · cambios con 24 h de antelación. La evaluación inicial no se descuenta en este formato.</p></article>
             <div className="service-terms"><p>Tarifa por persona. La evaluación inicial de 30 € no se descuenta de las sesiones en pareja. No hay permanencia; los cambios deben avisarse con 24 h de antelación y la recuperación depende de la disponibilidad.</p></div>
           </>}
           {activeService === 'grupos' && <>
             <div className="plan-cards-heading"><div><p className="eyebrow">ENTRENAMIENTO EN EQUIPO</p><h3 className="subsection-title">Grupo reducido.</h3></div><p>Entrenamiento compartido, con atención técnica y un máximo de cuatro personas.</p></div>
-            <article className="training-card format-service-card"><small>SESIÓN · 60 MIN · MÁXIMO 4 PERSONAS</small><h3>Grupos reducidos</h3><div className="format-service-price">{money(groupFormat.precio)} <span>/ persona / sesión</span></div><p>{groupFormat.texto}</p><p className="format-bonuses">{groupFormat.desde}</p><a href={waLink('Hola, quiero consultar si hay grupo reducido compatible con mi zona y disponibilidad.')} target="_blank" rel="noopener noreferrer">Consultar grupos en mi zona <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a></article>
+            <article className="training-card format-service-card"><small>GRUPO REDUCIDO · MÁXIMO 4 PERSONAS</small><h3>Grupos reducidos</h3><div className="format-service-price">{money(groupFormat.precio)} <span>/ persona / sesión</span></div><p>{groupFormat.texto}</p><p className="format-bonuses">{groupFormat.desde}</p><a href={waLink('Hola, quiero consultar si hay grupo reducido compatible con mi zona y disponibilidad.')} target="_blank" rel="noopener noreferrer">Consultar grupos en mi zona <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a><p className="format-risk-note">Sin permanencia · grupos sujetos a zona y plazas disponibles. Si no existe uno compatible, puedes apuntarte para formarlo.</p></article>
             <div className="service-terms"><p>Los grupos se forman por zona, disponibilidad y frecuencia. Si aún no existe uno compatible, puedes dejar tu disponibilidad para ayudar a formarlo. No hay permanencia; los cambios deben avisarse con 24 h de antelación y la recuperación depende de la disponibilidad del grupo.</p></div>
           </>}
         </div>
         <div className="pricing-common-note"><p><strong>{kitInicio.nombre} · {money(kitInicio.precio)}.</strong> {kitInicio.contenido}. Opcional.</p></div>
-        <RecommendationRoulette />
         <button type="button" className="text-link section-next" onClick={() => go('reserva')}>Reservar evaluación inicial →</button>
       </section>
 
