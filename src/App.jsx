@@ -108,6 +108,7 @@ function App() {
   const go = (id) => {
     setActive(id);
     setMenuOpen(false);
+    window.dispatchEvent(new CustomEvent('sml:navigate', { detail: { id } }));
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   const formatPlans = existingPlans.filter((plan) => plan.tipo === 'formato');
@@ -161,7 +162,9 @@ function App() {
 
 
 
-      <section className="explore-dwell" role="region" aria-label="Selección de disciplinas y formas de entrenamiento" />
+      <div className="explore-dwell-track">
+        <section className="explore-dwell" role="region" aria-label="Selección de disciplinas y formas de entrenamiento" />
+      </div>
 
       <section id="metodo" className="method-section journey-section">
         <div className="method-stage">

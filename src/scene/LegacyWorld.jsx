@@ -77,40 +77,88 @@ export default function LegacyWorld() {
   useEffect(() => {
     let lastChapter = '';
     let frame = 0;
+    // La selección es una puerta real: el scroll puede revelar la escena, pero no
+    // puede sacarla de pantalla. Solo una elección de disciplina libera el recorrido.
+    let phase = 'bridge'; // bridge | select | selected
+    let bridgeSeen = false;
+    let scrollLockY = null;
+
+    const isInsideSelectionPanel = (target) => !!target?.closest?.('.ex-overlay .ex__scroll');
+    const blockPageWheel = (event) => {
+      if (phase === 'select' && !useStore.getState().selectedDiscipline && !isInsideSelectionPanel(event.target)) event.preventDefault();
+    };
+    const blockPageTouch = (event) => {
+      if (phase === 'select' && !useStore.getState().selectedDiscipline && !isInsideSelectionPanel(event.target)) event.preventDefault();
+    };
+    const blockPageKeys = (event) => {
+      if (phase === 'select' && !useStore.getState().selectedDiscipline && !isInsideSelectionPanel(event.target) && ['ArrowDown', 'PageDown', ' ', 'End'].includes(event.key)) event.preventDefault();
+    };
+    const handleNavigation = (event) => {
+      const destination = event.detail?.id;
+      if (destination && !['inicio', 'home'].includes(destination)) {
+        phase = 'selected';
+        scrollLockY = null;
+        update();
+      }
+    };
+    const unsubscribe = useStore.subscribe((state) => {
+      if (phase === 'select' && state.selectedDiscipline) {
+        phase = 'selected';
+        scrollLockY = null;
+        update();
+      }
+    });
 
     const update = () => {
       if (frame) cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         const y = window.scrollY;
-        const exploreNode = document.querySelector('.explore-dwell');
+        const exploreNode = document.querySelector('.explore-dwell-track');
         const exploreRect = exploreNode?.getBoundingClientRect();
         const exploreTop = exploreRect ? exploreRect.top + y : Infinity;
         const exploreBottom = exploreRect ? exploreRect.bottom + y : -Infinity;
         const exploreHeight = Math.max(1, exploreBottom - exploreTop);
-        const insideExplore = !!exploreRect && y >= exploreTop && y < exploreBottom;
+        const hasEnteredExplore = !!exploreRect && y >= exploreTop;
 
-        // Toda la escena se deriva de una única fuente: el scroll dentro del tramo.
-        // No hay reloj paralelo, ni animación que siga corriendo mientras el usuario avanza.
-        if (insideExplore) {
+        // Si se intenta seguir sin elegir, se conserva exactamente la posición de
+        // llegada a la selección. El panel interno sigue pudiendo desplazarse.
+        if (phase === 'select' && !useStore.getState().selectedDiscipline && scrollLockY !== null && Math.abs(y - scrollLockY) > 1) {
+          window.scrollTo(0, scrollLockY);
+          return;
+        }
+
+        if (hasEnteredExplore && phase !== 'selected') {
           const dwellProgress = clamp((y - exploreTop) / exploreHeight);
-          const sequenceProgress = prefersReducedMotion
+          const revealCompleteAt = BRIDGE_SHARE + REVEAL_SHARE;
+          if (!bridgeSeen && (dwellProgress >= revealCompleteAt || prefersReducedMotion)) {
+            bridgeSeen = true;
+            phase = 'select';
+            scrollLockY = exploreTop + exploreHeight * (prefersReducedMotion ? 0 : revealCompleteAt);
+            if (Math.abs(y - scrollLockY) > 1) window.scrollTo(0, scrollLockY);
+          }
+          const sequenceProgress = phase === 'select' || prefersReducedMotion
             ? 1
             : dwellProgress <= BRIDGE_SHARE
               ? 0.82 * smoothstep(dwellProgress / BRIDGE_SHARE)
-              : dwellProgress <= BRIDGE_SHARE + REVEAL_SHARE
-                ? 0.82 + 0.18 * smoothstep((dwellProgress - BRIDGE_SHARE) / REVEAL_SHARE)
-                : 1;
+              : 0.82 + 0.18 * smoothstep((dwellProgress - BRIDGE_SHARE) / REVEAL_SHARE);
           setSegment('entrada', 1);
           const routeProgress = EXPLORE_START + (EXPLORE_END - EXPLORE_START) * sequenceProgress;
           lastChapter = applyRoute(ROUTES[0], routeProgress, lastChapter);
           return;
         }
 
+        // Tras la elección, la escena queda visible mientras se termina de recorrer
+        // el tramo reservado; al salir de él vuelve a funcionar la ruta normal.
+        if (phase === 'selected' && exploreRect && y >= exploreTop && y < exploreBottom) {
+          const dwellProgress = clamp((y - exploreTop) / exploreHeight);
+          setSegment('entrada', 1);
+          const routeProgress = EXPLORE_END + (1 - EXPLORE_END) * dwellProgress;
+          lastChapter = applyRoute(ROUTES[0], routeProgress, lastChapter);
+          return;
+        }
+
         // Fuera de la selección, el resto del sitio sigue usando su recorrido original.
-        const sections = ROUTES.map((route) => ({
-          route,
-          node: document.getElementById(route.id),
-        })).filter((item) => item.node);
+        const sections = ROUTES.map((route) => ({ route, node: document.getElementById(route.id) })).filter((item) => item.node);
         if (!sections.length) return;
         for (let i = 0; i < sections.length; i += 1) {
           const start = sections[i].node.getBoundingClientRect().top + y;
@@ -128,9 +176,18 @@ export default function LegacyWorld() {
     update();
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
+    window.addEventListener('wheel', blockPageWheel, { passive: false });
+    window.addEventListener('touchmove', blockPageTouch, { passive: false });
+    window.addEventListener('keydown', blockPageKeys);
+    window.addEventListener('sml:navigate', handleNavigation);
     return () => {
+      unsubscribe();
+      window.removeEventListener('sml:navigate', handleNavigation);
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
+      window.removeEventListener('wheel', blockPageWheel);
+      window.removeEventListener('touchmove', blockPageTouch);
+      window.removeEventListener('keydown', blockPageKeys);
       if (frame) cancelAnimationFrame(frame);
     };
   }, []);

@@ -481,14 +481,24 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 .method-evaluation .method-discount-exception{max-width:42ch}
 
 
-/* Character Select: recorrido 3D ligado al scroll, con tiempo real para mirar y elegir. */
-.explore-dwell {
+/* Character Select: una escena sticky dentro de un tramo propio. El controlador
+   bloquea el avance de página al llegar a la selección hasta que se elige disciplina. */
+.explore-dwell-track {
   display: block;
+  position: relative;
   height: 220vh;
   height: 220svh;
   min-height: 220vh;
   min-height: 220svh;
   flex: 0 0 auto;
-  position: relative;
+}
+.explore-dwell {
+  display: block;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  min-height: 100vh;
+  min-height: 100svh;
   pointer-events: none;
 }
