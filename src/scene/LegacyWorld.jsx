@@ -4,7 +4,7 @@ import CameraRig from '../legacy/Scene/Camera/index.jsx';
 import Lighting from '../legacy/Scene/Lighting/index.jsx';
 import Environment from '../legacy/Scene/Environment/index.jsx';
 import { segmentKeys } from '../legacy/Data/Content.js';
-import { scrollState, setSegment } from '../legacy/Scene/Transitions/scrollState.js';
+import { scrollState, setSegment, prefersReducedMotion } from '../legacy/Scene/Transitions/scrollState.js';
 import { useStore } from '../legacy/App/store.js';
 
 const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
@@ -45,19 +45,11 @@ const chapterFor = (key, progress) => {
   return progress >= (CHAPTER_GATE[key] ?? 0.72) ? to : from;
 };
 
-// Permanencia de EXPLORE. Original: 120vh de scroll propio; en la preview todo Inicio -> Explore cabia en ~1 pantalla y Explore
-// recibia ~10vh (imposible quedarse a tocar un luchador). En movil vertical hay un hueco transparente (.explore-dwell, entre
-// #inicio y #metodo): el recorrido previo (entrada + umbral) conserva su ritmo y Explore (progreso EXPLORE_AT..1) recorre el hueco.
-const EXPLORE_AT = 0.90; // = 'from' del paso 'character-select' en ROUTES.inicio
-function withExploreDwell(progress, px, total) {
-  const dwell = document.querySelector('.explore-dwell')?.offsetHeight || 0;
-  if (dwell <= 0 || dwell >= total) return progress;
-  const body = total - dwell;
-  // La selección no es una animación de entrada: al pisar su tramo, los tres luchadores
-  // aparecen ya asentados, a escala final y con opacidad completa. El scroll reservado
-  // queda para elegir/ampliar, no para ver cómo atraviesan la pantalla.
-  return px <= body ? clamp(px / body) * EXPLORE_AT : 1;
-}
+// La selección ocupa una sola pantalla REAL (explore-dwell), no un hueco para consumir scroll.
+// Al entrar en esa región, el reveal se ejecuta por tiempo (1,5 s), no por la velocidad del dedo.
+const EXPLORE_START = 0.78;
+const EXPLORE_END = 0.90;
+const EXPLORE_DURATION_MS = 1500;
 
 function applyRoute(route, progress, lastChapter) {
   const step = route.steps.find((item, index) => progress < item.to || index === route.steps.length - 1);
@@ -79,10 +71,70 @@ export default function LegacyWorld() {
   useEffect(() => {
     let lastChapter = '';
     let frame = 0;
+    let revealFrame = 0;
+    let revealStarted = false;
+    let revealComplete = false;
+    let revealRunning = false;
+
+    const playExploreReveal = () => {
+      if (revealStarted) return;
+      revealStarted = true;
+      // Con movimiento reducido, saltamos directamente al fotograma estático de máxima calidad.
+      if (prefersReducedMotion) {
+        setSegment('entrada', 1);
+        lastChapter = applyRoute(ROUTES[0], EXPLORE_END, lastChapter);
+        revealComplete = true;
+        return;
+      }
+      revealRunning = true;
+      // La Entrada termina y el umbral HOME → selección se anima por reloj.
+      // RosterGroup usa este mismo progreso para opacidad, separación y asentamiento espacial.
+      setSegment('entrada', 1);
+      setSegment('entrada>character-select', 0.0001);
+      const startedAt = performance.now();
+      const tick = (now) => {
+        const t = clamp((now - startedAt) / EXPLORE_DURATION_MS);
+        const eased = t * t * (3 - 2 * t);
+        lastChapter = applyRoute(ROUTES[0], EXPLORE_START + (EXPLORE_END - EXPLORE_START) * eased, lastChapter);
+        if (t < 1) {
+          revealFrame = requestAnimationFrame(tick);
+          return;
+        }
+        // Pose final: tres figuras asentadas, reveal=1 y capítulo interactivo.
+        lastChapter = applyRoute(ROUTES[0], EXPLORE_END, lastChapter);
+        revealRunning = false;
+        revealComplete = true;
+        revealFrame = 0;
+        update();
+      };
+      revealFrame = requestAnimationFrame(tick);
+    };
+
     const update = () => {
       if (frame) cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         const y = window.scrollY;
+        const exploreNode = document.querySelector('.explore-dwell');
+        const exploreRect = exploreNode?.getBoundingClientRect();
+        const exploreTop = exploreRect ? exploreRect.top + y : Infinity;
+        const exploreBottom = exploreRect ? exploreRect.bottom + y : -Infinity;
+        const exploreVisible = !!exploreRect && exploreRect.top < window.innerHeight * 0.92 && exploreRect.bottom > window.innerHeight * 0.08;
+        // También detecta un salto de scroll que haya cruzado el borde entre dos frames.
+        const exploreReached = !!exploreRect && y + window.innerHeight * 0.92 >= exploreTop && y < exploreBottom + window.innerHeight;
+
+        // Al entrar la escena en pantalla se dispara una sola vez. El scroll puede continuar:
+        // no modifica la animación ni puede dejar a los luchadores a medio revelar.
+        if ((exploreVisible || exploreReached) && !revealStarted) {
+          playExploreReveal();
+          return;
+        }
+        if (revealRunning || (exploreVisible && revealComplete)) return;
+        // Si se vuelve hacia arriba y se abandona la escena, se permite reproducirla de nuevo.
+        if (!exploreVisible && exploreNode && y < exploreTop) {
+          revealStarted = false;
+          revealComplete = false;
+        }
+
         const sections = ROUTES.map((route) => ({
           route,
           node: document.getElementById(route.id),
@@ -95,8 +147,7 @@ export default function LegacyWorld() {
           const next = sections[i + 1]?.node || (sections[i].route.id === 'reserva' ? document.getElementById('empresas') : null);
           const end = next ? next.getBoundingClientRect().top + y : Math.max(start + 1, document.documentElement.scrollHeight - window.innerHeight);
           if (y >= start && (y < end || i === sections.length - 1)) {
-            let progress = clamp((y - start) / Math.max(1, end - start));
-            if (sections[i].route.id === 'inicio') progress = withExploreDwell(progress, y - start, Math.max(1, end - start));
+            const progress = clamp((y - start) / Math.max(1, end - start));
             lastChapter = applyRoute(sections[i].route, progress, lastChapter);
             return;
           }
@@ -110,6 +161,7 @@ export default function LegacyWorld() {
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
       if (frame) cancelAnimationFrame(frame);
+      if (revealFrame) cancelAnimationFrame(revealFrame);
     };
   }, []);
 

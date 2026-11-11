@@ -161,7 +161,7 @@ function App() {
 
 
 
-      <div className="explore-dwell" aria-hidden="true" />
+      <section className="explore-dwell" role="region" aria-label="Selección de disciplinas y formas de entrenamiento" />
 
       <section id="metodo" className="method-section journey-section">
         <div className="method-stage">

@@ -339,13 +339,18 @@
   html[data-sml-chapter="character-select"] #metodo .method-stage { visibility: hidden; }
 }
 
-/* No pantalla vacÃ­a entre Inicio (01) y MÃ©todo (02). */
-.explore-dwell { display: none; height: 0; }
+/* La selección es una escena real de una pantalla, no un spacer vacío. */
+.explore-dwell {
+  display: block;
+  height: 88svh;
+  min-height: 560px;
+  max-height: 760px;
+  pointer-events: none;
+}
 
-/* Preview correction: keep the mobile 3D roster clear of the fixed 70px header. */
 @media (max-aspect-ratio: 11/10) {
   .ex-overlay .ex__glow { top: 86px; height: 32%; }
   .ex-overlay .ex__panel { top: calc(32% + 86px); }
-  .ex-overlay .ex__scroll { padding-top: 2rem; }
-  .explore-dwell { display: block !important; height: 88svh !important; min-height: 560px !important; max-height: 760px !important; pointer-events: none; }
+  .ex-overlay .ex__scroll { padding-top: 1.25rem; }
+  .explore-dwell { height: 88svh; min-height: 0; max-height: none; }
 }
