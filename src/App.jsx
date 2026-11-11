@@ -5,7 +5,7 @@ import {
   site, hero, advisorySubstages, evaluacionInicial,
   dossierItems, reserva, faq, empresas, cierre, waLink
 } from './legacy/Data/Content.js';
-import { image } from './legacy/Data/Media.js';
+import { image, eci, entrenamientoMedia } from './legacy/Data/Media.js';
 import { existingPlans, kitInicio } from './legacy/Data/Programs.js';
 import { RUTAS } from './legacy/Data/Legal.js';
 import RecommendationRoulette from './scene/RecommendationRoulette.jsx';
@@ -194,6 +194,9 @@ function App() {
         <p className="eyebrow">ELIGE CÓMO ENTRENAR</p><h2 className="pricing-title">Entrenamiento diseñado alrededor de ti.</h2>
         <p className="pricing-social" aria-label="Valoración en Google: 5,0 estrellas y 18 reseñas">{site.rating.valor.replace('.', ',')} ★ · {site.rating.resenas} reseñas</p>
         <p className="lead">Sesiones privadas y grupos reducidos. El material técnico está incluido y cada sesión dura 60 minutos.</p>
+        <div className="pricing-followup"><span>EL VALOR ESTÁ EN EL PROCESO</span><p>No pagas solo por venir a entrenar: trabajamos sobre tu técnica, revisamos cómo evolucionas y ajustamos el entrenamiento a lo que necesitas desarrollar.</p></div>
+        <div className="entry-clarity"><p><strong>Evaluación inicial · 30 €</strong><span>Analizamos tu punto de partida y definimos qué necesitas trabajar. Si contratas un plan mensual, se descuentan esos 30 €.</span></p><p><strong>Sesión suelta 1:1 · 30 €</strong><span>Una sesión de entrenamiento privado, sin contratar un plan mensual. No incluye la evaluación ni el diseño inicial del plan.</span></p></div>
+        {entrenamientoMedia.sala?.poster && <figure className="session-proof"><img src={entrenamientoMedia.sala.poster} alt="Sesión real de entrenamiento privado de combate en interior" loading="lazy"/><figcaption>Trabajo técnico real · Sesiones privadas</figcaption></figure>}
         <nav className="pricing-tabs" role="tablist" aria-label="Tipo de entrenamiento">
           {serviceTabs.map((tab) => <a key={tab.id} id={`tab-${tab.id}`} href={`#${tab.id}`} role="tab" aria-selected={activeService === tab.id} aria-controls="service-pricing-panel" className={`pricing-tab ${activeService === tab.id ? 'is-active' : ''}`} onClick={(event) => { event.preventDefault(); chooseService(tab.id); }}>
             <strong>{tab.label}</strong><span>{tab.detail}</span>
@@ -263,6 +266,7 @@ function App() {
       <section id="alex" className="journey-section content-section founder-section">
         <div className="section-meta"><span>04 / 05</span><span>SOBRE ALEX</span></div>
         <p className="eyebrow">COACH / COMPETIDOR</p><h2>Experiencia dentro y fuera del ring.</h2>
+        <div className="founder-human"><figure><img src={image.chenAzotea} alt="Alex, entrenador de Striking Motion Lab" loading="lazy"/><figcaption>Alex · Entrenador</figcaption></figure><figure><img src={image.chenRing} alt="Alex compitiendo en el ring" loading="lazy"/><figcaption>Experiencia en competición · FEKM / WAKO</figcaption></figure></div>
         {dossierItems.filter((item) => item.id !== 'metodo').map((item) => <article className="proof-card" key={item.id}><small>{item.label}</small>{item.titulo && <h3>{item.titulo}</h3>}{item.datos?.map(([a, b]) => <p key={a}><b>{a}:</b> {b}</p>)}{item.texto?.map((line, i) => <p key={i}>{line}</p>)}{item.resenas?.map((review, i) => <blockquote key={i}>“{review}”</blockquote>)}{item.enlace && <a href={item.enlace.href} target="_blank" rel="noopener noreferrer">{item.enlace.label} ↗</a>}</article>)}
       </section>
 
@@ -291,11 +295,11 @@ function App() {
         <div className="b2b-case">
           <div>
             <p className="eyebrow">SELECTED WORK / EXECUTED</p><h3 className="subsection-title">El Corte Inglés · Experiencia Muay Thai</h3>
-            <p>Activación realizada durante dos jornadas, con demostraciones técnicas e intervenciones participativas guiadas. SML se encargó de la dirección deportiva, el equipo técnico y el material de entrenamiento.</p>
+            <p>Activación realizada durante dos jornadas, con ocho intervenciones programadas de 20 minutos. Un entrenador y dos peleadores realizaron demostraciones técnicas y participación guiada. SML se encargó de la dirección deportiva y del material.</p>
             <div className="b2b-facts"><div className="b2b-fact"><strong>2</strong><span>jornadas</span></div><div className="b2b-fact"><strong>8</strong><span>intervenciones programadas</span></div><div className="b2b-fact"><strong>2026</strong><span>Madrid</span></div></div>
             <p>Un formato que combina exhibición y participación: el público no solo observa, también puede probar la actividad con acompañamiento profesional.</p>
           </div>
-          <div><p className="eyebrow">DEL CONCEPTO A LA EJECUCIÓN</p><p>Montaje de zona y tatami, material, demostraciones, explicación técnica y participación guiada. Cada activación se dimensiona según el espacio, los horarios y el flujo de asistentes.</p></div>
+          <div><p className="eyebrow">DEL CONCEPTO A LA EJECUCIÓN</p><p>Montaje de zona y tatami, material, demostraciones, explicación técnica y participación guiada. Cada activación se dimensiona según el espacio, los horarios y el flujo de asistentes.</p><div className="eci-proof"><img src={eci.participacion} alt="Participación guiada del público en la activación de Muay Thai de El Corte Inglés" loading="lazy"/><img src={eci.demostracionPoster} alt="Demostración técnica de Muay Thai en El Corte Inglés" loading="lazy"/></div></div>
         </div>
         <p className="eyebrow">HOSPITALITY / FORMATOS EN PROPUESTA</p>
         <div className="b2b-proposals">

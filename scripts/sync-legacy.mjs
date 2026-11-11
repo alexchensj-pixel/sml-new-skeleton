@@ -123,4 +123,40 @@ patchCopiedSource(
     'return { split: false, fx: 1, fy: EXPLORE_STACK_FY, cx: 0.5, cy: topInset / viewportHeight + EXPLORE_STACK_FY / 2 };'
   ].join('\n')
 );
+// Commercial copy and lighting refinements for the immersive preview.
+patchCopiedSource(
+  'src/legacy/Data/Content.js',
+  "titulo: ['Entrenamiento privado', 'de deportes de combate', 'en Madrid.']",
+  "titulo: ['Tu técnica.', 'Tu estrategia.', 'Tu forma de combatir.']"
+);
+patchCopiedSource(
+  'src/legacy/Data/Content.js',
+  "contexto: 'Sesiones privadas · Parejas y grupos reducidos'",
+  "contexto: 'Entrenamiento privado en Madrid · Análisis técnico · Seguimiento personal'"
+);
+patchCopiedSource(
+  'src/legacy/Data/Content.js',
+  "texto: 'Una primera sesión privada para conocerte, observar cómo te mueves y entender qué necesitas.'",
+  "texto: 'No es una clase de prueba: es una sesión privada para analizar tu punto de partida, observar cómo te mueves y definir qué necesitas trabajar.'"
+);
+patchCopiedSource(
+  'src/legacy/Scene/Environment/RosterGroup.jsx',
+  'const GAIN_IDLE = 0.9;',
+  'const GAIN_IDLE = 1.15;'
+);
+patchCopiedSource(
+  'src/legacy/Scene/Environment/RosterGroup.jsx',
+  'const GAIN_DIM = 0.42;',
+  'const GAIN_DIM = 0.62;'
+);
+patchCopiedSource(
+  'src/legacy/Scene/Environment/RosterGroup.jsx',
+  'const GAIN_DIM_PORTRAIT = 0.64;',
+  'const GAIN_DIM_PORTRAIT = 0.78;'
+);
+patchCopiedSource(
+  'src/legacy/Scene/Environment/Fighter.jsx',
+  's.gain = MathUtils.damp(s.gain, isFocus ? 1.1 : 0, 4, dt);',
+  's.gain = MathUtils.damp(s.gain, isFocus ? 1.25 : 0, 4, dt);'
+);
 console.log('Hybrid routing ready: immersive skeleton at /; original Mi SML, Academy and legal modules on their own routes.');
