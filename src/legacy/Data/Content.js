@@ -322,7 +322,6 @@ export const dossierItems = [
   {
     id: 'trayectoria', label: 'Trayectoria',
     datos: [['Disciplinas', 'K1 y Muay Thai'], ['Resultado', site.logro], ['Campeonatos de España', 'Dos participaciones, representando a Madrid']],
-    texto: ['Dos participaciones en Campeonatos de España representando a Madrid.'],
     imagen: { src: image.chenRing, alt: 'Alex, con pantalón corto rojo, de pie en el ring durante una competición federada FEKM de K1/Muay Thai' },
   },
   {

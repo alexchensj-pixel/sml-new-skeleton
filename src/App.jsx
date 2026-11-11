@@ -174,7 +174,7 @@ function App() {
               <div className="method-evaluation-title"><h3>{evaluacionInicial.titulo}</h3><strong>{evaluacionInicial.precio}</strong></div>
               <p>{evaluacionInicial.texto}</p>
               <p className="method-evaluation-note">{evaluacionInicial.nota}</p>
-              <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">{evaluacionInicial.cta} ↗</a>
+              <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">{evaluacionInicial.cta} <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
               <button className="text-link" type="button" aria-expanded={showMore} onClick={() => setShowMore((value) => !value)}>{showMore ? 'Cerrar información −' : `${evaluacionInicial.ctaMas} +`}</button>
               {showMore && <ul>{evaluacionInicial.mas.map(([a, b]) => <li key={a}><b>{a}:</b> {b}</li>)}</ul>}
             </div>
