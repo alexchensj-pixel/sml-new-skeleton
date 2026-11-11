@@ -8,6 +8,7 @@ import {
 import { image } from './legacy/Data/Media.js';
 import { existingPlans, kitInicio } from './legacy/Data/Programs.js';
 import { RUTAS } from './legacy/Data/Legal.js';
+import RecommendationRoulette from './scene/RecommendationRoulette.jsx';
 
 class SpatialBoundary extends React.Component {
   constructor(props) { super(props); this.state = { failed: false }; }
@@ -170,6 +171,7 @@ function App() {
         <div className="section-meta"><span>03 / 05</span><span>ENTRENAMIENTO · FORMATOS Y PRECIOS</span></div>
         <p className="eyebrow">ELIGE CÓMO ENTRENAR</p><h2>Entrenamiento diseñado alrededor de ti.</h2>
         <p className="lead">Sesiones privadas y grupos reducidos. El material técnico está incluido y cada sesión dura 60 minutos.</p>
+        <RecommendationRoulette />
         <h3 className="subsection-title">Sesiones sueltas y formatos</h3>
         <div className="training-grid">
           {formatPlans.map((plan) => <article className="training-card" key={plan.id}><small>SESIÓN · 60 MIN</small><h3>{plan.nombre}</h3><strong className="plan-price">{money(plan.precio)}</strong><p className="plan-unit">{plan.unidad}</p><p>{plan.texto}</p>{plan.desde && <p className="plan-extra">{plan.desde}</p>}<a href={waLink(`Hola, quiero consultar el formato ${plan.nombre}. ¿Hay disponibilidad?`)} target="_blank" rel="noopener noreferrer">Consultar por WhatsApp ↗</a></article>)}
