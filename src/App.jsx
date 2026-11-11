@@ -172,10 +172,12 @@ function App() {
               <span>{evaluacionInicial.kickerMetodo}</span>
               <div className="method-evaluation-title"><h3>{evaluacionInicial.titulo}</h3><strong>{evaluacionInicial.precio}</strong></div>
               <p>{evaluacionInicial.texto}</p>
-              <p className="method-evaluation-note">{evaluacionInicial.nota}</p>
+              <p className="method-evaluation-note">{evaluacionInicial.texto}</p>
               <p className="method-material-note">No necesitas comprar nada para empezar. Si no tienes material, lo llevo yo.</p>
-              <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">{evaluacionInicial.cta} <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
-              <p className="method-cta-note">30 € descontables al contratar un plan mensual 1:1 · Sin permanencia.</p>
+              <p className="method-discount-note">Si después contratas un plan mensual 1:1, los 30 € se descuentan.</p>
+              <p className="method-discount-exception">No aplica a parejas ni a grupos.</p>
+              <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer">Reservar evaluación · 30 € <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
+              <p className="method-cta-note">Sin permanencia en los planes.</p>
               <button className="text-link" type="button" aria-expanded={showMore} onClick={() => setShowMore((value) => !value)}>{showMore ? 'Cerrar información −' : `${evaluacionInicial.ctaMas} +`}</button>
               {showMore && <ul>{evaluacionInicial.mas.map(([a, b]) => <li key={a}><b>{a}:</b> {b}</li>)}</ul>}
             </div>

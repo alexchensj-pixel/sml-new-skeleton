@@ -253,7 +253,7 @@ export const explore = {
 export const advisorySubstages = [
   {
     id: 'apertura', label: 'Entrada',
-    titular: ['No empezamos por el entrenamiento.', 'Empezamos por ti.'],
+    titular: ['No empiezo por el entrenamiento.', 'Empiezo por ti.'],
   },
   {
     id: 'conozco', label: 'Te conozco', num: '01', n: 'TE CONOZCO',
@@ -268,7 +268,7 @@ export const advisorySubstages = [
   },
   {
     id: 'entrenamos', label: 'Entrenamos', num: '03', n: 'ENTRENAMOS',
-    texto: 'Lo que veo determina lo que trabajamos.',
+    texto: 'Lo que veo determina qué te propongo trabajar.',
   },
   {
     id: 'adaptamos', label: 'Adaptamos', num: '04', n: 'ADAPTAMOS',
@@ -276,7 +276,7 @@ export const advisorySubstages = [
   },
   {
     id: 'seguimos', label: 'Seguimos', num: '05', n: 'SEGUIMOS',
-    texto: 'Lo que trabajamos cambia contigo.',
+    texto: 'Lo que necesitas trabajar cambia contigo.',
   },
 ];
 
@@ -290,7 +290,7 @@ export const evaluacionInicial = {
   kickerMetodo: 'Tu primer paso', // rótulo en Método (V27 MAPA · paso 5); Chen sigue usando `kicker`
   titulo: 'Evaluación inicial',
   precio: '30 €',
-  texto: 'Una primera sesión privada para conocerte, observar cómo te mueves y entender qué necesitas.',
+  texto: 'Una sesión privada de 60 minutos para analizar tu punto de partida, ver cómo te mueves y definir qué necesitas trabajar. Después te escribo con una recomendación concreta.',
   nota: 'Si contratas Arsenal, Striker o Fight IQ, los 30 € se descuentan del plan. No se descuentan en parejas ni en grupos.',
   cta: 'Reservar evaluación',
   ctaMas: 'Quiero saber más',
@@ -298,7 +298,7 @@ export const evaluacionInicial = {
   mas: [
     ['Te conozco', 'Objetivo, experiencia, disponibilidad y contexto.'],
     ['Te observo', 'Cómo te mueves, antes de decidir qué necesitas.'],
-    ['Después', 'Lo que veo determina lo que trabajamos: de ahí sale tu plan a medida.'],
+    ['Después', 'Lo que veo determina qué te propongo trabajar: de ahí sale tu plan a medida.'],
   ],
 };
 
@@ -370,7 +370,7 @@ export const faq = [
   { q: '¿Tengo que hacer sparring?', a: 'No es obligatorio. No es para el primer día: se introduce poco a poco y se adapta a tu nivel. No es una pelea, es una forma de aprender.' },
   { q: '¿Tengo que comprar material?', a: 'No. Si no tienes material, lo llevo yo. Si prefieres material nuevo y tuyo, puedes adquirir el kit opcional.' },
   { q: '¿Tengo que competir?', a: 'No. El entrenamiento puede orientarse a técnica y bienestar sin ninguna intención de competir.' },
-  { q: '¿Qué ocurre en mi primera sesión?', a: 'Evalúo tu nivel y tu objetivo, y empezamos a trabajar fundamentos. Solo necesitas ropa deportiva cómoda y agua. Si no tienes material, lo llevo yo.' },
+  { q: '¿Qué ocurre en mi primera sesión?', a: 'Evalúo tu nivel y tu objetivo, y empiezas a trabajar fundamentos desde tu punto de partida. Solo necesitas ropa deportiva cómoda y agua. Si no tienes material, lo llevo yo.' },
   { q: '¿Cómo sé qué plan elegir?', a: 'No hace falta decidirlo antes de empezar. Después de tu primera sesión te oriento sobre el plan que mejor encaja contigo, y siempre puedes cambiar de plan más adelante.' },
   { q: '¿Puedo empezar antes de contratar un plan?', a: `Sí. ${evaluacionInicialTexto}` },
   { q: '¿Cómo funciona la reserva?', a: 'Directamente desde la web: eliges día y hora disponible en el calendario y confirmas — sin tener que escribir antes para preguntar disponibilidad. Puedes pagar por Bizum, transferencia o efectivo, antes o después de la sesión.' },
