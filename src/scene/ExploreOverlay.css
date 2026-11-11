@@ -347,5 +347,5 @@
   .ex-overlay .ex__glow { top: 86px; height: 32%; }
   .ex-overlay .ex__panel { top: calc(32% + 86px); }
   .ex-overlay .ex__scroll { padding-top: 2rem; }
-  .explore-dwell { display: block !important; height: 3svh !important; min-height: 14px !important; max-height: 22px !important; pointer-events: none; }
+  .explore-dwell { display: block !important; height: 88svh !important; min-height: 560px !important; max-height: 760px !important; pointer-events: none; }
 }

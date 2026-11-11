@@ -53,9 +53,10 @@ function withExploreDwell(progress, px, total) {
   const dwell = document.querySelector('.explore-dwell')?.offsetHeight || 0;
   if (dwell <= 0 || dwell >= total) return progress;
   const body = total - dwell;
-  return px <= body
-    ? clamp(px / body) * EXPLORE_AT
-    : EXPLORE_AT + (1 - EXPLORE_AT) * clamp((px - body) / dwell);
+  // La selección no es una animación de entrada: al pisar su tramo, los tres luchadores
+  // aparecen ya asentados, a escala final y con opacidad completa. El scroll reservado
+  // queda para elegir/ampliar, no para ver cómo atraviesan la pantalla.
+  return px <= body ? clamp(px / body) * EXPLORE_AT : 1;
 }
 
 function applyRoute(route, progress, lastChapter) {
