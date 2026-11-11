@@ -339,7 +339,10 @@
   html[data-sml-chapter="character-select"] #metodo .method-stage { visibility: hidden; }
 }
 
-/* No pantalla vacía entre Inicio (01) y Método (02). */\n.explore-dwell { display: none !important; height: 0 !important; }\n\n/* Preview correction: keep the mobile 3D roster clear of the fixed 70px header. */
+/* No pantalla vacía entre Inicio (01) y Método (02). */
+.explore-dwell { display: none !important; height: 0 !important; }
+
+/* Preview correction: keep the mobile 3D roster clear of the fixed 70px header. */
 @media (max-aspect-ratio: 11/10) {
   .ex-overlay .ex__glow { top: 86px; height: 32%; }
   .ex-overlay .ex__panel { top: calc(32% + 86px); }
