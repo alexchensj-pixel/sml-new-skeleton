@@ -80,7 +80,6 @@ export default function LegacyWorld() {
     // La selección es una puerta real: el scroll puede revelar la escena, pero no
     // puede sacarla de pantalla. Solo una elección de disciplina libera el recorrido.
     let phase = 'bridge'; // bridge | select | selected
-    let bridgeSeen = false;
     let scrollLockY = null;
 
     const isInsideSelectionPanel = (target) => !!target?.closest?.('.ex-overlay .ex__scroll');
@@ -95,7 +94,7 @@ export default function LegacyWorld() {
     };
     const handleNavigation = (event) => {
       const destination = event.detail?.id;
-      if (destination && !['inicio', 'home'].includes(destination)) {
+      if (destination) {
         phase = 'selected';
         scrollLockY = null;
         update();
@@ -113,7 +112,7 @@ export default function LegacyWorld() {
       if (frame) cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         const y = window.scrollY;
-        const exploreNode = document.querySelector('.explore-dwell-track');
+        const exploreNode = document.querySelector('.explore-dwell');
         const exploreRect = exploreNode?.getBoundingClientRect();
         const exploreTop = exploreRect ? exploreRect.top + y : Infinity;
         const exploreBottom = exploreRect ? exploreRect.bottom + y : -Infinity;
@@ -130,8 +129,7 @@ export default function LegacyWorld() {
         if (hasEnteredExplore && phase !== 'selected') {
           const dwellProgress = clamp((y - exploreTop) / exploreHeight);
           const revealCompleteAt = BRIDGE_SHARE + REVEAL_SHARE;
-          if (!bridgeSeen && (dwellProgress >= revealCompleteAt || prefersReducedMotion)) {
-            bridgeSeen = true;
+          if (phase === 'bridge' && (dwellProgress >= revealCompleteAt || prefersReducedMotion)) {
             phase = 'select';
             scrollLockY = exploreTop + exploreHeight * (prefersReducedMotion ? 0 : revealCompleteAt);
             if (Math.abs(y - scrollLockY) > 1) window.scrollTo(0, scrollLockY);
@@ -151,8 +149,10 @@ export default function LegacyWorld() {
         // el tramo reservado; al salir de él vuelve a funcionar la ruta normal.
         if (phase === 'selected' && exploreRect && y >= exploreTop && y < exploreBottom) {
           const dwellProgress = clamp((y - exploreTop) / exploreHeight);
+          const revealCompleteAt = BRIDGE_SHARE + REVEAL_SHARE;
+          const exitProgress = clamp((dwellProgress - revealCompleteAt) / Math.max(0.001, 1 - revealCompleteAt));
           setSegment('entrada', 1);
-          const routeProgress = EXPLORE_END + (1 - EXPLORE_END) * dwellProgress;
+          const routeProgress = EXPLORE_END + (1 - EXPLORE_END) * exitProgress;
           lastChapter = applyRoute(ROUTES[0], routeProgress, lastChapter);
           return;
         }
