@@ -1,4 +1,4 @@
-name: Temporary preview build diagnostics
+name: Temporary preview build and mobile capture
 on:
   push:
     branches:
@@ -7,7 +7,7 @@ on:
 permissions:
   contents: read
 jobs:
-  build:
+  build-and-capture:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout including source submodule
@@ -19,7 +19,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install dependencies
+      - name: Install project dependencies
         run: npm install
       - name: Build preview
         run: npm run build
+      - name: Install Playwright
+        run: npm install --no-save playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Record and verify mobile pricing scene
+        run: node scripts/record-mobile-preview.mjs
+      - name: Upload mobile recording and screenshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: sml-pricing-mobile-recording
+          path: artifacts/
+          if-no-files-found: error
