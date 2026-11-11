@@ -276,10 +276,37 @@ function App() {
       </section>
 
       <section id="empresas" className="journey-section content-section business-section">
-        <div className="section-meta"><span>EXTRA / B2B</span><span>PARTNERSHIPS</span></div>
-        <p className="eyebrow">BRING THE LAB TO YOUR SPACE</p><h2>Experiencias de combate para equipos y espacios.</h2><p className="lead">{empresas.texto}</p>
-        <div className="training-grid">{empresas.items.map((item) => <article className="training-card" key={item.nombre}><h3>{item.nombre}</h3><p>{item.texto}</p></article>)}</div>
-        <p>{empresas.ayuda}</p><a className="primary-cta" href={waLink(empresas.mensaje)} target="_blank" rel="noopener noreferrer">Hablar de una colaboración ↗</a>
+        <style>{`.business-section .b2b-intro{max-width:760px;margin-bottom:34px}.business-section .b2b-offers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:28px 0 46px}.business-section .b2b-offer{border:1px solid rgba(255,255,255,.13);background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));padding:24px;min-height:190px}.business-section .b2b-offer .eyebrow{margin-bottom:14px}.business-section .b2b-offer h3{font-size:clamp(20px,2.5vw,28px);margin:0 0 10px}.business-section .b2b-offer p{color:rgba(241,241,238,.72);line-height:1.65;margin:0}.business-section .b2b-case{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.8fr);gap:28px;padding:28px 0;border-top:1px solid rgba(255,255,255,.16);border-bottom:1px solid rgba(255,255,255,.16);margin:24px 0 34px}.business-section .b2b-facts{display:flex;gap:24px;flex-wrap:wrap;margin:22px 0}.business-section .b2b-fact strong{display:block;font-size:30px;color:#e05a2b}.business-section .b2b-fact span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:rgba(241,241,238,.65)}.business-section .b2b-proposals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0 30px}.business-section .b2b-proposal{padding:20px;border:1px solid rgba(255,255,255,.12)}.business-section .b2b-proposal p{color:rgba(241,241,238,.7);line-height:1.6}.business-section .b2b-process{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:24px 0}.business-section .b2b-process article{border-left:2px solid #e05a2b;padding:4px 14px}.business-section .b2b-process strong{display:block;margin-bottom:7px}.business-section .b2b-process span{font-size:14px;line-height:1.55;color:rgba(241,241,238,.68)}.business-section .b2b-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}@media(max-width:680px){.business-section .b2b-offers,.business-section .b2b-proposals,.business-section .b2b-case,.business-section .b2b-process{grid-template-columns:1fr}.business-section .b2b-offer{min-height:0}.business-section .b2b-case{gap:12px}.business-section .b2b-facts{gap:18px}}`}</style>
+        <div className="section-meta"><span>BUSINESS / B2B</span><span>PRIVATE EXPERIENCES · MADRID</span></div>
+        <div className="b2b-intro">
+          <p className="eyebrow">COMBAT SPORTS, DESIGNED FOR YOUR AUDIENCE</p>
+          <h2>Una experiencia que convierte el combate en algo que se vive.</h2>
+          <p className="lead">Diseño y ejecuto experiencias de Muay Thai, boxeo y kickboxing para empresas, hoteles, eventos y marcas. Llevo entrenador, material y coordinación; el espacio y la audiencia los aporta el partner.</p>
+        </div>
+        <div className="b2b-offers">
+          <article className="b2b-offer"><p className="eyebrow">01 / CORPORATE</p><h3>Empresas & equipos</h3><p>Actividades participativas para team building, bienestar y encuentros internos. Adaptadas al tamaño del grupo, al espacio y al objetivo del evento.</p></article>
+          <article className="b2b-offer"><p className="eyebrow">02 / HOSPITALITY</p><h3>Hoteles & huéspedes</h3><p>Sesiones privadas individuales, en pareja o para pequeños grupos. Una experiencia premium que el hotel puede ofrecer como actividad para sus huéspedes.</p></article>
+          <article className="b2b-offer"><p className="eyebrow">03 / LIVE EVENTS</p><h3>Eventos & activaciones</h3><p>Demostraciones, introducciones guiadas y participación del público con tatami, material y dirección técnica.</p></article>
+          <article className="b2b-offer"><p className="eyebrow">04 / BRAND PARTNERSHIPS</p><h3>Marcas & colaboraciones</h3><p>Experiencias deportivas integradas en lanzamientos, campañas y acciones de marca, diseñadas alrededor del público y del contexto.</p></article>
+        </div>
+        <div className="b2b-case">
+          <div>
+            <p className="eyebrow">SELECTED WORK / EXECUTED</p><h3 className="subsection-title">El Corte Inglés · Experiencia Muay Thai</h3>
+            <p>Activación realizada durante dos jornadas, con demostraciones técnicas e intervenciones participativas guiadas. SML se encargó de la dirección deportiva, el equipo técnico y el material de entrenamiento.</p>
+            <div className="b2b-facts"><div className="b2b-fact"><strong>2</strong><span>jornadas</span></div><div className="b2b-fact"><strong>8</strong><span>intervenciones programadas</span></div><div className="b2b-fact"><strong>2026</strong><span>Madrid</span></div></div>
+            <p>Un formato que combina exhibición y participación: el público no solo observa, también puede probar la actividad con acompañamiento profesional.</p>
+          </div>
+          <div><p className="eyebrow">DEL CONCEPTO A LA EJECUCIÓN</p><p>Montaje de zona y tatami, material, demostraciones, explicación técnica y participación guiada. Cada activación se dimensiona según el espacio, los horarios y el flujo de asistentes.</p></div>
+        </div>
+        <p className="eyebrow">HOSPITALITY / FORMATOS EN PROPUESTA</p>
+        <div className="b2b-proposals">
+          <article className="b2b-proposal"><h3>Hotel 101</h3><p>Formato propuesto para sesiones privadas individuales, en pareja o grupos de 3–4 personas. Propuesta comercial, no presentada como colaboración ejecutada.</p></article>
+          <article className="b2b-proposal"><h3>ILUNION Atrium</h3><p>Formato propuesto de entrenamiento privado para huéspedes, adaptable a la operativa y los espacios del hotel. Propuesta comercial pendiente de confirmación.</p></article>
+        </div>
+        <p className="eyebrow">A SIMPLE PARTNERSHIP MODEL</p>
+        <div className="b2b-process"><article><strong>01 · Diseñamos</strong><span>Definimos objetivo, audiencia, duración, aforo y espacio.</span></article><article><strong>02 · Producimos</strong><span>SML aporta entrenador, material y coordinación de la experiencia.</span></article><article><strong>03 · Activamos</strong><span>El partner aporta espacio y acceso al público; ejecutamos y ajustamos el formato.</span></article></div>
+        <p>{empresas.ayuda}</p>
+        <div className="b2b-actions"><a className="primary-cta" href={waLink('Hola, quiero diseñar una experiencia B2B con SML. Tipo de proyecto: empresa / hotel / evento / marca.')} target="_blank" rel="noopener noreferrer">Diseñar una experiencia ↗</a><a className="secondary-cta" href={waLink('Hola, quiero recibir información sobre formatos y colaboración B2B.')} target="_blank" rel="noopener noreferrer">Solicitar dossier ↗</a></div>
       </section>
     </main>
 
