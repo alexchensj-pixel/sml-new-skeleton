@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './ExploreOverlay.css';
 import { useStore } from '../legacy/App/store.js';
 import { disciplines } from '../legacy/Data/Disciplines.js';
 import { seleccion, explore, hero } from '../legacy/Data/Content.js';
-import { prefersReducedMotion } from '../legacy/Scene/Transitions/scrollState.js';
 
 // EXPLORE (V22 · paso 3) — una única experiencia que fusiona el antiguo Bridge + Character Select + parte de Disciplines.
 //
@@ -213,30 +212,20 @@ function DisciplineDetail({ discipline: d, stacked, onReset }) {
   );
 }
 
-// Vídeo local de la disciplina (el mismo asset «-cell» que usa el 3D), sobre negro: `mix-blend-mode: screen` lo funde con el fondo.
-// Un único pase silencioso; el fotograma fijo (poster) se queda si el móvil bloquea el autoplay. Un toque lo repite.
+// Retrato fijo del personaje: sin vídeo ni movimiento. Tocar permite ampliarlo y volver.
 function DisciplineMedia({ discipline: d, label }) {
-  const ref = useRef(null);
-  const replay = () => {
-    const v = ref.current;
-    if (!v) return;
-    v.currentTime = 0;
-    const p = v.play();
-    if (p && p.catch) p.catch(() => {});
-  };
+  const [zoomed, setZoomed] = useState(false);
   return (
-    <div className="ex__media" role="group" aria-label={label}>
-      <video
-        ref={ref}
-        src={d.video}
-        poster={d.poster}
-        muted
-        playsInline
-        preload="metadata"
-        autoPlay={!prefersReducedMotion}
-        onClick={replay}
-        aria-label={`${d.name}: vídeo del personaje (toca para repetir)`}
-      />
-    </div>
+    <button
+      type="button"
+      className={`ex__media${zoomed ? ' is-zoomed' : ''}`}
+      aria-label={zoomed ? `Cerrar ampliación de ${d.name}` : `Ampliar personaje: ${d.name}`}
+      aria-pressed={zoomed}
+      onClick={() => setZoomed((value) => !value)}
+    >
+      <img src={d.poster} alt={`${d.name} — retrato estático`} loading="lazy" />
+      <span className="ex__mediaHint">{zoomed ? 'CERRAR ×' : 'AMPLIAR +'}</span>
+    </button>
   );
 }
+

@@ -83,6 +83,23 @@ const patchCopiedSource = (relativePath, before, after) => {
   fs.writeFileSync(target, source.replace(before, after));
 };
 
+// Static character portraits: never start the roster video loop. Selection still controls focus/scale.
+patchCopiedSource(
+  'src/legacy/Scene/Environment/RosterGroup.jsx',
+  'const wantPlay = reveal > 0.02 && !prefersReducedMotion;',
+  'const wantPlay = false; // Static poster only; no character movement.'
+);
+patchCopiedSource(
+  'src/legacy/Scene/Environment/Fighter.jsx',
+  'const wantPlay = getCharactersReveal() > 0.02 && !prefersReducedMotion && isFocus && !s.settled;',
+  'const wantPlay = false; // Static poster only; focus may still enlarge the portrait.'
+);
+patchCopiedSource(
+  'src/legacy/Scene/Environment/Fighter.jsx',
+  'const breathe = prefersReducedMotion ? 0 : Math.sin(clock.elapsedTime * 1.6 + phase) * 0.006 * (1 - s.mix);',
+  'const breathe = 0; // No idle breathing animation.'
+);
+
 patchCopiedSource(
   'src/legacy/Scene/Environment/RosterGroup.jsx',
   's.mix = MathUtils.damp(s.mix, playing ? 1 : 0, 6, dt);',
