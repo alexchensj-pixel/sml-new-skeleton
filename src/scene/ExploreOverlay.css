@@ -342,9 +342,9 @@
 /* La selección es una escena real de una pantalla, no un spacer vacío. */
 .explore-dwell {
   display: block;
-  height: 88svh;
-  min-height: 560px;
-  max-height: 760px;
+  height: 58svh;
+  min-height: 360px;
+  max-height: 560px;
   pointer-events: none;
 }
 
@@ -352,5 +352,5 @@
   .ex-overlay .ex__glow { top: 86px; height: 32%; }
   .ex-overlay .ex__panel { top: calc(32% + 86px); }
   .ex-overlay .ex__scroll { padding-top: 1.25rem; }
-  .explore-dwell { height: 88svh; min-height: 0; max-height: none; }
+  .explore-dwell { height: 55svh; min-height: 320px; max-height: 480px; }
 }

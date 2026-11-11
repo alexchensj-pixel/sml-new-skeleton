@@ -155,7 +155,7 @@ function App() {
           <button className="secondary-cta" type="button" onClick={() => go('metodo')}>Conocer el método</button>
         </div>
         <div className="hero-proof">{hero.confianza}</div>
-        <div className="hero-quicklinks"><button type="button" onClick={() => go('entrenamiento')}>Ver precios</button><button type="button" onClick={() => go('empresas')}>Empresas y eventos</button></div>
+        <div className="hero-quicklinks"><button type="button" onClick={() => go('entrenamiento')}>Ver precios</button><button type="button" onClick={() => go('empresas')}>Empresas y eventos</button><button type="button" className="intro-skip" onClick={() => go('entrenamiento')}>Saltar introducción ↓</button></div>
         <div className="scroll-cue">SCROLL TO EXPLORE ↓</div>
       </section>
 
@@ -166,7 +166,6 @@ function App() {
       <section id="metodo" className="method-section journey-section">
         <div className="method-stage">
           <div className="method-copy">
-            <div className="section-meta"><span>02 / 05</span><span>MÉTODO · LABORATORIO</span></div>
             <p className="eyebrow">UN PROCESO PERSONAL</p>
             <h2>{advisorySubstages[0].titular.map((line, i) => <React.Fragment key={line}>{line}{i === 0 && <br/>}</React.Fragment>)}</h2>
             <div className="method-evaluation">
