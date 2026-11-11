@@ -113,6 +113,9 @@ function App() {
   };
   const formatPlans = existingPlans.filter((plan) => plan.tipo === 'formato');
   const monthlyPlans = existingPlans.filter((plan) => plan.tipo === 'mensual');
+  const individualFormat = formatPlans.find((plan) => plan.id === '1-1');
+  const coupleFormat = formatPlans.find((plan) => plan.id === 'duo');
+  const groupFormat = formatPlans.find((plan) => plan.id === 'grupo');
   const chooseService = (id) => {
     setActiveService(id);
     window.history.replaceState(null, '', `#${id}`);
@@ -194,11 +197,11 @@ function App() {
         <p className="pricing-social" aria-label="Valoración en Google: 5,0 estrellas y 18 reseñas">{site.rating.valor.replace('.', ',')} ★ · {site.rating.resenas} reseñas</p>
         <p className="lead">Sesiones privadas y grupos reducidos. El material técnico está incluido y cada sesión dura 60 minutos.</p>
         <nav className="pricing-tabs" role="tablist" aria-label="Tipo de entrenamiento">
-          {serviceTabs.map((tab) => <a key={tab.id} id={`tab-${tab.id}`} href={`#${tab.id}`} role="tab" aria-selected={activeService === tab.id} aria-controls={activeService} className={`pricing-tab ${activeService === tab.id ? 'is-active' : ''}`} onClick={(event) => { event.preventDefault(); chooseService(tab.id); }}>
+          {serviceTabs.map((tab) => <a key={tab.id} id={`tab-${tab.id}`} href={`#${tab.id}`} role="tab" aria-selected={activeService === tab.id} aria-controls="service-pricing-panel" className={`pricing-tab ${activeService === tab.id ? 'is-active' : ''}`} onClick={(event) => { event.preventDefault(); chooseService(tab.id); }}>
             <strong>{tab.label}</strong><span>{tab.detail}</span>
           </a>)}
         </nav>
-        <div id={activeService} className="pricing-tab-panel" role="tabpanel" aria-labelledby={`tab-${activeService}`}>
+        <div id="service-pricing-panel" className="pricing-tab-panel" role="tabpanel" aria-labelledby={`tab-${activeService}`}>
           {activeService === 'individual' && <>
             <div className="plan-cards-heading">
               <div><p className="eyebrow">PLANES MENSUALES · 1:1</p><h3 className="subsection-title">Elige tu plan de entrenamiento.</h3></div>
@@ -226,8 +229,8 @@ function App() {
               })}
             </div>
             <div className="single-session-card">
-              <div><small>SESIÓN INDIVIDUAL · 60 MIN</small><h3>Sesión suelta 1:1</h3><p>Máxima personalización y adaptación a tu nivel y objetivo.</p></div>
-              <strong>30 € <span>/ sesión</span></strong>
+              <div><small>SESIÓN INDIVIDUAL · 60 MIN</small><h3>Sesión suelta 1:1</h3><p>{individualFormat.texto}</p></div>
+              <strong>{money(individualFormat.precio)} <span>/ sesión</span></strong>
               <a href={waLink('Hola, quiero consultar disponibilidad para una sesión individual 1:1.')} target="_blank" rel="noopener noreferrer">Consultar sesión <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
             </div>
             <div className="plan-comparison-control">
@@ -245,12 +248,12 @@ function App() {
           </>}
           {activeService === 'parejas' && <>
             <div className="plan-cards-heading"><div><p className="eyebrow">ENTRENAMIENTO COMPARTIDO</p><h3 className="subsection-title">Entrenad juntos.</h3></div><p>Una sesión privada para dos personas, adaptada a vuestro nivel y objetivos.</p></div>
-            <article className="training-card format-service-card"><small>SESIÓN · 60 MIN · 2 PERSONAS</small><h3>Parejas</h3><div className="format-service-price">20 € <span>/ persona / sesión</span></div><p>Mismo formato personalizado, entrenando junto a otra persona — pareja, amigo o familiar.</p><a href={waLink('Hola, quiero consultar disponibilidad para entrenar en pareja.')} target="_blank" rel="noopener noreferrer">Consultar disponibilidad <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a></article>
+            <article className="training-card format-service-card"><small>SESIÓN · 60 MIN · 2 PERSONAS</small><h3>Parejas</h3><div className="format-service-price">{money(coupleFormat.precio)} <span>/ persona / sesión</span></div><p>{coupleFormat.texto}</p><a href={waLink('Hola, quiero consultar disponibilidad para entrenar en pareja.')} target="_blank" rel="noopener noreferrer">Consultar disponibilidad <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a></article>
             <div className="service-terms"><p>Tarifa por persona. La evaluación inicial de 30 € no se descuenta de las sesiones en pareja. No hay permanencia; los cambios deben avisarse con 24 h de antelación y la recuperación depende de la disponibilidad.</p></div>
           </>}
           {activeService === 'grupos' && <>
             <div className="plan-cards-heading"><div><p className="eyebrow">ENTRENAMIENTO EN EQUIPO</p><h3 className="subsection-title">Grupo reducido.</h3></div><p>Entrenamiento compartido, con atención técnica y un máximo de cuatro personas.</p></div>
-            <article className="training-card format-service-card"><small>SESIÓN · 60 MIN · MÁXIMO 4 PERSONAS</small><h3>Grupos reducidos</h3><div className="format-service-price">15 € <span>/ persona / sesión</span></div><p>Entrenamiento en grupos pequeños, con más interacción sin perder la corrección individual.</p><p className="format-bonuses"><strong>Bonos:</strong> 55 € · 4 clases/mes <span>·</span> 95 € · 8 clases/mes</p><a href={waLink('Hola, quiero consultar si hay grupo reducido compatible con mi zona y disponibilidad.')} target="_blank" rel="noopener noreferrer">Consultar grupos en mi zona <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a></article>
+            <article className="training-card format-service-card"><small>SESIÓN · 60 MIN · MÁXIMO 4 PERSONAS</small><h3>Grupos reducidos</h3><div className="format-service-price">{money(groupFormat.precio)} <span>/ persona / sesión</span></div><p>{groupFormat.texto}</p><p className="format-bonuses">{groupFormat.desde}</p><a href={waLink('Hola, quiero consultar si hay grupo reducido compatible con mi zona y disponibilidad.')} target="_blank" rel="noopener noreferrer">Consultar grupos en mi zona <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a></article>
             <div className="service-terms"><p>Los grupos se forman por zona, disponibilidad y frecuencia. Si aún no existe uno compatible, puedes dejar tu disponibilidad para ayudar a formarlo. No hay permanencia; los cambios deben avisarse con 24 h de antelación y la recuperación depende de la disponibilidad del grupo.</p></div>
           </>}
         </div>
