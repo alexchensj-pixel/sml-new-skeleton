@@ -461,7 +461,7 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 
 /* 2026-11 · jerarquía del hero y política de material */
 .hero-quicklinks{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px}
-.hero-quicklinks .intro-skip{margin-left:auto;white-space:nowrap}
+.hero-quicklinks .intro-skip{position:static;margin-left:auto;white-space:nowrap}
 .scroll-cue{display:block;position:relative;z-index:2;width:max-content;max-width:100%;margin-top:clamp(24px,4vh,48px);clear:both}
 .method-material-note{margin:12px 0 0;color:#f1f1ee;font-size:13px;line-height:1.55;border-left:2px solid var(--orange);padding-left:12px}
 .plan-kit-note{margin:12px 0 0;color:#cbd0d8;font-size:12px;line-height:1.45}

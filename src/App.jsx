@@ -156,7 +156,7 @@ function App() {
         </div>
         <div className="hero-proof">{hero.confianza}</div>
         <div className="hero-quicklinks"><button type="button" onClick={() => go('entrenamiento')}>Ver precios</button><button type="button" onClick={() => go('empresas')}>Empresas y eventos</button><button type="button" className="intro-skip" onClick={() => go('entrenamiento')}>Saltar introducción ↓</button></div>
-        <div className="scroll-cue">SCROLL TO EXPLORE ↓</div>
+        <div className="scroll-cue">DESLIZA PARA EXPLORAR ↓</div>
       </section>
 
 
