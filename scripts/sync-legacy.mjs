@@ -14,21 +14,6 @@ const copy = (from, to) => {
 // Keep the immersive skeleton as the actual home application. The original product modules live in an isolated namespace.
 copy(path.join(legacy, 'src'), path.join(root, 'src/legacy'));
 
-// The immersive home scene consumes a normalized, explicit price list.
-// Keep these values aligned with the public SML price architecture.
-const programsSource = `export const existingPlans = [
-  { id: '1-1', tipo: 'formato', nombre: '1:1', precio: 30, unidad: '€ / sesión suelta', texto: 'Entrenamiento individual adaptado a tu nivel y objetivo.' },
-  { id: 'duo', tipo: 'formato', nombre: 'Parejas', precio: 20, unidad: '€ / persona / sesión', texto: 'Entrenamiento compartido para dos personas.' },
-  { id: 'grupo', tipo: 'formato', nombre: 'Grupo reducido', precio: 15, unidad: '€ / persona / sesión', desde: 'Bonos: 55 € (4 clases/mes) · 95 € (8 clases/mes)', texto: 'Entrenamiento en grupos pequeños, máximo 4 personas.' },
-  { id: 'arsenal', tipo: 'mensual', nombre: 'Arsenal', sesionesSemana: 1, precio: 110, unidad: '€ / mes' },
-  { id: 'striker', tipo: 'mensual', nombre: 'Striker', sesionesSemana: 2, precio: 185, unidad: '€ / mes' },
-  { id: 'fight-iq', tipo: 'mensual', nombre: 'Fight IQ', sesionesSemana: 3, precio: 270, unidad: '€ / mes' },
-];
-export const kitInicio = { nombre: 'Kit de Inicio', precio: 65, contenido: 'Guantes + vendas + bucal' };
-`;
-fs.mkdirSync(path.join(root, 'src/legacy/Data'), { recursive: true });
-fs.writeFileSync(path.join(root, 'src/legacy/Data/Programs.js'), programsSource);
-
 // Preserve the original 3D roster layer. RosterGroup is the overview state for the three fighters;
 // it is synchronized with the individual Fighter videos through getCharactersReveal().
 copy(path.join(legacy, 'server'), path.join(root, 'server'));
