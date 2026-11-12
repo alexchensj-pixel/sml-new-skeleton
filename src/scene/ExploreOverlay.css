@@ -339,21 +339,12 @@
   html[data-sml-chapter="character-select"] #metodo .method-stage { visibility: hidden; }
 }
 
-/* La selección es una escena real de una pantalla, no un spacer vacío. */
-.explore-dwell {
-  display: block;
-  height: 28svh;
-  min-height: 180px;
-  max-height: 300px;
-  pointer-events: none;
-  background: radial-gradient(ellipse at 50% 42%, rgba(224,90,43,.075), transparent 58%);
-}
+/* .explore-dwell: la altura vive solo en styles.css (antes había reglas duplicadas que se contradecían). */
 
 @media (max-aspect-ratio: 11/10) {
   .ex-overlay .ex__glow { top: 86px; height: 32%; }
   .ex-overlay .ex__panel { top: calc(32% + 86px); }
   .ex-overlay .ex__scroll { padding-top: 1.25rem; }
-  .explore-dwell { height: 24svh; min-height: 160px; max-height: 260px; }
 }
 
 
