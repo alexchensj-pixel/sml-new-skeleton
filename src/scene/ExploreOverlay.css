@@ -363,6 +363,7 @@
 
 /* Salida visible, separada del panel de lectura y del área táctil 3D. */
 .ex-overlay .ex__continue {
+  pointer-events: auto;
   position: fixed; right: clamp(20px, 5vw, 76px); bottom: calc(24px + env(safe-area-inset-bottom)); z-index: 20;
   display: inline-flex; align-items: center; gap: 1rem; min-height: 48px; padding: 0 18px;
   border: 1px solid rgba(255,255,255,.62); background: rgba(7,9,13,.92); color: #fff;
