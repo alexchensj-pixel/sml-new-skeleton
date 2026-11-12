@@ -36,7 +36,7 @@ export const hero = {
   claimLineas: ['No elijas', 'tu entreno.', 'Descúbrelo.'],
   // Dos caminos principales, con el mismo peso: quien no sabe qué quiere descubre; quien ya lo sabe reserva sin pasar por Descubrir.
   noSe: { pre: 'No sé qué quiero', accion: 'Descubrir', aux: 'Explora el mundo del combate.' },
-  yaSe: { pre: 'Ya sé qué quiero', accion: 'Reservar', aux: 'Evaluación inicial · 30 €' },
+  yaSe: { pre: 'Ya sé qué quiero', accion: 'Reservar', aux: 'Entrenamiento privado con método propio' },
   // Ruta secundaria (no compite con las dos anteriores).
   ctaB2B: 'Empresas · Hoteles · Eventos →',
   // Recorrido C (prueba): rutas rápidas, modalidades y confianza en el primer pantallazo.
@@ -48,7 +48,7 @@ export const hero = {
   marca: 'Striking Motion Lab',
   titulo: ['Entrenamiento privado', 'de deportes de combate', 'en Madrid.'],
   disciplinasLinea: 'Boxeo · K1 · Muay Thai',
-  ctaReservar: 'Reservar evaluación · 30 €',
+  ctaReservar: 'Reservar evaluación técnica',
   ctaExplorar: 'No sé qué necesito → Descubrir',
   contexto: 'Madrid · Sesiones privadas · Grupos reducidos',
   kicker: 'Madrid · Muay Thai · Boxeo · Kickboxing · K1',
@@ -153,9 +153,9 @@ export const metodoCierre = ['No solo entrenas.', 'Entiendes qué estás desarro
 export const evaluacionInicial = {
   kicker: 'Primera sesión',
   kickerMetodo: 'Tu primer paso', // rótulo en Método (V27 MAPA · paso 5); Chen sigue usando `kicker`
-  titulo: 'Evaluación inicial',
+  titulo: 'Evaluación técnica y análisis de movimiento',
   precio: '30 €',
-  texto: 'Una sesión privada de 60 minutos para analizar tu punto de partida, ver cómo te mueves y definir qué necesitas trabajar. Después te escribo con una recomendación concreta.',
+  texto: 'Observo tu punto de partida, cómo te mueves y cómo ejecutas la técnica. Con ese análisis identifico qué necesitas trabajar y te preparo una recomendación concreta para orientar tu entrenamiento. Es el inicio de un proceso diseñado alrededor de ti, no una clase de prueba.',
   nota: 'Si contratas Arsenal, Striker o Fight IQ, los 30 € se descuentan del plan. No se descuentan en parejas ni en grupos.',
   cta: 'Reservar evaluación',
   ctaMas: 'Quiero saber más',
