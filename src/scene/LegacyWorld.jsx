@@ -77,36 +77,6 @@ export default function LegacyWorld() {
   useEffect(() => {
     let lastChapter = '';
     let frame = 0;
-    // La selección es una puerta real: el scroll puede revelar la escena, pero no
-    // puede sacarla de pantalla. Solo una elección de disciplina libera el recorrido.
-    let phase = 'bridge'; // bridge | select | selected
-    let scrollLockY = null;
-
-    const isInsideSelectionPanel = (target) => !!target?.closest?.('.ex-overlay .ex__scroll');
-    const blockPageWheel = (event) => {
-      if (phase === 'select' && !useStore.getState().selectedDiscipline && !isInsideSelectionPanel(event.target)) event.preventDefault();
-    };
-    const blockPageTouch = (event) => {
-      if (phase === 'select' && !useStore.getState().selectedDiscipline && !isInsideSelectionPanel(event.target)) event.preventDefault();
-    };
-    const blockPageKeys = (event) => {
-      if (phase === 'select' && !useStore.getState().selectedDiscipline && !isInsideSelectionPanel(event.target) && ['ArrowDown', 'PageDown', ' ', 'End'].includes(event.key)) event.preventDefault();
-    };
-    const handleNavigation = (event) => {
-      const destination = event.detail?.id;
-      if (destination) {
-        phase = 'selected';
-        scrollLockY = null;
-        update();
-      }
-    };
-    const unsubscribe = useStore.subscribe((state) => {
-      if (phase === 'select' && state.selectedDiscipline) {
-        phase = 'selected';
-        scrollLockY = null;
-        update();
-      }
-    });
 
     const update = () => {
       if (frame) cancelAnimationFrame(frame);
@@ -117,42 +87,21 @@ export default function LegacyWorld() {
         const exploreTop = exploreRect ? exploreRect.top + y : Infinity;
         const exploreBottom = exploreRect ? exploreRect.bottom + y : -Infinity;
         const exploreHeight = Math.max(1, exploreBottom - exploreTop);
-        const hasEnteredExplore = !!exploreRect && y >= exploreTop;
+        const insideExplore = !!exploreRect && y >= exploreTop && y < exploreBottom;
 
-        // Si se intenta seguir sin elegir, se conserva exactamente la posición de
-        // llegada a la selección. El panel interno sigue pudiendo desplazarse.
-        if (phase === 'select' && !useStore.getState().selectedDiscipline && scrollLockY !== null && Math.abs(y - scrollLockY) > 1) {
-          window.scrollTo(0, scrollLockY);
-          return;
-        }
-
-        if (hasEnteredExplore && phase !== 'selected') {
+        // La selección ocupa una pantalla, pero nunca bloquea el scroll de página.
+        // El reveal 3D sigue ligado al recorrido real y reversible del usuario.
+        if (insideExplore) {
           const dwellProgress = clamp((y - exploreTop) / exploreHeight);
-          const revealCompleteAt = BRIDGE_SHARE + REVEAL_SHARE;
-          if (phase === 'bridge' && (dwellProgress >= revealCompleteAt || prefersReducedMotion)) {
-            phase = 'select';
-            scrollLockY = exploreTop + exploreHeight * (prefersReducedMotion ? 0 : revealCompleteAt);
-            if (Math.abs(y - scrollLockY) > 1) window.scrollTo(0, scrollLockY);
-          }
-          const sequenceProgress = phase === 'select' || prefersReducedMotion
+          const sequenceProgress = prefersReducedMotion
             ? 1
             : dwellProgress <= BRIDGE_SHARE
               ? 0.82 * smoothstep(dwellProgress / BRIDGE_SHARE)
-              : 0.82 + 0.18 * smoothstep((dwellProgress - BRIDGE_SHARE) / REVEAL_SHARE);
+              : dwellProgress <= BRIDGE_SHARE + REVEAL_SHARE
+                ? 0.82 + 0.18 * smoothstep((dwellProgress - BRIDGE_SHARE) / REVEAL_SHARE)
+                : 1;
           setSegment('entrada', 1);
           const routeProgress = EXPLORE_START + (EXPLORE_END - EXPLORE_START) * sequenceProgress;
-          lastChapter = applyRoute(ROUTES[0], routeProgress, lastChapter);
-          return;
-        }
-
-        // Tras la elección, la escena queda visible mientras se termina de recorrer
-        // el tramo reservado; al salir de él vuelve a funcionar la ruta normal.
-        if (phase === 'selected' && exploreRect && y >= exploreTop && y < exploreBottom) {
-          const dwellProgress = clamp((y - exploreTop) / exploreHeight);
-          const revealCompleteAt = BRIDGE_SHARE + REVEAL_SHARE;
-          const exitProgress = clamp((dwellProgress - revealCompleteAt) / Math.max(0.001, 1 - revealCompleteAt));
-          setSegment('entrada', 1);
-          const routeProgress = EXPLORE_END + (1 - EXPLORE_END) * exitProgress;
           lastChapter = applyRoute(ROUTES[0], routeProgress, lastChapter);
           return;
         }
@@ -173,21 +122,15 @@ export default function LegacyWorld() {
       });
     };
 
+    const handleNavigation = () => update();
     update();
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
-    window.addEventListener('wheel', blockPageWheel, { passive: false });
-    window.addEventListener('touchmove', blockPageTouch, { passive: false });
-    window.addEventListener('keydown', blockPageKeys);
     window.addEventListener('sml:navigate', handleNavigation);
     return () => {
-      unsubscribe();
       window.removeEventListener('sml:navigate', handleNavigation);
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
-      window.removeEventListener('wheel', blockPageWheel);
-      window.removeEventListener('touchmove', blockPageTouch);
-      window.removeEventListener('keydown', blockPageKeys);
       if (frame) cancelAnimationFrame(frame);
     };
   }, []);
