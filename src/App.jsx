@@ -117,7 +117,7 @@ function App() {
       if (id === 'metodo') {
         // Método activa su ruta 3D en el borde real de la sección; scrollIntoView respeta scroll-padding-top y se quedaba 90px antes.
         const top = target.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({ top, behavior: 'smooth' });
+        window.scrollTo({ top: top + 2, behavior: 'smooth' });
       } else {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
