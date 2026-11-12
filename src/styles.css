@@ -485,11 +485,22 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
    Fuente única de la altura: LegacyWorld.jsx reparte este recorrido (BRIDGE_SHARE / REVEAL_SHARE). */
 .explore-dwell {
   display: block;
-  height: 340vh;
-  height: 340svh;
-  min-height: 340vh;
-  min-height: 340svh;
+  height: 0;
+  min-height: 0;
+  max-height: 0;
+  overflow: hidden;
   flex: 0 0 auto;
   position: relative;
   pointer-events: none;
+  background: radial-gradient(ellipse at 50% 42%, rgba(224,90,43,.075), transparent 58%);
+  transition: height .45s ease, min-height .45s ease;
 }
+.explore-dwell.is-open {
+  height: 100vh;
+  height: 100svh;
+  min-height: 100vh;
+  min-height: 100svh;
+  max-height: none;
+  overflow: visible;
+}
+@media (prefers-reduced-motion: reduce) { .explore-dwell { transition: none; } }

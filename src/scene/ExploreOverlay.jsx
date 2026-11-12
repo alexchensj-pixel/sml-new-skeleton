@@ -32,7 +32,7 @@ function rgbTriplet(hex) {
 //   v30: la SELECCIÓN vive en el 3D (Scene/Environment/ModeStations.jsx: estaciones 01–05 + sockets de disciplina + haz). Los botones de abajo
 //   son solo el acceso por teclado / lector de pantalla de esos mismos objetos (.exs__sr); el texto aparece como consecuencia de la selección.
 //   Nivel 1 (siempre): disciplina · concepto · acción.  Nivel 2: línea de la disciplina / del concepto.  Nivel 3 (solo si se pide): «Profundizar».
-export default function Explore() {
+export default function Explore({ onContinue }) {
   const discId = useStore((s) => s.selectedDiscipline);
   const selectDiscipline = useStore((s) => s.selectDiscipline);
   const focus = useStore((s) => s.exploreFocus);
@@ -127,6 +127,7 @@ export default function Explore() {
         </div>
       </div>
       </div>
+      <button type="button" className="ex__continue" onClick={onContinue}>Continuar a Método <span aria-hidden="true">→</span></button>
     </div>
   );
 }

@@ -359,3 +359,16 @@
 
 /* Las tres disciplinas permanecen visibles desde el primer fotograma; sin retardo ni estado atenuado. */
 .ex-overlay .ex__figure-label{animation:none!important;animation-delay:0s!important;opacity:1!important;filter:none!important}
+
+
+/* Salida visible, separada del panel de lectura y del área táctil 3D. */
+.ex-overlay .ex__continue {
+  position: fixed; right: clamp(20px, 5vw, 76px); bottom: calc(24px + env(safe-area-inset-bottom)); z-index: 20;
+  display: inline-flex; align-items: center; gap: 1rem; min-height: 48px; padding: 0 18px;
+  border: 1px solid rgba(255,255,255,.62); background: rgba(7,9,13,.92); color: #fff;
+  font: 700 11px/1 var(--font-mono, ui-monospace, monospace); letter-spacing: .1em; text-transform: uppercase;
+  cursor: pointer; backdrop-filter: blur(12px);
+}
+.ex-overlay .ex__continue span { color: #e05a2b; font-size: 18px; }
+.ex-overlay .ex__continue:focus-visible { outline: 2px solid #e05a2b; outline-offset: 3px; }
+@media (max-aspect-ratio: 11/10) { .ex-overlay .ex__continue { right: 1rem; bottom: calc(12px + env(safe-area-inset-bottom)); min-height: 44px; } }

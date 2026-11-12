@@ -57,6 +57,7 @@ const planComparisonRows = [
 
 function App() {
   const [active, setActive] = useState('inicio');
+  const [exploreOpen, setExploreOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [faqOpen, setFaqOpen] = useState(-1);
   const [showPlanComparison, setShowPlanComparison] = useState(false);
@@ -107,9 +108,14 @@ function App() {
 
   const go = (id) => {
     setActive(id);
+    setExploreOpen(false);
     setMenuOpen(false);
     window.dispatchEvent(new CustomEvent('sml:navigate', { detail: { id } }));
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  };
+  const openExplore = () => {
+    setExploreOpen(true);
+    requestAnimationFrame(() => document.querySelector('.explore-dwell')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   };
   const formatPlans = existingPlans.filter((plan) => plan.tipo === 'formato');
   const monthlyPlans = existingPlans.filter((plan) => plan.tipo === 'mensual');
@@ -128,8 +134,8 @@ function App() {
 
   return <>
     <a className="skip-link" href="#contenido">Saltar al contenido</a>
-    <SpatialBoundary><LegacyWorld /></SpatialBoundary>
-    <ExploreOverlay />
+    <SpatialBoundary><LegacyWorld exploreOpen={exploreOpen} /></SpatialBoundary>
+    <ExploreOverlay onContinue={() => go('metodo')} />
     <div className="grain" aria-hidden="true" />
     <header className="topbar">
       <a className="brand" href="#inicio" onClick={(e) => { e.preventDefault(); go('inicio'); }} aria-label="Striking Motion Lab, inicio">
@@ -154,6 +160,7 @@ function App() {
         <div className="hero-actions">
           <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer"><span>{hero.ctaReservar}</span><svg className="hero-cta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
           <button className="secondary-cta" type="button" onClick={() => go('metodo')}>Conocer el método</button>
+          <button className="secondary-cta explore-open-cta" type="button" onClick={openExplore}>Descubre tu disciplina</button>
         </div>
         <div className="hero-proof">{hero.confianza}</div>
         <div className="hero-quicklinks"><button type="button" onClick={() => go('entrenamiento')}>Ver precios</button><button type="button" onClick={() => go('empresas')}>Empresas y eventos</button><button type="button" className="intro-skip" onClick={() => go('entrenamiento')}>Saltar introducción ↓</button></div>
@@ -162,7 +169,7 @@ function App() {
 
 
 
-      <section className="explore-dwell" role="region" aria-label="Selección de disciplinas y formas de entrenamiento" />
+      <section className={exploreOpen ? "explore-dwell is-open" : "explore-dwell"} role="region" aria-label="Selección de disciplinas y formas de entrenamiento" aria-hidden={!exploreOpen} />
 
       <section id="metodo" className="method-section journey-section">
         <div className="method-stage">

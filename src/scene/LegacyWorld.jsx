@@ -38,6 +38,7 @@ const ROUTES = [
 // El 3D (Scene/Transitions/scrollState.js#isExploreActive) solo acepta toques sobre los luchadores cuando el umbral
 // 'entrada>character-select' esta COMPLETO (>= .999). El overlay de Explore debe mostrarse justo entonces, no antes: si no,
 // hay un tramo con panel visible y luchadores que no responden.
+const HOME_DIRECT_ROUTE = { id: 'inicio', steps: [{ key: 'entrada', from: 0, to: 1 }] };
 const CHAPTER_GATE = { 'entrada>character-select': 0.999 };
 const chapterFor = (key, progress) => {
   if (!key.includes('>')) return key;
@@ -74,7 +75,7 @@ function applyRoute(route, progress, lastChapter) {
   return chapter;
 }
 
-export default function LegacyWorld() {
+export default function LegacyWorld({ exploreOpen = false }) {
   useEffect(() => {
     let lastChapter = '';
     let frame = 0;
@@ -91,7 +92,7 @@ export default function LegacyWorld() {
         const exploreTop = exploreRect ? exploreRect.top + y : Infinity;
         const exploreBottom = exploreRect ? exploreRect.bottom + y : -Infinity;
         const exploreHeight = Math.max(1, exploreBottom - exploreTop);
-        const insideExplore = !!exploreRect && y >= exploreTop && y < exploreBottom;
+        const insideExplore = exploreOpen && !!exploreRect && y >= exploreTop && y < exploreBottom;
         if (y < exploreTop) selectionSeen = false;
 
         // La selección ocupa una pantalla, pero nunca bloquea el scroll de página.
@@ -121,11 +122,16 @@ export default function LegacyWorld() {
           const end = next ? next.getBoundingClientRect().top + y : Math.max(start + 1, document.documentElement.scrollHeight - window.innerHeight);
           if (y >= start && (y < end || i === sections.length - 1)) {
             let progress = clamp((y - start) / Math.max(1, end - start));
-            // inicio: el recorrido previo al dwell se reparte solo hasta EXPLORE_START para enlazar sin salto con la secuencia de selección.
-            if (sections[i].route.id === 'inicio' && Number.isFinite(exploreTop) && exploreTop > start) {
-              progress = EXPLORE_START * clamp((y - start) / (exploreTop - start));
+            let route = sections[i].route;
+            if (route.id === 'inicio' && !exploreOpen) {
+              // Sin abrir Descubrir, el hero recorre únicamente Entrada y enlaza directamente con Método.
+              route = HOME_DIRECT_ROUTE;
+            } else if (route.id === 'inicio' && exploreOpen && Number.isFinite(exploreTop) && exploreTop > start) {
+              // Antes del dwell: 0 → 0,78. Después: 0,90 → 1. El tramo central lo gobierna el recorrido opcional.
+              if (y < exploreTop) progress = EXPLORE_START * clamp((y - start) / (exploreTop - start));
+              else if (y >= exploreBottom) progress = EXPLORE_END + (1 - EXPLORE_END) * clamp((y - exploreBottom) / Math.max(1, end - exploreBottom));
             }
-            lastChapter = applyRoute(sections[i].route, progress, lastChapter);
+            lastChapter = applyRoute(route, progress, lastChapter);
             return;
           }
         }
@@ -143,7 +149,7 @@ export default function LegacyWorld() {
       window.removeEventListener('resize', update);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [exploreOpen]);
 
   return (
     <div className="world" aria-hidden="true">
