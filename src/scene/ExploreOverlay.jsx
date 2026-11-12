@@ -109,7 +109,7 @@ export default function Explore() {
   return (
     <div className={`ex-overlay ${activeChapter === 'character-select' ? 'is-active' : ''}`} aria-hidden={activeChapter !== 'character-select'}>
       <div className="ex">
-      <div className="ex__body" data-empty={!active && !forma ? 'true' : undefined} data-picked={active ? active.id : 'none'} data-focus={focus} data-deep={deep || undefined} style={style}>
+      <div className="ex__body" data-empty={!active ? 'true' : undefined} data-picked={active ? active.id : 'none'} data-focus={focus} data-deep={deep || undefined} style={style}>
         <div className="ex__glow" aria-hidden="true" />
 
         <div className="ex__panel">
