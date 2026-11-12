@@ -45,12 +45,13 @@ const chapterFor = (key, progress) => {
   return progress >= (CHAPTER_GATE[key] ?? 0.72) ? to : from;
 };
 
-// La transición y la selección se gobiernan por el scroll real del tramo explore-dwell.
-// 42% Bridge, 36% revelado de luchadores y 22% de permanencia para seleccionar.
+// La transición y la selección se gobiernan por el scroll real del tramo explore-dwell (340svh en styles.css).
+// 18% Bridge, 18% revelado de luchadores y 64% de permanencia (~2 pantallas) para seleccionar sin que un
+// solo deslizamiento la consuma.
 const EXPLORE_START = 0.78;
 const EXPLORE_END = 0.90;
-const BRIDGE_SHARE = 0.32;
-const REVEAL_SHARE = 0.32;
+const BRIDGE_SHARE = 0.18;
+const REVEAL_SHARE = 0.18;
 
 const smoothstep = (t) => {
   const x = clamp(t);
@@ -77,6 +78,9 @@ export default function LegacyWorld() {
   useEffect(() => {
     let lastChapter = '';
     let frame = 0;
+    // Una vez alcanzada la permanencia, volver a entrar desde abajo muestra el estado final (sin repetir Bridge ni revelado).
+    // Se reinicia solo al volver por encima del tramo (hero), donde la secuencia vuelve a enlazar de forma continua.
+    let selectionSeen = false;
 
     const update = () => {
       if (frame) cancelAnimationFrame(frame);
@@ -88,12 +92,14 @@ export default function LegacyWorld() {
         const exploreBottom = exploreRect ? exploreRect.bottom + y : -Infinity;
         const exploreHeight = Math.max(1, exploreBottom - exploreTop);
         const insideExplore = !!exploreRect && y >= exploreTop && y < exploreBottom;
+        if (y < exploreTop) selectionSeen = false;
 
         // La selección ocupa una pantalla, pero nunca bloquea el scroll de página.
         // El reveal 3D sigue ligado al recorrido real y reversible del usuario.
         if (insideExplore) {
           const dwellProgress = clamp((y - exploreTop) / exploreHeight);
-          const sequenceProgress = prefersReducedMotion
+          if (dwellProgress >= BRIDGE_SHARE + REVEAL_SHARE) selectionSeen = true;
+          const sequenceProgress = prefersReducedMotion || selectionSeen
             ? 1
             : dwellProgress <= BRIDGE_SHARE
               ? 0.82 * smoothstep(dwellProgress / BRIDGE_SHARE)
@@ -114,7 +120,11 @@ export default function LegacyWorld() {
           const next = sections[i + 1]?.node || (sections[i].route.id === 'reserva' ? document.getElementById('empresas') : null);
           const end = next ? next.getBoundingClientRect().top + y : Math.max(start + 1, document.documentElement.scrollHeight - window.innerHeight);
           if (y >= start && (y < end || i === sections.length - 1)) {
-            const progress = clamp((y - start) / Math.max(1, end - start));
+            let progress = clamp((y - start) / Math.max(1, end - start));
+            // inicio: el recorrido previo al dwell se reparte solo hasta EXPLORE_START para enlazar sin salto con la secuencia de selección.
+            if (sections[i].route.id === 'inicio' && Number.isFinite(exploreTop) && exploreTop > start) {
+              progress = EXPLORE_START * clamp((y - start) / (exploreTop - start));
+            }
             lastChapter = applyRoute(sections[i].route, progress, lastChapter);
             return;
           }
