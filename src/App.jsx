@@ -115,7 +115,15 @@ function App() {
   };
   const openExplore = () => {
     setExploreOpen(true);
-    requestAnimationFrame(() => document.querySelector('.explore-dwell')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    requestAnimationFrame(() => {
+      const node = document.querySelector('.explore-dwell');
+      if (!node) return;
+      const root = document.documentElement;
+      const previousBehavior = root.style.scrollBehavior;
+      root.style.scrollBehavior = 'auto';
+      window.scrollTo(0, node.getBoundingClientRect().top + window.scrollY);
+      root.style.scrollBehavior = previousBehavior;
+    });
   };
   const formatPlans = existingPlans.filter((plan) => plan.tipo === 'formato');
   const monthlyPlans = existingPlans.filter((plan) => plan.tipo === 'mensual');

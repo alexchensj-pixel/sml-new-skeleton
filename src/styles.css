@@ -493,7 +493,7 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
   position: relative;
   pointer-events: none;
   background: radial-gradient(ellipse at 50% 42%, rgba(224,90,43,.075), transparent 58%);
-  transition: height .45s ease, min-height .45s ease;
+
 }
 .explore-dwell.is-open {
   height: 100vh;
@@ -503,4 +503,4 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
   max-height: none;
   overflow: visible;
 }
-@media (prefers-reduced-motion: reduce) { .explore-dwell { transition: none; } }
+
