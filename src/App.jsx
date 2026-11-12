@@ -111,7 +111,17 @@ function App() {
     setExploreOpen(false);
     setMenuOpen(false);
     window.dispatchEvent(new CustomEvent('sml:navigate', { detail: { id } }));
-    requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    requestAnimationFrame(() => {
+      const target = document.getElementById(id);
+      if (!target) return;
+      if (id === 'metodo') {
+        // Método activa su ruta 3D en el borde real de la sección; scrollIntoView respeta scroll-padding-top y se quedaba 90px antes.
+        const top = target.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top, behavior: 'smooth' });
+      } else {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   };
   const openExplore = () => {
     setExploreOpen(true);
