@@ -2,26 +2,9 @@ import { useEffect, useState } from 'react';
 import './ExploreOverlay.css';
 import { useStore } from '../legacy/App/store.js';
 import { disciplines } from '../legacy/Data/Disciplines.js';
-import { seleccion, explore, hero } from '../legacy/Data/Content.js';
+import { explore } from '../legacy/Data/Content.js';
 
-// EXPLORE (V22 · paso 3) — una única experiencia que fusiona el antiguo Bridge + Character Select + parte de Disciplines.
-//
-//   ¿Cómo quieres entrenar?  →  selectedTrainingMode   (APRENDER · ENTRENAR · VIVIR EL ENTRENAMIENTO DE UN PELEADOR · SPARRING · COMPETIR)
-//   Después elegimos cómo.   →  selectedDiscipline     (BOXEO · K1 / KICKBOXING · MUAY THAI)
-//   selección                →  personaje / vídeo · qué es · cómo se entrena · qué desarrolla · glosario (solo la elegida)
-//
-// La SELECCIÓN es la causa; el scroll no decide nada:
-//   toque → store (selectedTrainingMode / selectedDiscipline) → UI (esta capa) + 3D (cámara, luz, personaje y vídeo lo leen del
-//   mismo estado: Scene/Camera, Scene/Lighting/CharacterSelectLighting, Scene/Environment/Fighter + RosterGroup + blockouts).
-// Tocar al luchador en el 3D hace exactamente lo mismo que tocar su tarjeta (blockouts.jsx#CharacterHitArea → selectDiscipline).
-//
-// Las cinco formas NO son niveles (ni principiante / intermedio / avanzado): son formas distintas de entrenar.
-// Cualquiera de las dos decisiones puede cambiarse en cualquier momento y en cualquier orden; no hay animación que esperar.
-//
-// Composición: el panel (esta capa) y el 3D se reparten la pantalla — panel a la izquierda y 3D a la derecha en apaisado;
-// 3D en la franja superior y panel debajo en vertical (Scene/Environment/cells.js#exploreRegion, global.css#.ex__panel).
-// Todo el texto sale de Data/Content.js (seleccion, explore) y Data/Disciplines.js: nada de información nueva.
-
+// Selector visible de disciplinas; el capítulo y la selección 3D comparten estado.
 // Vertical = pantalla con aspect < 1,1 (misma frontera que cells.js#EXPLORE_SPLIT_MIN_ASPECT). Solo ahí se muestra el vídeo
 // en el panel: en apaisado el personaje ya es el propio 3D, a pantalla grande, a la derecha.
 function useStacked() {
@@ -44,28 +27,21 @@ function rgbTriplet(hex) {
   return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
 }
 
-const pad = (n) => String(n).padStart(2, '0');
-const firstWord = (t) => t.split(' ')[0]; // etiqueta corta de la estación: sale del propio título (Aprender · Entrenar · Vivir · Sparring · Competir)
 
 // v29 · EXPLORE como SELECCIÓN DE PERSONAJE (no como documento). Misma fuente de estado y mismas acciones que antes; cambia la jerarquía:
 //   v30: la SELECCIÓN vive en el 3D (Scene/Environment/ModeStations.jsx: estaciones 01–05 + sockets de disciplina + haz). Los botones de abajo
 //   son solo el acceso por teclado / lector de pantalla de esos mismos objetos (.exs__sr); el texto aparece como consecuencia de la selección.
 //   Nivel 1 (siempre): disciplina · concepto · acción.  Nivel 2: línea de la disciplina / del concepto.  Nivel 3 (solo si se pide): «Profundizar».
 export default function Explore() {
-  const mode = useStore((s) => s.selectedTrainingMode);
-  const selectMode = useStore((s) => s.selectTrainingMode);
   const discId = useStore((s) => s.selectedDiscipline);
   const selectDiscipline = useStore((s) => s.selectDiscipline);
-  const focus = useStore((s) => s.exploreFocus); // 'modos' (puerta DESCUBRIR) | 'disciplinas' (puerta DISCIPLINAS)
+  const focus = useStore((s) => s.exploreFocus);
   const activeChapter = useStore((s) => s.activeChapter);
   const setExploreFocus = useStore((s) => s.setExploreFocus);
   const stacked = useStacked();
   const [deep, setDeep] = useState(false);     // Nivel 3 de la disciplina (qué es · cómo · desarrolla · glosario)
-  const [modeDeep, setModeDeep] = useState(false); // Nivel 3 del concepto (texto largo de la forma de entrenar)
 
   const active = disciplines.find((d) => d.id === discId) || null;
-  const forma = seleccion.formas.find((f) => f.id === mode) || null;
-  const modeTitle = mode ? explore.modosTitulo[mode] : null;
 
   // Capitulo activo expuesto al CSS (data-sml-chapter en <html>): las secciones DOM de otros capitulos no deben pintarse bajo este overlay.
   useEffect(() => {
@@ -98,14 +74,10 @@ export default function Explore() {
     root.addEventListener('scroll', syncFigureToCard, { passive: true });
     return () => root.removeEventListener('scroll', syncFigureToCard);
   }, [activeChapter, selectDiscipline]);
-  useEffect(() => { setModeDeep(false); }, [mode]);
 
   const style = active ? { '--ex-accent': active.accent, '--ex-rgb': rgbTriplet(active.accent) } : undefined;
 
-  // El ORDEN de percepción lo decide la puerta (exploreFocus), no el scroll. Mismas dos secciones, mismo estado:
-  //   DESCUBRIR   (modos)       → 1 CÓMO QUIERES ENTRENAR (formas) · 2 QUÉ QUIERES ENTRENAR (disciplinas)
-  //   DISCIPLINAS (disciplinas) → el 3D manda: primero el roster de luchadores; las formas quedan después.
-  // PERSONAJE — selector de disciplina. Tocar al luchador en el 3D hace lo mismo (blockouts.jsx#CharacterHitArea).
+  // Tocar una disciplina aquí o en el 3D actualiza la misma selección.
   const discSection = (
     <section className="ex__block ex__block--disc" aria-label={explore.disciplinasTitulo}>
       <h3 className="ex__h">{explore.disciplinasTitulo}</h3>
@@ -131,46 +103,6 @@ export default function Explore() {
       {active && deep && (
         <DisciplineDetail key={active.id} discipline={active} stacked={stacked} onReset={() => { setDeep(false); selectDiscipline(null); }} />
       )}
-    </section>
-  );
-
-  const modeSection = (
-    <section className="exs__proto" aria-label={seleccion.pregunta}>
-      <ol className="exs__rail exs__sr">
-        {seleccion.formas.map((f, i) => {
-          const on = f.id === mode;
-          return (
-            <li key={f.id} data-on={on}>
-              <button type="button" aria-pressed={on} aria-label={`${explore.modosTitulo[f.id]}. ${f.concepto}`} onClick={() => selectMode(on ? null : f.id)}>
-                <span className="exs__n">{pad(i + 1)}</span>
-                <span className="exs__w">{firstWord(explore.modosTitulo[f.id])}</span>
-              </button>
-            </li>
-          );
-        })}
-      </ol>
-      <div className="exs__concept" aria-live="polite">
-        {forma ? (
-          <>
-            <p className="exs__cT">{modeTitle}</p>
-            <p className="exs__cC">{forma.concepto}</p>
-            <p className="exs__cL">{explore.modos[forma.id]}</p>
-            <button type="button" className="exs__more" aria-expanded={modeDeep} onClick={() => setModeDeep((v) => !v)}>
-              {modeDeep ? explore.cerrar : explore.profundizar} <i aria-hidden="true">{modeDeep ? '−' : '+'}</i>
-            </button>
-            {modeDeep && (
-              <div className="exs__cD">
-                <p className="ex__text">{forma.texto}</p>
-                {forma.destacada && <p className="ex__hl">{forma.destacada.map((line) => <span key={line}>{line}</span>)}</p>}
-                {forma.etiquetas && <ul className="ex__tags">{forma.etiquetas.map((t) => <li key={t}>{t}</li>)}</ul>}
-                {forma.cierre && <p className="ex__text ex__text--soft">{forma.cierre}</p>}
-              </div>
-            )}
-          </>
-        ) : (
-          <p className="exs__cL exs__hint">{explore.notaModos}</p>
-        )}
-      </div>
     </section>
   );
 
