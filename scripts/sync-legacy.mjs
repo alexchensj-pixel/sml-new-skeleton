@@ -112,7 +112,14 @@ patchCopiedSource(
   's.mix = MathUtils.damp(s.mix, playing ? 1 : 0, 6, dt);',
   's.mix = playing ? 1 : 0; // Switch poster â first decoded video frame without a ghosted crossfade.'
 );
-// Preserve the original shader color values; no custom luminance/saturation transform.
+// Lift dark character detail without changing the black background: zero remains zero,
+// while low/mid tones become readable on mobile and desktop. No camera/scroll/layout changes.
+patchCopiedSource(
+  'src/legacy/Scene/Environment/RosterGroup.jsx',
+  'vec3 c = mix(texture2D(uStill, uv).rgb, texture2D(uVideo, uv).rgb, uMix);',
+  'vec3 c = pow(max(mix(texture2D(uStill, uv).rgb, texture2D(uVideo, uv).rgb, uMix), vec3(0.0)), vec3(0.82));'
+);
+
 
 patchCopiedSource(
   'src/legacy/Scene/Environment/cells.js',
