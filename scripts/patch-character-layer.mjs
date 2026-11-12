@@ -203,3 +203,33 @@ export default function Fighter({ discipline }) {
   );
 }
 `);
+
+// Remove obsolete character-video imports from the copied data modules as well.
+const disciplinesPath = path.join(root, 'src/legacy/Data/Disciplines.js');
+let disciplinesSource = fs.readFileSync(disciplinesPath, 'utf8');
+disciplinesSource = disciplinesSource.replace("import { video, poster } from './Media.js';", "import { poster } from './Media.js';");
+for (const [id, key] of [['boxeo', 'boxeo'], ['k1', 'k1'], ['muay-thai', 'muayThai']]) {
+  disciplinesSource = disciplinesSource.replace(`id: '${id}', name:`, `id: '${id}', name:`);
+  disciplinesSource = disciplinesSource.replace(`video: video.${key}, `, '');
+}
+fs.writeFileSync(disciplinesPath, disciplinesSource);
+
+const mediaPath = path.join(root, 'src/legacy/Data/Media.js');
+let mediaSource = fs.readFileSync(mediaPath, 'utf8');
+for (const line of [
+  "import boxeoCell from '../Assets/Video/boxeo-cell.mp4';\\n",
+  "import k1Cell from '../Assets/Video/k1-cell.mp4';\\n",
+  "import muayThaiCell from '../Assets/Video/muay-thai-cell.mp4';\\n",
+  "import rosterCompleto from '../Assets/Video/roster-completo.mp4';\\n",
+]) mediaSource = mediaSource.replace(line, '');
+mediaSource = mediaSource.replace(
+  /export const video = \\{[\\s\\S]*?\\n\\};/,
+  'export const video = { tysonBridge, mcgregorBridge };'
+);
+mediaSource = mediaSource.replace(
+  'export const poster = { boxeo: stillBoxeo, k1: stillK1, muayThai: stillMuayThai, roster: stillRoster };',
+  'export const poster = { boxeo: stillBoxeo, k1: stillK1, muayThai: stillMuayThai };'
+);
+mediaSource = mediaSource.replace("import stillRoster from '../Assets/Images/roster-completo-poster.jpg';\\n", '');
+fs.writeFileSync(mediaPath, mediaSource);
+
