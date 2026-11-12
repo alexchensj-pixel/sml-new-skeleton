@@ -91,34 +91,14 @@ const patchCopiedSource = (relativePath, before, after) => {
 };
 
 // Static character portraits: never start the roster video loop. Selection still controls focus/scale.
-patchCopiedSource(
-  'src/legacy/Scene/Environment/RosterGroup.jsx',
-  'const wantPlay = reveal > 0.02 && !prefersReducedMotion;',
-  'const wantPlay = false; // Static poster only; no character movement.'
-);
-patchCopiedSource(
-  'src/legacy/Scene/Environment/Fighter.jsx',
-  'const wantPlay = getCharactersReveal() > 0.02 && !prefersReducedMotion && isFocus && !s.settled;',
-  'const wantPlay = false; // Static poster only; focus may still enlarge the portrait.'
-);
-patchCopiedSource(
-  'src/legacy/Scene/Environment/Fighter.jsx',
-  'const breathe = prefersReducedMotion ? 0 : Math.sin(clock.elapsedTime * 1.6 + phase) * 0.006 * (1 - s.mix);',
-  'const breathe = 0; // No idle breathing animation.'
-);
+;
+;
+;
 
-patchCopiedSource(
-  'src/legacy/Scene/Environment/RosterGroup.jsx',
-  's.mix = MathUtils.damp(s.mix, playing ? 1 : 0, 6, dt);',
-  's.mix = playing ? 1 : 0; // Switch poster â first decoded video frame without a ghosted crossfade.'
-);
+;
 // Lift dark character detail without changing the black background: zero remains zero,
 // while low/mid tones become readable on mobile and desktop. No camera/scroll/layout changes.
-patchCopiedSource(
-  'src/legacy/Scene/Environment/RosterGroup.jsx',
-  'vec3 c = mix(texture2D(uStill, uv).rgb, texture2D(uVideo, uv).rgb, uMix);',
-  'vec3 c = pow(max(mix(texture2D(uStill, uv).rgb, texture2D(uVideo, uv).rgb, uMix), vec3(0.0)), vec3(0.82));'
-);
+;
 
 
 patchCopiedSource(
@@ -146,24 +126,11 @@ patchCopiedSource(
   "texto: 'Una primera sesión privada para conocerte, observar cómo te mueves y entender qué necesitas.'",
   "texto: 'No es una clase de prueba: es una sesión privada para analizar tu punto de partida, observar cómo te mueves y definir qué necesitas trabajar.'"
 );
-patchCopiedSource(
-  'src/legacy/Scene/Environment/RosterGroup.jsx',
-  'const GAIN_IDLE = 0.9;',
-  'const GAIN_IDLE = 1.15;'
-);
-patchCopiedSource(
-  'src/legacy/Scene/Environment/RosterGroup.jsx',
-  'const GAIN_DIM = 0.42;',
-  'const GAIN_DIM = 0.62;'
-);
-patchCopiedSource(
-  'src/legacy/Scene/Environment/RosterGroup.jsx',
-  'const GAIN_DIM_PORTRAIT = 0.64;',
-  'const GAIN_DIM_PORTRAIT = 0.78;'
-);
-patchCopiedSource(
-  'src/legacy/Scene/Environment/Fighter.jsx',
-  's.gain = MathUtils.damp(s.gain, isFocus ? 1.1 : 0, 4, dt);',
-  's.gain = MathUtils.damp(s.gain, isFocus ? 1.25 : 0, 4, dt);'
-);
+;
+;
+;
+;
 console.log('Hybrid routing ready: immersive skeleton at /; original Mi SML, Academy and legal modules on their own routes.');
+
+// One static source of truth for roster and focused character portraits.
+execFileSync(process.execPath, [path.join(root, 'scripts/patch-character-layer.mjs')], { cwd: root, stdio: 'inherit' });
