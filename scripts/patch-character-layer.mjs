@@ -213,15 +213,15 @@ fs.writeFileSync(disciplinesPath, disciplinesSource);
 
 const mediaPath = path.join(root, 'src/legacy/Data/Media.js');
 let mediaSource = fs.readFileSync(mediaPath, 'utf8');
-mediaSource = mediaSource.split('\\n').filter((line) => ![
+mediaSource = mediaSource.split('\n').filter((line) => ![
   "import boxeoCell from '../Assets/Video/boxeo-cell.mp4';",
   "import k1Cell from '../Assets/Video/k1-cell.mp4';",
   "import muayThaiCell from '../Assets/Video/muay-thai-cell.mp4';",
   "import rosterCompleto from '../Assets/Video/roster-completo.mp4';",
   "import stillRoster from '../Assets/Images/roster-completo-poster.jpg';",
-].includes(line)).join('\\n');
+].includes(line)).join('\n');
 const videoStart = mediaSource.indexOf('export const video = {');
-const videoEnd = mediaSource.indexOf('\\n};', videoStart);
+const videoEnd = mediaSource.indexOf('\n};', videoStart);
 if (videoStart < 0 || videoEnd < 0) throw new Error('Expected character video export not found in Media.js');
 mediaSource = mediaSource.slice(0, videoStart) + 'export const video = { tysonBridge, mcgregorBridge };' + mediaSource.slice(videoEnd + 3);
 mediaSource = mediaSource.replace(
