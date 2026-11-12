@@ -481,13 +481,14 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 .method-evaluation .method-discount-exception{max-width:42ch}
 
 
-/* Character Select: un único tramo de una pantalla; el 3D ya es fixed. */
+/* Character Select: tramo de ~3,4 pantallas (Bridge → revelado → permanencia); el 3D ya es fixed.
+   Fuente única de la altura: LegacyWorld.jsx reparte este recorrido (BRIDGE_SHARE / REVEAL_SHARE). */
 .explore-dwell {
   display: block;
-  height: 100vh;
-  height: 100svh;
-  min-height: 100vh;
-  min-height: 100svh;
+  height: 340vh;
+  height: 340svh;
+  min-height: 340vh;
+  min-height: 340svh;
   flex: 0 0 auto;
   position: relative;
   pointer-events: none;
