@@ -153,6 +153,7 @@ function App() {
   return <>
     <a className="skip-link" href="#contenido">Saltar al contenido</a>
     <SpatialBoundary><LegacyWorld exploreOpen={exploreOpen} /></SpatialBoundary>
+    <img className="intro-world-backdrop" src={image.heroLab} alt="" aria-hidden="true" decoding="async" fetchPriority="high" />
     <ExploreOverlay onContinue={() => go('metodo')} />
     <div className="grain" aria-hidden="true" />
     <header className="topbar">
@@ -170,7 +171,6 @@ function App() {
 
     <main id="contenido">
       <section id="inicio" className="hero journey-section">
-        <img className="hero-photo" src={image.heroLab} alt="" aria-hidden="true" decoding="async" fetchPriority="high" />
         <p className="hero-overline">{hero.marca}</p>
         <h1>{hero.titulo.map((line, i) => <React.Fragment key={line}>{line}{i < hero.titulo.length - 1 && <br/>}</React.Fragment>)}</h1>
         <p className="hero-disciplines">{hero.disciplinasLinea}</p>

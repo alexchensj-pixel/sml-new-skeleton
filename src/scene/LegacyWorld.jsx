@@ -38,7 +38,11 @@ const ROUTES = [
 // El 3D (Scene/Transitions/scrollState.js#isExploreActive) solo acepta toques sobre los luchadores cuando el umbral
 // 'entrada>character-select' esta COMPLETO (>= .999). El overlay de Explore debe mostrarse justo entonces, no antes: si no,
 // hay un tramo con panel visible y luchadores que no responden.
-const HOME_DIRECT_ROUTE = { id: 'inicio', steps: [{ key: 'entrada', from: 0, to: 1 }] };
+const HOME_DIRECT_ROUTE = { id: 'inicio', steps: [
+  { key: 'entrada', from: 0, to: 0.56 },
+  { key: 'entrada>character-select', from: 0.56, to: 0.70 },
+  { key: 'character-select>asesoria-lab', from: 0.70, to: 1 },
+] };
 const CHAPTER_GATE = { 'entrada>character-select': 0.999 };
 const chapterFor = (key, progress) => {
   if (!key.includes('>')) return key;
@@ -87,6 +91,9 @@ export default function LegacyWorld({ exploreOpen = false }) {
       if (frame) cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         const y = window.scrollY;
+        const bridgeProgress = scrollState.segments['entrada>character-select'] ?? 0;
+        const backdropOpacity = 1 - smoothstep(clamp((bridgeProgress - 0.08) / 0.84));
+        document.documentElement.style.setProperty('--intro-world-opacity', String(backdropOpacity));
         const exploreNode = document.querySelector('.explore-dwell');
         const exploreRect = exploreNode?.getBoundingClientRect();
         const exploreTop = exploreRect ? exploreRect.top + y : Infinity;

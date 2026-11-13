@@ -3,6 +3,7 @@ import { chapters } from '../legacy/Data/Content.js';
 import { Pillars, Room, Reels, Archive, Door } from '../legacy/Scene/Environment/blockouts.jsx';
 import EntradaWorld from '../legacy/Scene/Environment/Entrada/EntradaWorld.jsx';
 import BridgeHall from '../legacy/Scene/Environment/Bridge/BridgeHall.jsx';
+import ContinuityPassage from './ContinuityPassage.jsx';
 import { useStore } from '../legacy/App/store.js';
 
 const blockouts = {
@@ -21,7 +22,7 @@ export default function MemoryEnvironment() {
   const activeIndex = Math.max(0, chapters.findIndex((chapter) => chapter.id === activeChapter));
   const mounted = chapters
     .map((chapter, index) => ({ chapter, index }))
-    .filter(({ index }) => Math.abs(index - activeIndex) <= 1);
+    .filter(({ index, chapter }) => Math.abs(index - activeIndex) <= 1 || chapter.id === 'entrada');
 
   return (
     <>
@@ -31,6 +32,7 @@ export default function MemoryEnvironment() {
         <meshStandardMaterial color="#07090d" roughness={1} />
       </mesh>
       <BridgeHall transitionOnly />
+      <ContinuityPassage />
       {mounted.map(({ chapter, index }) => {
         const Blockout = blockouts[chapter.id];
         if (!Blockout) return null;
