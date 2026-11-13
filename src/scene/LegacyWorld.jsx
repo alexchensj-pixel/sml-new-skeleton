@@ -39,8 +39,8 @@ const ROUTES = [
 // chapter differs: the character selector is reserved for the explicit Discover action.
 const HOME_DIRECT_ROUTE = { id: 'inicio', bypassDiscover: true, steps: [
   { key: 'entrada', from: 0, to: 0.56 },
-  { key: 'entrada>character-select', from: 0.56, to: 0.70 },
-  { key: 'character-select>asesoria-lab', from: 0.70, to: 1 },
+  // Skip the character-selection scene entirely: transition straight into the lab.
+  { key: 'character-select>asesoria-lab', from: 0.56, to: 1 },
 ] };
 const CHAPTER_GATE = { 'entrada>character-select': 0.999 };
 const chapterFor = (key, progress) => {
@@ -75,12 +75,9 @@ function applyRoute(route, progress, lastChapter) {
   setSegment(step.key, Math.max(0.0001, local));
 
   let chapter = chapterFor(step.key, local);
-  if (route.bypassDiscover && step.key.includes('character-select')) {
-    // Preserve the camera's bridge into and out of the Discover room, without ever
-    // exposing its selector, text, or interactive chapter during ordinary scrolling.
-    chapter = step.key === 'character-select>asesoria-lab' && local >= 0.999
-      ? 'asesoria-lab'
-      : 'entrada';
+  if (route.bypassDiscover && step.key === 'character-select>asesoria-lab') {
+    // The selector chapter is removed from the normal route, not blurred or covered.
+    chapter = 'asesoria-lab';
   }
   if (chapter !== lastChapter) useStore.getState().setActiveChapter(chapter);
   return chapter;
