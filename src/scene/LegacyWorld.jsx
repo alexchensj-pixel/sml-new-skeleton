@@ -40,7 +40,7 @@ const ROUTES = [
 const HOME_DIRECT_ROUTE = { id: 'inicio', bypassDiscover: true, steps: [
   { key: 'entrada', from: 0, to: 0.56 },
   // Skip the character-selection scene entirely: transition straight into the lab.
-  { key: 'character-select>asesoria-lab', from: 0.56, to: 1 },
+  { key: 'entrada>asesoria-lab', from: 0.56, to: 1 },
 ] };
 const CHAPTER_GATE = { 'entrada>character-select': 0.999 };
 const chapterFor = (key, progress) => {

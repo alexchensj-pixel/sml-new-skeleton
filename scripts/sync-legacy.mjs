@@ -135,6 +135,19 @@ patchCopiedSource(
 ;
 ;
 ;
+// Normal home scrolling uses a dedicated direct camera segment: Entrada → Método.
+// The original Entrada → Descubrir → Método segments remain intact for the explicit Discover action.
+patchCopiedSource(
+  'src/legacy/Data/Content.js',
+  "export const segmentKeys = chapters.flatMap((c, i) =>\n  i < chapters.length - 1 ? [c.id, `${c.id}>${chapters[i + 1].id}`] : [c.id]\n);",
+  "const chapterSegments = chapters.flatMap((c, i) =>\n  i < chapters.length - 1 ? [c.id, `${c.id}>${chapters[i + 1].id}`] : [c.id]\n);\nexport const segmentKeys = [chapterSegments[0], 'entrada>asesoria-lab', ...chapterSegments.slice(1)];"
+);
+patchCopiedSource(
+  'src/scene/LegacyWorld.jsx',
+  "{ key: 'character-select>asesoria-lab', from: 0.56, to: 1 },",
+  "{ key: 'entrada>asesoria-lab', from: 0.56, to: 1 },"
+);
+
 console.log('Hybrid routing ready: immersive skeleton at /; original Mi SML, Academy and legal modules on their own routes.');
 
 // One static source of truth for roster and focused character portraits.
