@@ -93,9 +93,6 @@ export default function LegacyWorld({ exploreOpen = false }) {
       if (frame) cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         const y = window.scrollY;
-        const bridgeProgress = scrollState.segments['entrada>character-select'] ?? 0;
-        const backdropOpacity = 1 - smoothstep(clamp((bridgeProgress - 0.08) / 0.84));
-        document.documentElement.style.setProperty('--intro-world-opacity', String(backdropOpacity));
         const exploreNode = document.querySelector('.explore-dwell');
         const exploreRect = exploreNode?.getBoundingClientRect();
         const exploreTop = exploreRect ? exploreRect.top + y : Infinity;

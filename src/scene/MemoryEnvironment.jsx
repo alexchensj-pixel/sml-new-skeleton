@@ -4,6 +4,7 @@ import { Pillars, Room, Reels, Archive, Door } from '../legacy/Scene/Environment
 import EntradaWorld from '../legacy/Scene/Environment/Entrada/EntradaWorld.jsx';
 import BridgeHall from '../legacy/Scene/Environment/Bridge/BridgeHall.jsx';
 import ContinuityPassage from './ContinuityPassage.jsx';
+import EntryRoomBackdrop from './EntryRoomBackdrop.jsx';
 import { useStore } from '../legacy/App/store.js';
 
 const blockouts = {
@@ -32,6 +33,7 @@ export default function MemoryEnvironment() {
         <meshStandardMaterial color="#07090d" roughness={1} />
       </mesh>
       <BridgeHall transitionOnly />
+      <EntryRoomBackdrop />
       <ContinuityPassage />
       {mounted.map(({ chapter, index }) => {
         const Blockout = blockouts[chapter.id];

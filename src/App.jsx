@@ -153,7 +153,6 @@ function App() {
   return <>
     <a className="skip-link" href="#contenido">Saltar al contenido</a>
     <SpatialBoundary><LegacyWorld exploreOpen={exploreOpen} /></SpatialBoundary>
-    <img className="intro-world-backdrop" src={image.heroLab} alt="" aria-hidden="true" decoding="async" fetchPriority="high" />
     <ExploreOverlay onContinue={() => go('metodo')} />
     <div className="grain" aria-hidden="true" />
     <header className="topbar">

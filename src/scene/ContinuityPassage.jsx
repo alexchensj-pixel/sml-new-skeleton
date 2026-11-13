@@ -14,7 +14,7 @@ const frameZ = Array.from({ length: FRAME_COUNT }, (_, i) => START_Z - i * FRAME
 export default function ContinuityPassage() {
   return (
     <group>
-      <mesh rotation-x={-Math.PI / 2} position={[0, -0.035, MID_Z]} receiveShadow>
+      <mesh rotation-x={-Math.PI / 2} position={[0, -0.012, MID_Z]} receiveShadow>
         <planeGeometry args={[WIDTH, LENGTH]} />
         <meshStandardMaterial color="#171d27" roughness={0.82} metalness={0.24} />
       </mesh>

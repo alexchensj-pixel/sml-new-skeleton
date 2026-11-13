@@ -643,27 +643,6 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 }
 
 
-/* One spatial world: the cinematic Entrada plate is fixed to the world and fades with the 3D bridge, not with the DOM hero. */
-.intro-world-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 52%;
-  opacity: var(--intro-world-opacity, 1);
-  filter: brightness(.82) contrast(1.12) saturate(.86);
-  pointer-events: none;
-  will-change: opacity;
-}
-.hero-photo { display: none !important; }
-main { position: relative; z-index: 2; }
+/* La sala inicial ahora está dentro del Canvas 3D, anclada al corredor. */
 .hero.journey-section { background: transparent; }
-@media (max-width: 760px) {
-  .intro-world-backdrop { object-position: center 50%; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .intro-world-backdrop { transition: none; }
-}
+.hero-photo { display: none !important; }
