@@ -496,10 +496,11 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 
 }
 .explore-dwell.is-open {
-  height: 100vh;
-  height: 100svh;
-  min-height: 100vh;
-  min-height: 100svh;
+  /* Descubrir es opcional: 1,4 pantallas para revelar y explorar; el CTA fijo permite continuar sin consumir todo el tramo. */
+  height: 140vh;
+  height: 140svh;
+  min-height: 140vh;
+  min-height: 140svh;
   max-height: none;
   overflow: visible;
 }
