@@ -15,7 +15,9 @@ const ROUTES = [
   { id: 'inicio', steps: [
     { key: 'entrada', from: 0, to: 0.78 },
     { key: 'entrada>character-select', from: 0.78, to: 0.90 },
-    { key: 'character-select', from: 0.90, to: 1 },
+    // Tras elegir disciplina, el último tramo de Inicio recorre el umbral físico
+    // hasta Método. No se debe saltar directamente de character-select a asesoria-lab.
+    { key: 'character-select>asesoria-lab', from: 0.90, to: 1 },
   ] },
   { id: 'metodo', steps: [
     { key: 'asesoria-lab', from: 0, to: 0.12 },
