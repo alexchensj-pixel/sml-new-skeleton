@@ -1,6 +1,6 @@
-import { useMemo, useRef } from 'react';
+import { useRef } from 'react';
 import { useFrame, useLoader } from '@react-three/fiber';
-import { MeshBasicMaterial, SRGBColorSpace, TextureLoader } from 'three';
+import { SRGBColorSpace, TextureLoader } from 'three';
 import { image } from '../legacy/Data/Media.js';
 
 // La sala inicial vive dentro del mismo mundo 3D, no como un background fijo del viewport.
