@@ -113,8 +113,13 @@ patchCopiedSource(
 // Commercial copy and lighting refinements for the immersive preview.
 patchCopiedSource(
   'src/legacy/Data/Content.js',
-  "titulo: ['Entrenamiento privado', 'de deportes de combate', 'en Madrid.']",
-  "titulo: ['Tu técnica.', 'Tu estrategia.', 'Tu forma de combatir.']"
+  "titulo: ['Tu técnica.', 'Tu estrategia.', 'Tu forma de combatir.']",
+  "titulo: ['Entrenamiento privado', 'de deportes de combate', 'en Madrid.']"
+);
+patchCopiedSource(
+  'src/legacy/Data/Content.js',
+  "ctaReservar: 'Reservar · 30 €'",
+  "ctaReservar: 'Empezar mi entrenamiento'"
 );
 patchCopiedSource(
   'src/legacy/Data/Content.js',
