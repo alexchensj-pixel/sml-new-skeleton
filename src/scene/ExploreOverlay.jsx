@@ -52,28 +52,7 @@ export default function Explore({ onContinue }) {
 
   // Cambiar de personaje o de concepto cierra el nivel 3 anterior: la información es consecuencia de la selección, no un resto.
   useEffect(() => { setDeep(false); }, [discId]);
-  useEffect(() => {
-    if (!discId || activeChapter !== 'character-select') return;
-    const target = document.querySelector(`[data-discipline-id="${discId}"]`);
-    target?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }, [discId, activeChapter]);
-  useEffect(() => {
-    if (activeChapter !== 'character-select') return undefined;
-    const root = document.querySelector('.ex-overlay .ex__scroll');
-    if (!root) return undefined;
-    const syncFigureToCard = () => {
-      const rootRect = root.getBoundingClientRect();
-      const anchor = rootRect.top + Math.min(130, rootRect.height * 0.38);
-      const cards = [...root.querySelectorAll('[data-discipline-id]')];
-      const nearest = cards
-        .map((node) => ({ node, distance: Math.abs(node.getBoundingClientRect().top - anchor) }))
-        .sort((a, b) => a.distance - b.distance)[0]?.node;
-      const id = nearest?.getAttribute('data-discipline-id');
-      if (id && useStore.getState().selectedDiscipline !== id) selectDiscipline(id);
-    };
-    root.addEventListener('scroll', syncFigureToCard, { passive: true });
-    return () => root.removeEventListener('scroll', syncFigureToCard);
-  }, [activeChapter, selectDiscipline]);
+  // La disciplina cambia solo por elección explícita del usuario o por interacción con el luchador 3D.
 
   const style = active ? { '--ex-accent': active.accent, '--ex-rgb': rgbTriplet(active.accent) } : undefined;
 

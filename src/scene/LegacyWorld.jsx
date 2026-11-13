@@ -101,8 +101,8 @@ export default function LegacyWorld({ exploreOpen = false }) {
         const insideExplore = exploreOpen && !!exploreRect && y >= exploreTop && y < exploreBottom;
         if (y < exploreTop) selectionSeen = false;
 
-        // La selección ocupa una pantalla, pero nunca bloquea el scroll de página.
-        // El reveal 3D sigue ligado al recorrido real y reversible del usuario.
+        // La escena opcional mantiene una cámara estable una vez completada la entrada.
+        // El usuario cambia disciplina; el scroll interno del panel no mueve la cámara ni el foco.
         if (insideExplore) {
           const dwellProgress = clamp((y - exploreTop) / exploreHeight);
           if (dwellProgress >= BRIDGE_SHARE + REVEAL_SHARE) selectionSeen = true;

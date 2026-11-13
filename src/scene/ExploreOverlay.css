@@ -373,3 +373,61 @@
 .ex-overlay .ex__continue span { color: #e05a2b; font-size: 18px; }
 .ex-overlay .ex__continue:focus-visible { outline: 2px solid #e05a2b; outline-offset: 3px; }
 @media (max-aspect-ratio: 11/10) { .ex-overlay .ex__continue { right: 1rem; bottom: calc(12px + env(safe-area-inset-bottom)); min-height: 44px; } }
+
+
+/* Selector de disciplinas: tipografía editorial integrada en la escena, sin tarjetas ni bloques cromáticos. */
+.ex-overlay .ex__figure-rail {
+  position: sticky;
+  top: 0;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(1.15rem, 4vw, 2.2rem);
+  padding: .8rem 0 .72rem;
+  margin: 0;
+  background: linear-gradient(180deg, rgba(5,6,8,.82), rgba(5,6,8,.34));
+  border: 0;
+  border-bottom: 1px solid rgba(238,241,246,.16);
+  backdrop-filter: blur(5px);
+}
+.ex-overlay .ex__figure-label {
+  position: relative;
+  min-width: 0;
+  padding: .35rem 0 .55rem;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: rgba(235,238,244,.62);
+  font: 600 clamp(10px, 1vw, 12px)/1.2 var(--ex-mono);
+  letter-spacing: .14em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .22s ease, opacity .22s ease;
+}
+.ex-overlay .ex__figure-label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: 0;
+  height: 2px;
+  background: #e05a2b;
+  transition: right .28s ease;
+}
+.ex-overlay .ex__figure-label[data-active="true"] {
+  color: #fff;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+.ex-overlay .ex__figure-label[data-active="true"]::after { right: 0; }
+.ex-overlay .ex__figure-label:hover { color: #fff; }
+.ex-overlay .ex__figure-label:focus-visible { outline: 1px solid #e05a2b; outline-offset: 5px; }
+@media (max-width: 520px) {
+  .ex-overlay .ex__figure-rail { gap: clamp(.9rem, 4vw, 1.35rem); padding: .72rem 0 .62rem; }
+  .ex-overlay .ex__figure-label { font-size: 9px; letter-spacing: .09em; }
+}
