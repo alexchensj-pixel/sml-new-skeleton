@@ -118,7 +118,7 @@ patchCopiedSource(
 );
 patchCopiedSource(
   'src/legacy/Data/Content.js',
-  "ctaReservar: 'Reservar · 30 €'",
+  "ctaReservar: 'Reservar evaluación · 30 €'",
   "ctaReservar: 'Empezar mi entrenamiento'"
 );
 patchCopiedSource(
