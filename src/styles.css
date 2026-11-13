@@ -504,3 +504,134 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
   overflow: visible;
 }
 
+
+
+/* HOME — recuperar el encuadre editorial centrado de la escena original. */
+.hero.journey-section {
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  gap: 0;
+  padding: clamp(118px, 17vh, 170px) 24px 104px;
+  min-height: 100svh;
+  background: transparent;
+}
+.hero .hero-overline {
+  width: 100%;
+  margin: 0 0 clamp(18px, 3vh, 30px);
+  color: rgba(245,246,248,.88);
+  font-size: clamp(10px, 1.15vw, 13px);
+  font-weight: 500;
+  letter-spacing: .34em;
+  text-align: center;
+  white-space: normal;
+  text-transform: uppercase;
+}
+.hero h1 {
+  width: min(100%, 920px);
+  max-width: 920px;
+  margin: 0 auto clamp(18px, 3vh, 28px);
+  color: #f4f3f0;
+  font: 900 clamp(2.35rem, 5.2vw, 4.25rem)/.98 'Barlow Condensed', sans-serif;
+  letter-spacing: -.025em;
+  text-align: center;
+  text-wrap: balance;
+  overflow-wrap: normal;
+}
+.hero .hero-disciplines {
+  width: 100%;
+  margin: 0 auto;
+  color: rgba(245,246,248,.86);
+  font-size: clamp(11px, 1.25vw, 15px);
+  font-weight: 500;
+  letter-spacing: .34em;
+  line-height: 1.7;
+  text-align: center;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.hero .hero-actions {
+  width: min(82vw, 560px);
+  display: flex;
+  justify-content: center;
+  margin: clamp(230px, 34vh, 340px) auto 0;
+}
+.hero .hero-actions .primary-cta {
+  width: 100%;
+  min-height: 58px;
+  border: 1px solid rgba(245,246,248,.92);
+  background: rgba(245,246,248,.94);
+  color: #101116;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .24em;
+}
+.hero .hero-actions .hero-cta-icon { color: currentColor; }
+.hero .hero-discover-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 18px auto 0;
+  padding: 8px 4px;
+  border: 0;
+  background: transparent;
+  color: rgba(245,246,248,.78);
+  font: 500 11px/1.5 'Barlow Condensed', sans-serif;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.hero .hero-discover-link span { color: var(--orange); font-size: 16px; }
+.hero .hero-quicklinks {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 22px;
+  width: 100%;
+  margin: 22px auto 0;
+}
+.hero .hero-quicklinks button {
+  padding: 4px 0;
+  border: 0;
+  border-bottom: 1px solid rgba(245,246,248,.25);
+  background: transparent;
+  color: rgba(245,246,248,.56);
+  font-size: 10px;
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+.hero .hero-proof {
+  margin: 14px auto 0;
+  color: rgba(245,246,248,.48);
+  font-size: 10px;
+  letter-spacing: .04em;
+  text-align: center;
+}
+.hero .scroll-cue {
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  color: rgba(245,246,248,.56);
+  font-size: 10px;
+  letter-spacing: .28em;
+}
+@media (max-width: 760px) {
+  .hero.journey-section { padding: 112px 22px 86px; min-height: 100svh; }
+  .hero .hero-overline { margin-bottom: 20px; font-size: 10px; letter-spacing: .28em; }
+  .hero h1 { width: 100%; max-width: 520px; margin-bottom: 18px; font-size: clamp(2.05rem, 7.1vw, 2.8rem); line-height: 1.02; letter-spacing: -.018em; }
+  .hero .hero-disciplines { font-size: clamp(10px, 2.8vw, 12px); letter-spacing: .23em; }
+  .hero .hero-actions { width: min(84vw, 420px); margin-top: clamp(220px, 34vh, 300px); }
+  .hero .hero-actions .primary-cta { min-height: 54px; font-size: 11px; letter-spacing: .2em; }
+  .hero .hero-discover-link { margin-top: 15px; font-size: 10px; letter-spacing: .18em; }
+  .hero .hero-quicklinks { gap: 18px; margin-top: 16px; }
+  .hero .hero-quicklinks button { font-size: 9px; }
+  .hero .hero-proof { margin-top: 12px; font-size: 9px; }
+  .hero .scroll-cue { bottom: 22px; }
+}
+@media (max-width: 390px) {
+  .hero.journey-section { padding-right: 18px; padding-left: 18px; }
+  .hero h1 { font-size: clamp(1.95rem, 7.3vw, 2.35rem); }
+  .hero .hero-disciplines { letter-spacing: .16em; }
+  .hero .hero-actions { width: min(88vw, 380px); }
+}

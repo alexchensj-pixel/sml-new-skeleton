@@ -48,7 +48,7 @@ export const hero = {
   marca: 'Striking Motion Lab',
   titulo: ['Entrenamiento privado', 'de deportes de combate', 'en Madrid.'],
   disciplinasLinea: 'Boxeo · K1 · Muay Thai',
-  ctaReservar: 'Reservar evaluación técnica',
+  ctaReservar: 'Empezar mi entrenamiento',
   ctaExplorar: 'No sé qué necesito → Descubrir',
   contexto: 'Madrid · Sesiones privadas · Grupos reducidos',
   kicker: 'Madrid · Muay Thai · Boxeo · Kickboxing · K1',

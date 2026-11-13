@@ -171,18 +171,16 @@ function App() {
     <main id="contenido">
       <section id="inicio" className="hero journey-section">
         <img className="hero-photo" src={image.heroLab} alt="" aria-hidden="true" decoding="async" fetchPriority="high" />
-        <p className="hero-overline">{hero.kicker}</p>
+        <p className="hero-overline">{hero.marca}</p>
         <h1>{hero.titulo.map((line, i) => <React.Fragment key={line}>{line}{i < hero.titulo.length - 1 && <br/>}</React.Fragment>)}</h1>
-        <p className="hero-context">{hero.contexto}</p>
-        <p className="hero-offer">Muay Thai · Boxeo · Kickboxing / K1 en Madrid<br/><span>1:1 · Parejas · Grupos reducidos de hasta 4</span></p>
+        <p className="hero-disciplines">{hero.disciplinasLinea}</p>
         <div className="hero-actions">
           <a className="primary-cta" href={site.calendly} target="_blank" rel="noopener noreferrer"><span>{hero.ctaReservar}</span><svg className="hero-cta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
-          <button className="secondary-cta" type="button" onClick={() => go('metodo')}>Conocer el método</button>
-          <button className="secondary-cta explore-open-cta" type="button" onClick={openExplore}>Descubre tu disciplina</button>
         </div>
+        <button className="hero-discover-link explore-open-cta" type="button" onClick={openExplore}>No sé qué necesito <span aria-hidden="true">→</span> Descubrir</button>
+        <div className="hero-quicklinks"><button type="button" onClick={() => go('empresas')}>Empresas · Hoteles · Eventos →</button><button type="button" onClick={() => go('entrenamiento')}>Ver precios →</button></div>
         <div className="hero-proof">{hero.confianza}</div>
-        <div className="hero-quicklinks"><button type="button" onClick={() => go('entrenamiento')}>Ver precios</button><button type="button" onClick={() => go('empresas')}>Empresas y eventos</button><button type="button" className="intro-skip" onClick={() => go('entrenamiento')}>Saltar introducción ↓</button></div>
-        <div className="scroll-cue">DESLIZA PARA EXPLORAR ↓</div>
+        <div className="scroll-cue">DESLIZA</div>
       </section>
 
 
