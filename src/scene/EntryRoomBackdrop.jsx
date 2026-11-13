@@ -6,7 +6,7 @@ import { image } from '../legacy/Data/Media.js';
 // La sala inicial vive dentro del mismo mundo 3D, no como un background fijo del viewport.
 // El plano está anclado al eje del corredor; la arquitectura real de Entrada queda delante.
 const ROOM_WALL_Z = -17.5;
-const ROOM_ASPECT = 704 / 1525;
+const ROOM_ASPECT = 1374 / 768; // relación real de hero-lab.jpg
 const FADE_START_Z = -5;
 const FADE_END_Z = -15.5;
 
