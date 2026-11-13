@@ -635,3 +635,9 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
   .hero .hero-disciplines { letter-spacing: .16em; }
   .hero .hero-actions { width: min(88vw, 380px); }
 }
+
+/* El hero conserva el espacio para la escena; la prueba social vive más abajo en el recorrido. */
+.hero .hero-proof { display: none; }
+@media (max-width: 760px) {
+  .hero .hero-photo { object-position: 50% 48%; }
+}
