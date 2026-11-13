@@ -9,14 +9,12 @@ import { useStore } from '../legacy/App/store.js';
 
 const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
 
-// The existing page sections remain the only DOM chapters. The original 3D Discover
-// room is traversed inside the Home → Method passage; it does not create another page.
+// The optional Discover room uses the full route. Normal scrolling keeps the same
+// camera/threshold segments but never activates the character-selection chapter.
 const ROUTES = [
   { id: 'inicio', steps: [
     { key: 'entrada', from: 0, to: 0.78 },
     { key: 'entrada>character-select', from: 0.78, to: 0.90 },
-    // Tras elegir disciplina, el último tramo de Inicio recorre el umbral físico
-    // hasta Método. No se debe saltar directamente de character-select a asesoria-lab.
     { key: 'character-select>asesoria-lab', from: 0.90, to: 1 },
   ] },
   { id: 'metodo', steps: [
@@ -37,10 +35,9 @@ const ROUTES = [
   ] },
 ];
 
-// El 3D (Scene/Transitions/scrollState.js#isExploreActive) solo acepta toques sobre los luchadores cuando el umbral
-// 'entrada>character-select' esta COMPLETO (>= .999). El overlay de Explore debe mostrarse justo entonces, no antes: si no,
-// hay un tramo con panel visible y luchadores que no responden.
-const HOME_DIRECT_ROUTE = { id: 'inicio', steps: [
+// The camera still traverses the original physical thresholds. Only the active
+// chapter differs: the character selector is reserved for the explicit Discover action.
+const HOME_DIRECT_ROUTE = { id: 'inicio', bypassDiscover: true, steps: [
   { key: 'entrada', from: 0, to: 0.56 },
   { key: 'entrada>character-select', from: 0.56, to: 0.70 },
   { key: 'character-select>asesoria-lab', from: 0.70, to: 1 },
@@ -76,7 +73,15 @@ function applyRoute(route, progress, lastChapter) {
     scrollState.segments[key] = i < index ? 1 : i === index ? Math.max(0.0001, local) : 0;
   });
   setSegment(step.key, Math.max(0.0001, local));
-  const chapter = chapterFor(step.key, local);
+
+  let chapter = chapterFor(step.key, local);
+  if (route.bypassDiscover && step.key.includes('character-select')) {
+    // Preserve the camera's bridge into and out of the Discover room, without ever
+    // exposing its selector, text, or interactive chapter during ordinary scrolling.
+    chapter = step.key === 'character-select>asesoria-lab' && local >= 0.999
+      ? 'asesoria-lab'
+      : 'entrada';
+  }
   if (chapter !== lastChapter) useStore.getState().setActiveChapter(chapter);
   return chapter;
 }
@@ -130,7 +135,7 @@ export default function LegacyWorld({ exploreOpen = false }) {
             let progress = clamp((y - start) / Math.max(1, end - start));
             let route = sections[i].route;
             if (route.id === 'inicio' && !exploreOpen) {
-              // Sin abrir Descubrir, el hero recorre únicamente Entrada y enlaza directamente con Método.
+              // Sin abrir Descubrir, se conserva el trayecto de cámara pero se omite el capítulo selector.
               route = HOME_DIRECT_ROUTE;
             } else if (route.id === 'inicio' && exploreOpen && Number.isFinite(exploreTop) && exploreTop > start) {
               // Antes del dwell: 0 → 0,78. Después: 0,90 → 1. El tramo central lo gobierna el recorrido opcional.
