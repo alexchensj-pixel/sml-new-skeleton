@@ -51,7 +51,7 @@ const monthlyPlanCopy = {
 const planComparisonRows = [
   { label: 'Técnica y vídeo', arsenal: 'Evaluación + análisis en vídeo', striker: 'Incluido', fightIq: 'Incluido' },
   { label: 'Personalización', arsenal: '—', striker: 'Plan + biblioteca + objetivos', fightIq: 'Incluida' },
-  { label: 'Estrategia y combate', arsenal: '—', striker: '—', fightIq: 'Táctica + estilo + sparring supervisado' },
+  { label: 'Estrategia y combate', arsenal: '—', striker: '—', fightIq: 'Preparación específica + táctica + estilo + sparring supervisado' },
   { label: 'Frecuencia', arsenal: '1 sesión/semana', striker: '2 sesiones/semana', fightIq: '3 sesiones/semana' },
 ];
 
@@ -222,17 +222,16 @@ function App() {
                   <p className="plan-card-identity">{card.identity}</p>
                   <div className="plan-card-price"><strong>{money(plan.precio)}</strong><span>/ mes</span></div>
                   <p className="plan-card-per-session">{perSession} € / sesión</p>
-                  <p className="plan-card-frequency">{plan.sesionesSemana} {plan.sesionesSemana === 1 ? 'sesión' : 'sesiones'} / semana <span>·</span> 60 min</p>
+                  <p className="plan-card-frequency">{plan.sesionesSemana} {plan.sesionesSemana === 1 ? 'sesión' : 'sesiones'} / semana <span>·</span> {monthlySessions} al mes <span>·</span> 60 min</p>
                   <div className="plan-card-content">
                     <p className="plan-card-intro">{card.intro}</p>
                     <ul>{card.highlights.map((item) => <li key={item}>{item}</li>)}</ul>
                   </div>
                   <a className="plan-card-action" href={waLink(`Hola, quiero información sobre el plan ${plan.nombre} y consultar disponibilidad.`)} target="_blank" rel="noopener noreferrer"><span>{card.cta} · {money(plan.precio)}/mes</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
-                  <p className="plan-card-footnote">Evaluación inicial · 30 € descontables al contratar este plan. Sin permanencia · cambios con 24 h y recuperación en el mismo mes según disponibilidad.</p>
-                  <p className="plan-kit-note">Kit completo opcional con tu plan mensual: <strong>{money(kitInicio.precio)}.</strong></p>
                 </article>;
               })}
             </div>
+            <p className="pricing-common-note">Evaluación inicial: 30 € (descontable al contratar cualquiera de estos planes) · Sin permanencia · Cambios con 24 h y recuperación en el mismo mes, según disponibilidad. Kit de Inicio opcional con plan mensual: {money(kitInicio.precio)} (guantes, vendas y bucal).</p>
             <div className="single-session-card">
               <div><small>SESIÓN INDIVIDUAL · 60 MIN</small><h3>Sesión suelta 1:1</h3><p>{individualFormat.texto} No incluye evaluación técnica inicial ni diseño de un plan mensual.</p></div>
               <strong>{money(individualFormat.precio)} <span>/ sesión</span></strong>

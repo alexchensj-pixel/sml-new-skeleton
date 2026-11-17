@@ -455,7 +455,7 @@ main :is(a, button, input, select, textarea, [role="button"]) { pointer-events: 
 .plan-card-footnote,.format-risk-note,.method-cta-note{margin:8px 0 0;color:#d8dde5;font-size:12px;line-height:1.5}
 .format-risk-note{padding-top:8px;border-top:1px solid rgba(255,255,255,.12)}
 .method-cta-note{color:#f0c0ad}
-.pricing-common-note{margin-top:22px;font-size:12px;color:#bfc5ce}
+.pricing-common-note{max-width:1000px;margin:14px 0 22px;font-size:12px;line-height:1.55;color:#bfc5ce}
 @media(max-width:680px){.hero-offer{font-size:12px;margin-top:13px}.pricing-followup{padding:13px 0 13px 14px}.pricing-followup p{font-size:13px;line-height:1.55}.plan-card-footnote,.format-risk-note,.method-cta-note{font-size:11px}}
 
 
